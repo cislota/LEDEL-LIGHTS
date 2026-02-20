@@ -1,0 +1,1 @@
+npx create-next-app@latest frontend --use-npm --typescript --tailwind --eslint --app --src-dir

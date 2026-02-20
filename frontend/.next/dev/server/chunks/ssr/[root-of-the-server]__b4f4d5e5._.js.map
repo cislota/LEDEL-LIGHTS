@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 10, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/KALEIDA/Desktop/ledl-lights/frontend/src/app/page.tsx"],"sourcesContent":["export default function Home() {\r\n  return (\r\n    <main style={{ padding: '2rem' }}>\r\n      <h1>Сайт LEDL Lights — работает!</h1>\r\n    </main>\r\n  );\r\n}"],"names":[],"mappings":";;;;;;AAAe,SAAS;IACtB,qBACE,8OAAC;QAAK,OAAO;YAAE,SAAS;QAAO;kBAC7B,cAAA,8OAAC;sBAAG;;;;;;;;;;;AAGV"}}]
+}

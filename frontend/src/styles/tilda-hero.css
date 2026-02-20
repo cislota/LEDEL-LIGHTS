@@ -1,0 +1,17 @@
+.tilda-hero {
+  padding: 80px 0;
+  background-color: #ffffff;
+}
+.tilda-hero h1 {
+  font-size: 40px;
+  line-height: 1.1;
+  font-weight: 700;
+  color: #222222;
+}
+.tilda-hero .btn {
+  background-color: #e52e2e;
+  color: white;
+  padding: 16px 32px;
+  border-radius: 8px;
+  font-weight: 600;
+}

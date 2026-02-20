@@ -1,0 +1,22 @@
+/* [project]/src/styles/tilda-hero.css [app-client] (css) */
+.tilda-hero {
+  background-color: #fff;
+  padding: 80px 0;
+}
+
+.tilda-hero h1 {
+  color: #222;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.tilda-hero .btn {
+  color: #fff;
+  background-color: #e52e2e;
+  border-radius: 8px;
+  padding: 16px 32px;
+  font-weight: 600;
+}
+
+/*# sourceMappingURL=src_styles_tilda-hero_css_bad6b30c._.single.css.map*/

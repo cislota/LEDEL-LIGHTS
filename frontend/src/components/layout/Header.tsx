@@ -28,7 +28,7 @@ export default function Header() {
           ))}
         </nav>
 
-        {/* Правая часть */}
+        {/* Наименование */}
         <div className="flex items-center gap-4 text-sm text-gray-600">
           <span className="hidden md:block" style={{ fontSize: '13px', fontFamily: 'Arial, sans-serif' }}>
             ГК «СветКонсалт» — официальный

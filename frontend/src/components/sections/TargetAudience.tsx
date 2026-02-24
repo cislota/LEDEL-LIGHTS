@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 const cards = [
   {
-    img: '/media/buisnes.jpg', 
+    img: '/media/business.jpg',
     title: 'Владельцам бизнеса',
   },
   {
@@ -27,12 +27,13 @@ export default function TargetAudience() {
         {/* Заголовок */}
         <div className="text-center max-w-3xl mx-auto mb-12">
           <h2
-            className="text-2xl md:text-3xl font-bold"
             style={{
               fontSize: '24px',
               fontFamily: '"TildaSans", Arial, sans-serif',
               color: '#000000',
               lineHeight: 1.4,
+              fontWeight: 'normal', // 
+              margin: 0,
             }}
           >
             Более, чем за 10 лет разработали{' '}
@@ -47,24 +48,36 @@ export default function TargetAudience() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {cards.map((card, i) => (
             <div key={i} className="text-center">
-              <div className="relative inline-block mb-6">
+              {/* Контейнер с изображением: 259×173 px, белый фон */}
+              <div
+                className="relative mx-auto mb-6"
+                style={{
+                  width: '259px',
+                  height: '173px',
+                  backgroundColor: '#FFFFFF',
+                  borderRadius: '16px',
+                  overflow: 'hidden',
+                }}
+              >
                 <Image
                   src={card.img}
                   alt={card.title}
-                  width={200}
-                  height={150}
-                  className="rounded-xl object-cover shadow-md"
-                  style={{ borderRadius: '16px' }}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 259px"
+                  className="object-cover"
+                  priority={i === 0}
                 />
-                {/* Optional: hover effect or cursor pointer */}
-                <div className="absolute inset-0 rounded-xl bg-black bg-opacity-0 hover:bg-opacity-10 transition-all duration-300" />
               </div>
+
+              {/* Подпись под картинкой */}
               <h3
-                className="font-semibold text-gray-800"
                 style={{
-                  fontSize: '16px',
+                  fontSize: '18px',
                   fontFamily: '"TildaSans", Arial, sans-serif',
-                  lineHeight: 1.5,
+                  lineHeight: '1.4',
+                  color: '#000000',
+                  margin: '0',
+                  fontWeight: 'normal',
                 }}
               >
                 {card.title}

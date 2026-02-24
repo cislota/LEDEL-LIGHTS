@@ -17,7 +17,7 @@ export default function Header() {
         {/* Меню */}
         <nav className="hidden md:flex space-x-8">
           {['Отрасли', 'Каталог', 'Индивидуальное КП', 'Проекты', 'Отзывы'].map((item) => (
-            <a key={item} href={`/${item.toLowerCase().replace(' ', '-')}`} className="text-gray-700 hover:text-blue-600 transition">
+            <a key={item} href={`/${item.toLowerCase().replace(' ', '-')}`} className="text-gray-700 hover:text-blue-600 transition" style={{fontSize: '13px', fontFamily: 'Arial, sans-serif'}}>
               {item}
             </a>
           ))}
@@ -25,8 +25,10 @@ export default function Header() {
 
         {/* Правая часть */}
         <div className="flex items-center gap-4 text-sm text-gray-600">
-          <span className="hidden md:block">
-            ГК «СветКонсалт» — официальный дилер завода-изготовителя Ledel
+          <span className="hidden md:block" style={{fontSize: '13px', fontFamily: 'Arial, sans-serif'}}>
+            ГК «СветКонсалт» — официальный
+            <br /> 
+            дилер завода-изготовителя Ledel
           </span>
 
           {/* Почта */}
@@ -52,7 +54,7 @@ export default function Header() {
           </a>
 
           {/* Телефон */}
-          <a href="tel:+78126658473" className="font-medium text-gray-800 hover:text-red-600 transition">
+          <a href="tel:+78126658473" className="font-medium text-gray-800 hover:text-red-600 transition" style={{fontSize: '13px', fontFamily: 'Arial, sans-serif'}}>
             8 (812) 665-84-73
           </a>
         </div>

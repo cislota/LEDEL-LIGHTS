@@ -68,7 +68,7 @@ export default function OfferCards() {
             }}
           >
             Сэкономьте до{' '}
-            <span style={{ color: '#d5302c', fontWeight: 'bold' }}>«40%»</span>{' '}
+            <span style={{ color: '#d5302c', fontWeight: 'bold' }}>40%</span>{' '}
             от стоимости светильников в проекте:
           </h3>
           <p
@@ -120,7 +120,7 @@ export default function OfferCards() {
             }}
           >
             Обеспечим все необходимое для вашего проекта без лишних расходов и переплат. Гарантируем{' '}
-            <span style={{ color: '#d5302c', fontWeight: 'bold' }}>«0%»</span> переплаты.
+            <span style={{ color: '#d5302c', fontWeight: 'bold' }}>0%</span> переплаты.
           </p>
         </div>
 
@@ -159,7 +159,7 @@ export default function OfferCards() {
             }}
           >
             Наши специалисты правильно сформируют световое пространство, что сэкономит{' '}
-            <span style={{ color: '#d5302c', fontWeight: 'bold' }}>«до 70%»</span> вашего бюджета за счет энергоэффективности.
+            <span style={{ color: '#d5302c', fontWeight: 'bold' }}>до 70%</span> вашего бюджета за счет энергоэффективности.
           </p>
         </div>
 

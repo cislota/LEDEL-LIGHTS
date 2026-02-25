@@ -5,6 +5,7 @@ import ProductsPreview from '@/components/sections/ProductsPreview';
 import ContactForm from '@/components/sections/ContactForm';
 import HeroTilda from '@/components/sections/HeroTilda';
 import TargetAudience from '@/components/sections/TargetAudience';
+import OfferCards from '@/components/sections/OfferCards';
 
 export default function HomePage() {
   return (
@@ -14,6 +15,7 @@ export default function HomePage() {
         <HeroTilda />
         <Advantages />
         <TargetAudience />
+        <OfferCards />
         <ProductsPreview />
         <ContactForm />
         

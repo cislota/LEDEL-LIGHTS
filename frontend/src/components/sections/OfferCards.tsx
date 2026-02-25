@@ -67,8 +67,8 @@ export default function OfferCards() {
               margin: '0 0 12px 0',
             }}
           >
-            Сэкономьте до{' '}
-            <span style={{ color: '#d5302c', fontWeight: 'bold' }}>40%</span>{' '}
+            Сэкономьте {' '}
+            <span style={{ color: '#d5302c', fontWeight: 'bold' }}>до 40%</span>{' '}
             от стоимости светильников в проекте:
           </h3>
           <p

@@ -9,11 +9,12 @@ export default function OfferCards() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Заявка отправлена:', phone);
+    // TODO: интеграция с FastAPI
   };
 
   return (
     <section className="bg-white">
-      {/* Заголовок — центрирован по экрану, max-width = 1158px */}
+      {/* Заголовок */}
       <div
         className="container mx-auto px-4"
         style={{ paddingTop: '45px', paddingBottom: '75px' }}
@@ -39,20 +40,21 @@ export default function OfferCards() {
         </div>
       </div>
 
-      {/* Карточки и форма — абсолютное позиционирование */}
+      {/* Карточки */}
       <div
         className="relative mx-auto max-w-[1440px]"
         style={{ height: '650px' }}
       >
         {/* Карточка 1 */}
         <div
-          className="bg-[#f1f1f1] p-6 rounded-2xl absolute"
+          className="bg-[#f1f1f1] p-6 absolute"
           style={{
             width: '359px',
             height: '302px',
             left: '167px',
             top: '30px',
-            boxShadow: '0 6px 16px rgba(0, 0, 0, 0.08)',
+            borderRadius: '50px',
+            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
           }}
         >
           <h3
@@ -85,13 +87,14 @@ export default function OfferCards() {
 
         {/* Карточка 2 */}
         <div
-          className="bg-[#f1f1f1] p-6 rounded-2xl absolute"
+          className="bg-[#f1f1f1] p-6 absolute"
           style={{
             width: '359px',
             height: '302px',
             left: '566px',
             top: '29px',
-            boxShadow: '0 6px 16px rgba(0, 0, 0, 0.08)',
+            borderRadius: '50px',
+            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
           }}
         >
           <h3
@@ -123,13 +126,14 @@ export default function OfferCards() {
 
         {/* Карточка 3 */}
         <div
-          className="bg-[#f1f1f1] p-6 rounded-2xl absolute"
+          className="bg-[#f1f1f1] p-6 absolute"
           style={{
             width: '761px',
             height: '275px',
             left: '166px',
             top: '355px',
-            boxShadow: '0 6px 16px rgba(0, 0, 0, 0.08)',
+            borderRadius: '50px',
+            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
           }}
         >
           <h3
@@ -159,14 +163,20 @@ export default function OfferCards() {
           </p>
         </div>
 
-        {/* Форма */}
+        {/* Форма — упрощённая*/}
         <div
-          className="bg-white p-6 rounded-2xl absolute border-2 border-[#d5302c]"
+          className="bg-white absolute border-2 border-[#d5302c]"
           style={{
             width: '359px',
             height: '587px',
             left: '966px',
             top: '29px',
+            borderRadius: '50px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: '0 24px',
           }}
         >
           <h3
@@ -176,36 +186,53 @@ export default function OfferCards() {
               color: '#000000',
               fontWeight: 'normal',
               lineHeight: 1.4,
-              marginBottom: '24px',
               textAlign: 'center',
+              marginBottom: '24px',
             }}
           >
             Оставьте заявку<br />
-            на бесплатный<br />
+            <strong style={{ fontWeight: 'bold' }}>на бесплатный</strong><br />
             светотехнический расчет
           </h3>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <input
-                type="tel"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="+7 (000) 000-00-00"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none"
-                style={{
-                  fontSize: '16px',
-                  fontFamily: '"TildaSans", Arial, sans-serif',
-                  padding: '12px 16px',
-                }}
-              />
+          <form onSubmit={handleSubmit} className="w-full" style={{ maxWidth: '280px' }}>
+            {/* Поле телефона и +7 */}
+            <div className="mb-5 w-full">
+              <div
+                className="flex items-center border border-gray-300 rounded-lg overflow-hidden"
+                style={{ borderColor: '#000000' }}
+              >
+                {/* Флаг и +7 */}
+                <div
+                  className="flex items-center justify-center w-12 h-10 bg-gray-50"
+                  style={{ backgroundColor: '#f8f9fa', borderRight: '1px solid #cccccc' }}
+                >
+                  <span className="text-xs font-medium">🇷🇺</span>
+                </div>
+                {/* Ввод номера */}
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="+7 (000) 000-00-00"
+                  className="w-full px-4 py-3 border-none outline-none"
+                  style={{
+                    fontSize: '16px',
+                    fontFamily: '"TildaSans", Arial, sans-serif',
+                    color: '#000000',
+                    padding: '12px 16px',
+                  }}
+                />
+              </div>
             </div>
+
             <button
               type="submit"
               className="w-full bg-red-600 text-white font-bold py-3 rounded-lg hover:bg-red-700 transition"
               style={{
                 fontSize: '16px',
                 fontFamily: '"TildaSans", Arial, sans-serif',
+                borderRadius: '10px',
               }}
             >
               ПОЛУЧИТЬ РАСЧЕТ

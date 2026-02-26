@@ -6,6 +6,7 @@ import ContactForm from '@/components/sections/ContactForm';
 import HeroTilda from '@/components/sections/HeroTilda';
 import TargetAudience from '@/components/sections/TargetAudience';
 import OfferCards from '@/components/sections/OfferCards';
+import CatalogSection from '@/components/sections/CatalogSection';
 
 export default function HomePage() {
   return (
@@ -16,6 +17,7 @@ export default function HomePage() {
         <Advantages />
         <TargetAudience />
         <OfferCards />
+        <CatalogSection />
         <ProductsPreview />
         <ContactForm />
         

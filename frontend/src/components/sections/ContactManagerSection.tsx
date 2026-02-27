@@ -85,7 +85,23 @@ export default function ContactManagerSection() {
               boxSizing: 'border-box',
             }}
           >
-            <ul className="space-y-4 mb-8">
+            {/* Подзаголовок — слева, отступ сверху 24px */}
+            <p
+              style={{
+                fontSize: '20px',
+                fontFamily: '"TildaSans", Arial, sans-serif',
+                color: '#000000',
+                fontWeight: 'normal',
+                lineHeight: 1.5,
+                margin: '24px 0 16px 0',
+                textAlign: 'left',
+              }}
+            >
+              Обратитесь к нашим менеджерам и получите:
+            </p>
+
+            {/* Список услуг */}
+            <ul className="space-y-4">
               {[
                 'подберем светильники по ТЗ',
                 'подберем аналоги',
@@ -118,20 +134,19 @@ export default function ContactManagerSection() {
             </ul>
 
             {/* Форма и кнопка */}
-            <div className="flex items-center" style={{ gap: '20px' }}>
+            <div className="flex items-center" style={{ gap: '20px', marginTop: '24px' }}>
+              {/* Форма телефона — как в OfferCards.tsx */}
               <div className="w-[303px]">
                 <div
                   className="flex items-center border rounded-lg overflow-hidden"
                   style={{ borderColor: '#000000', height: '50px' }}
                 >
-                  {/* Флаг и +7 */}
                   <div
                     className="flex items-center justify-center w-12 h-full bg-gray-50"
                     style={{ backgroundColor: '#f8f9fa', borderRight: '1px solid #cccccc' }}
                   >
                     <span className="text-xs font-medium">🇷🇺</span>
                   </div>
-                  {/* Поле ввода */}
                   <input
                     type="tel"
                     value={phone}
@@ -148,7 +163,7 @@ export default function ContactManagerSection() {
                 </div>
               </div>
 
-              {/* Кнопка */}
+              {/* Кнопка — старая версия */}
               <button
                 type="submit"
                 onClick={handleSubmit}
@@ -166,10 +181,10 @@ export default function ContactManagerSection() {
           </div>
         </div>
 
-        {/* Красная разделительная линия */}
-        <div className="mt-16 pt-8" style={{ borderTop: '1px solid #d5302c' }}>
-          {/* Нижний контактный блок SVG */}
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-8">
+        {/* 🔴 Нижний блок: линия + контакты — ширина 1160px */}
+        <div className="mt-16" style={{ width: '1160px', margin: '0 auto' }}>
+          <div style={{ height: '1px', backgroundColor: '#d5302c' }}></div>
+          <div className="pt-8 flex flex-col sm:flex-row justify-between items-center gap-8">
             {/* WhatsApp */}
             <div className="flex items-center gap-3">
               <div className="flex-shrink-0 w-6 h-6">

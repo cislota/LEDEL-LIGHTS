@@ -7,6 +7,7 @@ import HeroTilda from '@/components/sections/HeroTilda';
 import TargetAudience from '@/components/sections/TargetAudience';
 import OfferCards from '@/components/sections/OfferCards';
 import CatalogSection from '@/components/sections/CatalogSection';
+import ContactManagerSection from '@/components/sections/ContactManagerSection';
 
 export default function HomePage() {
   return (
@@ -18,7 +19,8 @@ export default function HomePage() {
         <TargetAudience />
         <OfferCards />
         <CatalogSection />
-        <ProductsPreview />
+        <ContactManagerSection />
+        
         <ContactForm />
         
       </main>

@@ -135,7 +135,7 @@ export default function ContactManagerSection() {
 
             {/* Форма и кнопка */}
             <div className="flex items-center" style={{ gap: '20px', marginTop: '24px' }}>
-              {/* Форма телефона */}
+              {/* Форма номера телефона */}
               <div className="w-[303px]">
                 <div
                   className="flex items-center border rounded-lg overflow-hidden"

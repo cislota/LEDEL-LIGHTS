@@ -135,7 +135,7 @@ export default function ContactManagerSection() {
 
             {/* Форма и кнопка */}
             <div className="flex items-center" style={{ gap: '20px', marginTop: '24px' }}>
-              {/* Форма телефона */}
+              {/* Форма телефона — как в OfferCards.tsx */}
               <div className="w-[303px]">
                 <div
                   className="flex items-center border rounded-lg overflow-hidden"
@@ -163,7 +163,7 @@ export default function ContactManagerSection() {
                 </div>
               </div>
 
-              {/* Кнопка */}
+              {/* Кнопка — старая версия */}
               <button
                 type="submit"
                 onClick={handleSubmit}
@@ -181,7 +181,7 @@ export default function ContactManagerSection() {
           </div>
         </div>
 
-        {/* Нижний блок: линия + контакты - ширина 1160 */}
+        {/* 🔴 Нижний блок: линия + контакты — ширина 1160px */}
         <div className="mt-16" style={{ width: '1160px', margin: '0 auto' }}>
           <div style={{ height: '1px', backgroundColor: '#d5302c' }}></div>
           <div className="pt-8 flex flex-col sm:flex-row justify-between items-center gap-8">

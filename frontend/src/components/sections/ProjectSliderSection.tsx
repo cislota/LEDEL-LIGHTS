@@ -235,7 +235,7 @@ export default function ProjectSliderSection() {
                 style={{ width: '17px', height: '32px' }}
               >
                 <Image
-                  src="/media/left-arrow.svg"
+                  src="/media/Group_9.svg"
                   alt="←"
                   width={17}
                   height={32}
@@ -250,11 +250,12 @@ export default function ProjectSliderSection() {
                 style={{ width: '17px', height: '32px' }}
               >
                 <Image
-                  src="/media/right-arrow.svg"
+                  src="/media/Group_9.svg"
                   alt="→"
                   width={17}
                   height={32}
                   className="object-contain"
+                  style={{ transform: 'scaleX(-1)' }}
                 />
               </button>
             </div>

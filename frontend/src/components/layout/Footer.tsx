@@ -115,12 +115,15 @@ export default function Footer() {
         style={{ border: '1px solid #cccccc' }}
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       >
-        <span
-          className="text-red-600 font-bold text-xl"
-          style={{ transform: 'rotate(180deg)' }}
-        >
-          ↑
-        </span>
+        <Image
+          src="/media/Group_9.svg"
+          alt="Вверх"
+          width={16}
+          height={16}
+          className="object-contain"
+          style={{ transform: 'rotate(90deg)' }}
+          aria-hidden="true"
+        />
       </button>
     </footer>
   );

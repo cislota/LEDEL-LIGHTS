@@ -23,7 +23,7 @@ export default function FinalCTASection() {
               backgroundColor: '#d5302c',
             }}
           >
-            {/* 1. Логотип — отступ слева 50px */}
+            {/* 1. Логотип */}
             <div
               className="absolute"
               style={{
@@ -43,9 +43,9 @@ export default function FinalCTASection() {
               />
             </div>
 
-            {/* 2. Подзаголовок — отступ слева 50px */}
+            {/* 2. Подзаголовок */}
             <div
-              className="absolute" 
+              className="absolute"
               style={{
                 left: '50px',
                 top: '180px',
@@ -53,7 +53,7 @@ export default function FinalCTASection() {
               }}
             >
               <p
-                style = {{
+                style={{
                   fontSize: '28px',
                   fontFamily: '"TildaSans", Arial, sans-serif',
                   color: '#ffffff',
@@ -65,7 +65,7 @@ export default function FinalCTASection() {
               </p>
             </div>
 
-            {/* 3. Описание — один абзац */}
+            {/* 3. Описание */}
             <div
               className="absolute"
               style={{
@@ -89,7 +89,7 @@ export default function FinalCTASection() {
               </p>
             </div>
 
-            {/* Вертикальная разделительная линия */}
+            {/* Вертикальная линия */}
             <div
               className="absolute"
               style={{
@@ -113,11 +113,15 @@ export default function FinalCTASection() {
               {/* WhatsApp */}
               <div className="flex items-start gap-4 mb-6">
                 <div className="flex-shrink-0 w-6 h-6">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path d="M17.5 14.5C17.5 14.5 16.5 14 16.5 13.5C16.5 13 16.5 12.5 16.5 12.5" stroke="white" strokeWidth="2"/>
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2Z" stroke="white" strokeWidth="2"/>
-                    <path d="M12 17C14.21 17 16 15.21 16 13C16 10.79 14.21 9 12 9C9.79 9 8 10.79 8 13C8 15.21 9.79 17 12 17Z" stroke="white" strokeWidth="2"/>
-                  </svg>
+                  <Image
+                    src="/media/question_riddle.svg"
+                    alt="WhatsApp"
+                    width={24}
+                    height={24}
+                    className="object-contain"
+                    style={{ filter: 'brightness(0) invert(1)' }}
+                    aria-hidden="true"
+                  />
                 </div>
                 <div>
                   <div
@@ -146,10 +150,15 @@ export default function FinalCTASection() {
               {/* Email */}
               <div className="flex items-start gap-4 mb-6">
                 <div className="flex-shrink-0 w-6 h-6">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path d="M20 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4Z" stroke="white" strokeWidth="2"/>
-                    <path d="M22 6L12 13L2 6" stroke="white" strokeWidth="2"/>
-                  </svg>
+                  <Image
+                    src="/media/envelope_e-mail_mail.svg"
+                    alt="Email"
+                    width={24}
+                    height={24}
+                    className="object-contain"
+                    style={{ filter: 'brightness(0) invert(1)' }}
+                    aria-hidden="true"
+                  />
                 </div>
                 <div>
                   <div
@@ -180,10 +189,15 @@ export default function FinalCTASection() {
               {/* Телефон */}
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0 w-6 h-6">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2Z" stroke="white" strokeWidth="2"/>
-                    <path d="M12 17C14.21 17 16 15.21 16 13C16 10.79 14.21 9 12 9C9.79 9 8 10.79 8 13C8 15.21 9.79 17 12 17Z" stroke="white" strokeWidth="2"/>
-                  </svg>
+                  <Image
+                    src="/media/phone_contact_call_r.svg"
+                    alt="Телефон"
+                    width={24}
+                    height={24}
+                    className="object-contain"
+                    style={{ filter: 'brightness(0) invert(1)' }}
+                    aria-hidden="true"
+                  />
                 </div>
                 <div>
                   <div

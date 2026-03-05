@@ -10,6 +10,7 @@ import CatalogSection from '@/components/sections/CatalogSection';
 import ContactManagerSection from '@/components/sections/ContactManagerSection';
 import ProjectSliderSection from '@/components/sections/ProjectSliderSection';
 import ClientTestimonialsSection from '@/components/sections/ClientTestimonialsSection';
+import FinalCTASection from '@/components/sections/FinalCTASection';
 
 export default function HomePage() {
   return (
@@ -23,7 +24,8 @@ export default function HomePage() {
         <CatalogSection />
         <ContactManagerSection />
         <ProjectSliderSection />
-        <ClientTestimonialsSection/>
+        <ClientTestimonialsSection />
+        <FinalCTASection />
 
         <ContactForm />
         

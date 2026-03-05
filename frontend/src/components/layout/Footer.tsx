@@ -111,17 +111,33 @@ export default function Footer() {
       <button
         type="button"
         aria-label="Наверх"
-        className="fixed bottom-6 right-6 w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-50 transition"
+        className="fixed bottom-6 right-6 w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center transition-all duration-300"
         style={{ border: '1px solid #cccccc' }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.backgroundColor = '#d5302c';
+          const img = e.currentTarget.querySelector('img');
+          if (img) {
+            // Белый SVG на красном фоне
+            img.style.filter = 'brightness(0) invert(1)';
+          }
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = '#ffffff';
+          const img = e.currentTarget.querySelector('img');
+          if (img) {
+            // Красный SVG на белом фоне
+            img.style.filter = 'brightness(0) saturate(100%) invert(38%) sepia(99%) hue-rotate(347deg)';
+          }
+        }}
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       >
         <Image
-          src="/media/Group_9.svg"
+          src="/media/Vector(1).svg"
           alt="Вверх"
           width={16}
           height={16}
           className="object-contain"
-          style={{ transform: 'rotate(90deg)' }}
+          style={{ transform: 'rotate(270deg)' }} 
           aria-hidden="true"
         />
       </button>

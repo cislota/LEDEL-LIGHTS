@@ -80,7 +80,7 @@ export default function CatalogSection() {
   ];
 
   return (
-    <section className="bg-white py-12">
+    <section id="catalog" className="bg-white py-12">
       <div className="container mx-auto px-4">
         {/* Заголовок */}
         <h2

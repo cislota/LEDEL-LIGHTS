@@ -59,7 +59,7 @@ export default function ProjectSliderSection() {
   const currentSlide = slides[currentIndex];
 
   return (
-    <section className="bg-white py-16">
+    <section id="projects" className="bg-white py-16">
       <div className="container mx-auto px-4">
         {/* Блок 1: Заголовок — 1492×203 */}
         <div

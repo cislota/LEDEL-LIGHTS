@@ -13,7 +13,7 @@ export default function ContactManagerSection() {
   };
 
   return (
-    <section className="bg-white py-16">
+    <section id="contact-manager" className="bg-white py-16">
       <div className="container mx-auto px-4">
         {/* Заголовок — контейнер 1492×203 */}
         <div

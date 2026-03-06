@@ -22,7 +22,7 @@ const cards = [
 
 export default function TargetAudience() {
   return (
-    <section className="py-16 bg-white">
+    <section id="target-audience" className="py-16 bg-white">
       <div className="container mx-auto px-4">
         {/* Заголовок */}
         <div className="text-center max-w-3xl mx-auto mb-12">

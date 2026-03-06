@@ -42,7 +42,7 @@ export default function ClientTestimonialsSection() {
   const current = testimonials[currentIndex];
 
   return (
-    <section className="bg-gray-100 py-16">
+    <section id="testimonials" className="bg-gray-100 py-16">
       <div className="container mx-auto px-4">
         {/* Заголовок */}
         <h2

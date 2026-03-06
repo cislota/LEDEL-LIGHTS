@@ -49,7 +49,7 @@ export default function Header() {
 
           {/* WhatsApp */}
           <a
-            href="https://wa.me/78126658473"
+            href="https://wa.me/79215724713"
             aria-label="WhatsApp"
             className="text-gray-500 hover:text-green-600 transition"
           >
@@ -64,11 +64,11 @@ export default function Header() {
 
           {/* Телефон */}
           <a
-            href="tel:+78126658473"
+            href="tel:+78003510975"
             className="font-medium text-gray-800 hover:text-red-600 transition"
             style={{ fontSize: '13px', fontFamily: 'Arial, sans-serif' }}
           >
-            8 (812) 665-84-73
+            8 (800) 351-09-75
           </a>
         </div>
       </div>

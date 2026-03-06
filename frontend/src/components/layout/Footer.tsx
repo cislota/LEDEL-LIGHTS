@@ -10,60 +10,105 @@ export default function Footer() {
       style={{ backgroundColor: '#eeeeee' }}
     >
       <div className="container mx-auto px-4">
-        {/* Верхняя часть: логотип + контакты */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6-8">
-          {/* Логотип — SVG */}
-          <div>
-            <Image
-              src="/media/logo.svg"
-              alt="LEDEL"
-              width={100}
-              height={32}
-              className="object-contain"
-              priority
-            />
+        {/* Верхняя часть: 4 колонки */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          {/* Колонка 1: логотип — скролл наверх */}
+          <div className="md:col-span-1 md:row-span-2 flex items-center">
+            <button
+              type="button"
+              aria-label="На главную"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="cursor-pointer"
+            >
+              <Image
+                src="/media/logo.svg"
+                alt="LEDEL"
+                width={200}
+                height={40}
+                className="object-contain"
+                priority
+              />
+            </button>
           </div>
 
-          {/* Контакты */}
-          <div className="flex flex-col sm:flex-row gap-6-center sm:text-right">
-            <div>
-              <p
-                style={{
-                  fontSize: '16px',
-                  fontFamily: '"TildaSans", Arial, sans-serif',
-                  color: '#333333',
-                  margin: 0,
-                }}
-              >
-                8 (800) 351-09-75
-              </p>
-            </div>
-            <div>
-              <p
-                style={{
-                  fontSize: '16px',
-                  fontFamily: '"TildaSans", Arial, sans-serif',
-                  color: '#333333',
-                  margin: 0,
-                }}
-              >
-                г. Санкт-Петербург<br />
-                ул. Дибуновская, д.45
-              </p>
-            </div>
-            <div>
-              <p
-                style={{
-                  fontSize: '16px',
-                  fontFamily: '"TildaSans", Arial, sans-serif',
-                  color: '#333333',
-                  margin: 0,
-                }}
-              >
-                Рабочее время:<br />
-                9:00 – 18:00 (пн–пт)
-              </p>
-            </div>
+          {/* Колонка 2: телефон email — кликабельные */}
+          <div className="md:col-span-1">
+            <a
+              href="tel:+78003510975"
+              style={{
+                fontSize: '16px',
+                fontFamily: '"TildaSans", Arial, sans-serif',
+                color: '#666666',
+                margin: '0 0 4px 0',
+                display: 'block',
+                textDecoration: 'none',
+              }}
+              className="hover:underline"
+            >
+              8 (800) 351-09-75
+            </a>
+            <a
+              href="mailto:info@ledl-lights.ru"
+              style={{
+                fontSize: '16px',
+                fontFamily: '"TildaSans", Arial, sans-serif',
+                color: '#666666',
+                margin: 0,
+                display: 'block',
+                textDecoration: 'none',
+              }}
+              className="hover:underline"
+            >
+              info@ledl-lights.ru
+            </a>
+          </div>
+
+          {/* Колонка 3: адрес */}
+          <div className="md:col-span-1">
+            <p
+              style={{
+                fontSize: '16px',
+                fontFamily: '"TildaSans", Arial, sans-serif',
+                color: '#666666',
+                margin: '0 0 4px 0',
+              }}
+            >
+              г. Санкт-Петербург
+            </p>
+            <p
+              style={{
+                fontSize: '16px',
+                fontFamily: '"TildaSans", Arial, sans-serif',
+                color: '#666666',
+                margin: 0,
+              }}
+            >
+              ул. Дибуновская, д.45
+            </p>
+          </div>
+
+          {/* Колонка 4: рабочее время */}
+          <div className="md:col-span-1">
+            <p
+              style={{
+                fontSize: '16px',
+                fontFamily: '"TildaSans", Arial, sans-serif',
+                color: '#666666',
+                margin: '0 0 4px 0',
+              }}
+            >
+              Рабочее время:
+            </p>
+            <p
+              style={{
+                fontSize: '16px',
+                fontFamily: '"TildaSans", Arial, sans-serif',
+                color: '#666666',
+                margin: 0,
+              }}
+            >
+              9:00 – 18:00 (пн–пт)
+            </p>
           </div>
         </div>
 
@@ -114,14 +159,14 @@ export default function Footer() {
         className="fixed bottom-6 right-6 w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center transition-all duration-300"
         style={{ border: '1px solid #cccccc' }}
         onMouseEnter={(e) => {
-          const img = e.currentTarget.querySelector('img');
-          if (img) img.src = '/media/Vector(1)white.svg';
           e.currentTarget.style.backgroundColor = '#d5302c';
+          const img = e.currentTarget.querySelector('img');
+          if (img) img.style.filter = 'brightness(0) invert(1)';
         }}
         onMouseLeave={(e) => {
-          const img = e.currentTarget.querySelector('img');
-          if (img) img.src = '/media/Vector(1)red.svg';
           e.currentTarget.style.backgroundColor = '#ffffff';
+          const img = e.currentTarget.querySelector('img');
+          if (img) img.style.filter = 'none';
         }}
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       >

@@ -42,7 +42,7 @@ var __TURBOPACK__imported__module__$5b$next$5d2f$internal$2f$font$2f$google$2f$i
 ;
 ;
 const metadata = {
-    title: 'LEDL Lights — Светодиодное освещение',
+    title: 'LEDEL Lights — Индивидуальное коммерческое предложение для вашего проекта!',
     description: 'Производство и продажа светодиодных светильников'
 };
 function RootLayout({ children }) {

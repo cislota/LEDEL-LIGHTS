@@ -8,7 +8,7 @@ import '@/styles/tilda-hero.css';
 const inter = Inter({ subsets: ['latin', 'cyrillic'] });
 
 export const metadata: Metadata = {
-  title: 'LEDL Lights — Светодиодное освещение',
+  title: 'LEDEL Lights — Индивидуальное коммерческое предложение для вашего проекта!',
   description: 'Производство и продажа светодиодных светильников',
 };
 

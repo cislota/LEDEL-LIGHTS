@@ -2,6 +2,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Header() {
   const scrollToSection = (id: string) => {
@@ -15,13 +16,15 @@ export default function Header() {
     <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         {/* Логотип */}
-        <Image
-          src="/media/logo_2.svg"
-          alt="LEDL Lights"
-          width={160}
-          height={32}
-          className="max-w-[160px] h-auto"
-        />
+        <Link href="/" aria-label="На главную">
+          <Image
+            src="/media/logo_2.svg"
+            alt="LEDL Lights"
+            width={160}
+            height={32}
+            className="max-w-[160px] h-auto"
+          />
+        </Link>
 
         {/* Меню — с прокруткой к секциям */}
         <nav className="hidden md:flex space-x-8">

@@ -135,15 +135,19 @@ export default function Footer() {
 
         {/* Нижняя строка */}
         <div className="flex flex-col sm:flex-row justify-between items-center text-sm">
-          <div
+          <a
+            href="https://re-spond.com/"
+            target="_blanl"
+            rel="noopener noreffer"
             style={{
               fontSize: '14px',
               fontFamily: '"TildaSans", Arial, sans-serif',
               color: '#666666',
             }}
+            className="hover:underline"
           >
             Сделано в RE:SPOND
-          </div>
+          </a>
           <div
             style={{
               fontSize: '14px',

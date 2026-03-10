@@ -2,13 +2,27 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
 
 export default function Header() {
+  const router = useRouter();
+  const pathname = usePathname();
+  
+  const handleLogoClick = () => {
+    if (pathname === '/') {
+      window.scroll({ top: 0, behavior: 'smooth'}); //если страница на главной - скролл вверх
+    } else {
+      router.push('/'); // переход на главную, скролл
+      setTimeout (() => {
+        window.scrollTo ({top: 0, behavior: 'smooth'}); // дилей прогрузки для домена
+      }, 100)
+    }
+  };
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({behavior: 'smooth'});
     }
   };
 

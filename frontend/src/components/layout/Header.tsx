@@ -39,9 +39,9 @@ export default function Header() {
            <Image
             src="/media/logo_2.svg"
             alt="LEDEL Lights"
-            width={160}
-            height={32}
-            className="max-w-[160px] h-auto"
+            width={100}
+            height={18}
+            className="max-w-[130px] max-h-[80px] object-contain"
           />
         </button>
          

@@ -30,15 +30,21 @@ export default function Header() {
     <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         {/* Логотип */}
-        <Link href="/" aria-label="На главную">
-          <Image
+        <button 
+          type = "button"
+          onClick = {handleLogoClick}
+          aria-label="На главную"
+          className = "cursor-pointer"
+        >
+           <Image
             src="/media/logo_2.svg"
-            alt="LEDL Lights"
+            alt="LEDEL Lights"
             width={160}
             height={32}
             className="max-w-[160px] h-auto"
           />
-        </Link>
+        </button>
+         
 
         {/* Меню — с прокруткой к секциям */}
         <nav className="hidden md:flex space-x-8">

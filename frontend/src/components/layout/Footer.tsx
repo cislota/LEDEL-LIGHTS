@@ -2,8 +2,23 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter, usePathname } from 'next/navigation';
 
 export default function Footer() {
+    const router = useRouter();
+    const pathname = usePathname();
+    
+    const handleLogoClick = () => {
+      if (pathname === '/') {
+        window.scroll({ top: 0, behavior: 'smooth'}); //если страница на главной - скролл вверх
+      } else {
+        router.push('/'); // переход на главную, скролл
+        setTimeout (() => {
+          window.scrollTo ({top: 0, behavior: 'smooth'}); // дилей прогрузки для домена
+        }, 100)
+      }
+    };
+
   return (
     <footer
       className="bg-gray-100 py-8"
@@ -15,10 +30,10 @@ export default function Footer() {
           {/* Колонка 1: логотип — скролл наверх */}
           <div className="md:col-span-1 md:row-span-2 flex items-center">
             <button
-              type="button"
-              aria-label="На главную"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="cursor-pointer"
+              type = "button"
+              aria-label = "На главную"
+              onClick = {handleLogoClick}
+              className = "cursor-pointer"
             >
               <Image
                 src="/media/logo.svg"

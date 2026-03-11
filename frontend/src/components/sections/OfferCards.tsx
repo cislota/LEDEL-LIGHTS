@@ -2,6 +2,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 
 export default function OfferCards() {
   const [phone, setPhone] = useState('');
@@ -30,6 +31,9 @@ export default function OfferCards() {
             top: '30px',
             borderRadius: '50px',
             boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
+            paddingTop: '55px',
+            paddingLeft: '40px',
+            boxSizing: 'border-box',
           }}
         >
           <h3
@@ -70,6 +74,9 @@ export default function OfferCards() {
             top: '29px',
             borderRadius: '50px',
             boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
+            paddingTop: '55px',
+            paddingLeft: '40px',
+            boxSizing: 'border-box',
           }}
         >
           <h3
@@ -82,7 +89,7 @@ export default function OfferCards() {
               margin: '0 0 12px 0',
             }}
           >
-            Закупайте освещение в «режиме одного окна»:
+            Закупайте освещение в&nbsp; «режиме одного окна»:
           </h3>
           <p
             style={{
@@ -109,33 +116,64 @@ export default function OfferCards() {
             top: '355px',
             borderRadius: '50px',
             boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
+            paddingTop: '30px',
+            paddingLeft: '40px',
+            paddingRight: '65px',  // отступ справа для изображения
+            boxSizing: 'border-box',
           }}
         >
-          <h3
-            style={{
-              fontSize: '22px',
-              fontFamily: '"TildaSans", Arial, sans-serif',
-              color: '#000000',
-              fontWeight: 'bold',
-              lineHeight: 1.4,
-              margin: '0 0 12px 0',
-            }}
-          >
-            Бесплатная оптимизация светового пространства:
-          </h3>
-          <p
-            style={{
-              fontSize: '20px',
-              fontFamily: '"TildaSans", Arial, sans-serif',
-              color: '#000000',
-              fontWeight: 'normal',
-              lineHeight: 1.5,
-              margin: 0,
-            }}
-          >
-            Наши специалисты правильно сформируют световое пространство, что сэкономит{' '}
-            <span style={{ color: '#d5302c', fontWeight: 'bold' }}>до 70%</span> вашего бюджета за счет энергоэффективности.
-          </p>
+          {/* Текстовый блок */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '24px', height: '100%' }}>
+            <div style={{ flex: '1' }}>
+              <h3
+                style={{
+                  fontSize: '22px',
+                  fontFamily: '"TildaSans", Arial, sans-serif',
+                  color: '#000000',
+                  fontWeight: 'bold',
+                  lineHeight: 1.4,
+                  margin: '0 0 12px 0',
+                  width: '320px',
+                  height: '62px',
+                }}
+              >
+                Бесплатная оптимизация светового пространства:
+              </h3>
+              <p
+                style={{
+                  fontSize: '20px',
+                  fontFamily: '"TildaSans", Arial, sans-serif',
+                  color: '#000000',
+                  fontWeight: 'normal',
+                  lineHeight: 1.5,
+                  margin: 0,
+                  width: '351px',
+                  height: '124px',
+                }}
+              >
+                Наши специалисты правильно сформируют световое пространство, что сэкономит{' '}
+                <span style={{ color: '#d5302c', fontWeight: 'bold' }}>до 70%</span> вашего бюджета за счет энергоэффективности.
+              </p>
+            </div>
+
+            {/* Изображение 255×204 */}
+            <div style={{ 
+              width: '255px', 
+              height: '204px', 
+              position: 'relative',
+              borderRadius: '20px',
+              overflow: 'hidden',
+              flexShrink: 0,
+            }}>
+              <Image
+                src="/media/noroot.png.webp"
+                alt="Оптимизация светового пространства"
+                fill
+                sizes="255px"
+                className="object-contain"
+              />
+            </div>
+          </div>
         </div>
 
         {/* Форма — упрощённая*/}

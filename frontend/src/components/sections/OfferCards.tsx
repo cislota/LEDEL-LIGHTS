@@ -3,14 +3,19 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import PhoneInput, { 
+  type Country, 
+  type Value 
+} from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
 
 export default function OfferCards() {
-  const [phone, setPhone] = useState('');
+  const [phone, setPhone] = useState<any>('');
+  const [country, setCountry] = useState<Country>('RU');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Заявка отправлена:', phone);
-    // TODO: интеграция с FastAPI
+    console.log('Заявка отправлена:', { phone, country });
   };
 
   return (
@@ -89,7 +94,7 @@ export default function OfferCards() {
               margin: '0 0 12px 0',
             }}
           >
-            Закупайте освещение в&nbsp; «режиме одного окна»:
+            Закупайте освещение в «режиме одного окна»:
           </h3>
           <p
             style={{
@@ -118,7 +123,7 @@ export default function OfferCards() {
             boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
             paddingTop: '30px',
             paddingLeft: '40px',
-            paddingRight: '65px',  // отступ справа для изображения
+            paddingRight: '65px',
             boxSizing: 'border-box',
           }}
         >
@@ -176,20 +181,22 @@ export default function OfferCards() {
           </div>
         </div>
 
-        {/* Форма — упрощённая*/}
+        {/* Форма с кастомными стилями */}
         <div
-          className="bg-white absolute border-2 border-[#d5302c]"
+          className="bg-white absolute"
           style={{
             width: '359px',
             height: '587px',
             left: '966px',
             top: '29px',
             borderRadius: '50px',
+            border: '2px solid #d5302c',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            padding: '0 24px',
+            padding: '40px 30px',
+            boxSizing: 'border-box',
           }}
         >
           <h3
@@ -200,7 +207,7 @@ export default function OfferCards() {
               fontWeight: 'normal',
               lineHeight: 1.4,
               textAlign: 'center',
-              marginBottom: '24px',
+              marginBottom: '40px',
             }}
           >
             Оставьте заявку<br />
@@ -209,43 +216,32 @@ export default function OfferCards() {
           </h3>
 
           <form onSubmit={handleSubmit} className="w-full" style={{ maxWidth: '280px' }}>
-            {/* Поле телефона и +7 */}
-            <div className="mb-5 w-full">
-              <div
-                className="flex items-center border border-gray-300 rounded-lg overflow-hidden"
-                style={{ borderColor: '#000000' }}
-              >
-                {/* Флаг и +7 */}
-                <div
-                  className="flex items-center justify-center w-12 h-10 bg-gray-50"
-                  style={{ backgroundColor: '#f8f9fa', borderRight: '1px solid #cccccc' }}
-                >
-                  <span className="text-xs font-medium">🇷🇺</span>
-                </div>
-                {/* Ввод номера */}
-                <input
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="+7 (000) 000-00-00"
-                  className="w-full px-4 py-3 border-none outline-none"
-                  style={{
-                    fontSize: '16px',
-                    fontFamily: '"TildaSans", Arial, sans-serif',
-                    color: '#000000',
-                    padding: '12px 16px',
-                  }}
-                />
-              </div>
+            {/* Поле телефона с кастомными стилями */}
+            <div className="mb-6 w-full">
+              <PhoneInput
+                international
+                defaultCountry="RU"
+                countryCallingCodeEditable={false}
+                value={phone}
+                onChange={setPhone}
+                onCountryChange={setCountry}
+                placeholder="+7 (000) 000-00-00"
+                className="PhoneInputCustom"
+              />
             </div>
 
             <button
               type="submit"
-              className="w-full bg-red-600 text-white font-bold py-3 rounded-lg hover:bg-red-700 transition"
+              disabled={!phone?.length || phone.length < 10}
+              className={`w-full text-white font-bold py-4 rounded-xl transition-all ${
+                phone?.length && phone.length >= 10
+                  ? 'bg-[#d5302c] hover:bg-[#b52824] cursor-pointer'
+                  : 'bg-[#f5a6a6] cursor-not-allowed'
+              }`}
               style={{
                 fontSize: '16px',
                 fontFamily: '"TildaSans", Arial, sans-serif',
-                borderRadius: '10px',
+                boxShadow: phone?.length && phone.length >= 10 ? '0 4px 12px rgba(213, 48, 44, 0.3)' : 'none',
               }}
             >
               ПОЛУЧИТЬ РАСЧЕТ

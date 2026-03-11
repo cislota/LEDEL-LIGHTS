@@ -1,3 +1,14 @@
+/* src/app/globals.css */
+
+/* 1. Стили библиотеки */
+@import 'react-phone-number-input/style.css';
+
+/* 2. Tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 3. Шрифты */
 @font-face {
   font-family: 'TildaSans';
   src: url('/media/TildaSans-VF.woff2') format('woff2');
@@ -5,10 +16,7 @@
   font-display: swap;
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
+/* 4. Глобальные переменные и тело страницы */
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-rgb: 255, 255, 255;
@@ -20,4 +28,170 @@ body {
   font-family: 'TildaSans', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* 5. КАСТОМНЫЕ СТИЛИ ДЛЯ PHONE INPUT */
+
+/* Основной контейнер поля */
+.PhoneInputCustom {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 56px;
+  border: 2px solid #d5302c;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #ffffff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Состояние фокуса */
+.PhoneInputCustom:focus-within {
+  border-color: #b52824;
+  box-shadow: 0 0 0 3px rgba(213, 48, 44, 0.1);
+}
+
+/* Контейнер страны (флаг + код) */
+.PhoneInputCustom .PhoneInputCountry {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  height: 100%;
+  border-right: 1px solid #e5e7eb;
+  background: #f9fafb;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.PhoneInputCustom .PhoneInputCountry:hover {
+  background: #f3f4f6;
+}
+
+/* Выпадающий список стран */
+.PhoneInputCustom .PhoneInputCountrySelect {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: "TildaSans", Arial, sans-serif;
+  color: #000000;
+  outline: none;
+  padding: 0;
+  height: 100%;
+}
+
+/* Скрываем стандартную стрелку */
+.PhoneInputCustom .PhoneInputCountrySelectArrow {
+  display: none !important;
+}
+
+/* Иконка флага */
+.PhoneInputCustom .PhoneInputCountryIcon {
+  width: 20px;
+  height: 16px;
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+/* Поле ввода номера */
+.PhoneInputCustom .PhoneInputInput {
+  flex: 1;
+  border: none !important;
+  outline: none !important;
+  font-size: 16px !important;
+  font-family: "TildaSans", Arial, sans-serif !important;
+  color: #000000 !important;
+  padding: 0 16px !important;
+  height: 100% !important;
+  background: transparent !important;
+}
+
+.PhoneInputCustom .PhoneInputInput::placeholder {
+  color: #9ca3af !important;
+}
+
+.PhoneInputCustom .PhoneInputInput:focus {
+  outline: none !important;
+}
+
+/* Выпадающее меню стран (кастомизация) */
+.PhoneInputCustom .PhoneInputCountrySelectMenu {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+  margin-bottom: 8px;
+}
+
+/* Элементы списка стран */
+.PhoneInputCustom .PhoneInputCountryOption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  font-size: 14px;
+  font-family: "TildaSans", Arial, sans-serif;
+}
+
+.PhoneInputCustom .PhoneInputCountryOption:hover {
+  background: #f3f4f6;
+}
+
+.PhoneInputCustom .PhoneInputCountryOption--selected {
+  background: #fef2f2;
+  font-weight: 600;
+}
+
+.PhoneInputCustom .PhoneInputCountryOption--selected:hover {
+  background: #fee2e2;
+}
+
+/* Код страны в списке */
+.PhoneInputCustom .PhoneInputCountryOption .PhoneInputCountryOptionCountryCode {
+  color: #6b7280;
+  margin-left: 12px;
+  font-weight: 500;
+}
+
+/* Скроллбар для списка стран */
+.PhoneInputCustom .PhoneInputCountrySelectMenu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.PhoneInputCustom .PhoneInputCountrySelectMenu::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.PhoneInputCustom .PhoneInputCountrySelectMenu::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.PhoneInputCustom .PhoneInputCountrySelectMenu::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Адаптив для мобильных */
+@media (max-width: 640px) {
+  .PhoneInputCustom {
+    height: 52px;
+  }
+  
+  .PhoneInputCustom .PhoneInputInput {
+    font-size: 16px !important; /* Предотвращает зум на iOS */
+  }
 }

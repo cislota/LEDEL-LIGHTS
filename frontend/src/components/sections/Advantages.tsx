@@ -67,15 +67,15 @@ const advantages = [
 export default function Advantages() {
   return (
     <section className="py-16 bg-[#F7F7F7]">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div 
+        className="mx-auto px-[233px]"
+        style={{ maxWidth: '1666px' }}
+      >
+        <div className="grid grid-cols-3 gap-8">
           {advantages.map((item, i) => (
             <div key={i} className="text-center">
               {/* Иконка */}
-              <div 
-                className="flex justify-center mb-6"
-                style={{ margin: '0 85px 30px' }}
-              >
+              <div className="flex justify-center mb-6">
                 <Image
                   src={item.icon}
                   alt=""
@@ -88,13 +88,13 @@ export default function Advantages() {
               {item.lines.map((line, lineIdx) => (
                 <div
                   key={lineIdx}
-                  className="mb-1 last:mb-0"
+                  className="mb-2 last:mb-0"
                   style={{
-                    fontSize: '20px',
+                    fontSize: '22px',
                     fontFamily: '"TildaSans", Arial, sans-serif',
-                    fontWeight: 'bold',
+                    fontWeight: 400,
                     color: '#000000',
-                    lineHeight: '1.3',
+                    lineHeight: '1.4',
                     whiteSpace: 'normal',
                   }}
                 >
@@ -103,7 +103,8 @@ export default function Advantages() {
                       key={idx}
                       style={{
                         color: part.color,
-                        fontWeight: part.bold ? 'bold' : 'normal',
+                        fontWeight: part.color === '#000000' ? 600 : (part.bold ? 600 : 400),
+                        display: 'inline',
                       }}
                     >
                       {part.text.replace(/ /g, '\u00A0')}

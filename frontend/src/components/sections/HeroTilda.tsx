@@ -3,7 +3,10 @@ import Image from 'next/image';
 
 export default function HeroTilda() {
   return (
-    <section className="py-16 md:py-24 bg-white">
+    <section 
+      className="py-16 md:py-24 bg-white"
+      style={{ fontFamily: '"TildaSans", Arial, sans-serif' }}
+    >
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="flex flex-col lg:flex-row items-center justify-center gap-12">
           {/* Текстовый блок */}
@@ -12,12 +15,12 @@ export default function HeroTilda() {
               <span className="whitespace-nowrap">Скачайте актуальный</span><br />
               <span className="whitespace-nowrap">прайс-лист завода <span className="text-red-600">LEDEL</span></span>
             </h1>
-            <p className="text-lg text-gray-600 mb-8">
+            <p className="text-[22px] text-gray-600 mb-8 font-medium" >
               с экономией на ценах до 30% среди конкурентов
             </p>
             <div className="flex justify-center lg:justify-start">
-              <button className="w-full max-w-md px-16 py-4 bg-red-600 text-white font-medium rounded-[35px] hover:bg-red-700 transition shadow-md">
-                Получить оптовый прайс-лист
+              <button className="w-full max-w-md px-16 py-4 bg-red-600 text-white font-bold rounded-[35px] hover:bg-red-700 transition shadow-md">
+                ПОЛУЧИТЬ ОПТОВЫЙ ПРАЙС-ЛИСТ
               </button>
             </div>
           </div>

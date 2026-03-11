@@ -218,16 +218,19 @@ export default function OfferCards() {
           <form onSubmit={handleSubmit} className="w-full" style={{ maxWidth: '280px' }}>
             {/* Поле телефона с кастомными стилями */}
             <div className="mb-6 w-full">
-              <PhoneInput
-                international
-                defaultCountry="RU"
-                countryCallingCodeEditable={false}
-                value={phone}
-                onChange={setPhone}
-                onCountryChange={setCountry}
-                placeholder="+7 (000) 000-00-00"
-                className="PhoneInputCustom"
-              />
+            <PhoneInput
+              international
+              defaultCountry="RU"
+              countryCallingCodeEditable={false}
+              value={phone}
+              onChange={setPhone}
+              onCountryChange={setCountry}
+              placeholder="(000) 000-00-00"
+              className="PhoneInputCustom"
+              inputProps={{
+                required: false,
+              }}
+            />
             </div>
 
             <button

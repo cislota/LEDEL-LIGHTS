@@ -121,7 +121,7 @@ export default function Header() {
 
           {/* Контакты */}
           <div className="flex items-center gap-4 text-sm text-gray-600">
-            <span style={{ fontSize: '13px', fontFamily: '"TildaSans", Arial, sans-serif' }}>
+            <span className="font-bold" style={{ fontSize: '13px', fontFamily: '"TildaSans", Arial, sans-serif' }}>
               ГК «СветКонсалт» — официальный
               <br />
               дилер завода-изготовителя Ledel
@@ -197,7 +197,8 @@ export default function Header() {
           </div>
 
           <div className="pt-4 border-t border-gray-200">
-            <p className="text-gray-600 mb-3" style={{ fontFamily: '"TildaSans", Arial, sans-serif' }}>
+            <p className="text-gray-600 mb-3 font-bold" 
+              style={{ fontFamily: '"TildaSans", Arial, sans-serif' }}>
               ГК «СветКонсалт» — официальный дилер завода-изготовителя Ledel
             </p>
             <div className="flex flex-col gap-3">

@@ -40,15 +40,15 @@ export default function PrivacyPolicyPage() {
         </div>
       </div>
 
-      {/* Контейнер 2: Основной текст 1560×7867 */}
+      {/* Контейнер 2: Основной текст 1160×7853 */}
       <div
         className="relative mx-auto mt-8"
-        style={{ width: '1560px', height: '6167px' }}
+        style={{ width: '1160px', height: '7853px' }}
       >
         <div
           className="absolute"
           style={{
-            left: '199px',
+            left: '0',
             top: '0',
             width: '1162px',
           }}
@@ -56,9 +56,9 @@ export default function PrivacyPolicyPage() {
         <div
         style={{
             fontFamily: '"TildaSans", Arial, sans-serif',
-            fontSize: '16px',
+            fontSize: '20px',
             color: '#000000',
-            lineHeight: 1.6,
+            lineHeight: 1.5,
         }}
         dangerouslySetInnerHTML={{
             __html: `

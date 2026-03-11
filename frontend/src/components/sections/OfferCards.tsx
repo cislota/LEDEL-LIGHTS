@@ -14,31 +14,6 @@ export default function OfferCards() {
 
   return (
     <section className="bg-white">
-      {/* Заголовок */}
-      <div
-        className="container mx-auto px-4"
-        style={{ paddingTop: '45px', paddingBottom: '75px' }}
-      >
-        <div
-          className="max-w-[1158px] mx-auto text-center"
-          style={{
-            fontSize: '24px',
-            fontFamily: '"TildaSans", Arial, sans-serif',
-            color: '#000000',
-            lineHeight: 1.5,
-            fontWeight: 'normal',
-          }}
-        >
-          <strong style={{ color: '#d5302c', fontWeight: 'bold' }}>
-            Поможем владельцам
-          </strong>{' '}
-          помещений{' '}
-          <strong style={{ color: '#d5302c', fontWeight: 'bold' }}>
-            сэкономить
-          </strong>{' '}
-          нервы, время и&nbsp;деньги. Подберем или разработаем светильник для любого назначения.
-        </div>
-      </div>
 
       {/* Карточки */}
       <div

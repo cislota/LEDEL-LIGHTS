@@ -5,18 +5,49 @@ import { useState } from 'react';
 import Image from 'next/image';
 import PhoneInput, { 
   type Country, 
-  type Value 
+  type Value,
+  isValidPhoneNumber 
 } from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 
 export default function OfferCards() {
   const [phone, setPhone] = useState<any>('');
   const [country, setCountry] = useState<Country>('RU');
+  const [error, setError] = useState<string>('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Заявка отправлена:', { phone, country });
+    
+    // Валидация перед отправкой
+    if (!phone || !isValidPhoneNumber(phone)) {
+      setError('Введите корректный номер телефона');
+      return;
+    }
+    
+    setError('');
+    console.log('Заявка отправлена:', { 
+      phone, 
+      country,
+      digits: phone?.replace(/\D/g, '') 
+    });
+    
+    // TODO: интеграция с FastAPI
+    // fetch('/api/lead', { 
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({ phone: phone?.replace(/\D/g, ''), country })
+    // })
   };
+
+  const handlePhoneChange = (value: Value) => {
+    setPhone(value);
+    // Сбрасываем ошибку при вводе
+    if (error) setError('');
+  };
+
+  // Проверка: номер валиден и достаточной длины
+  const isPhoneValid = phone && isValidPhoneNumber(phone);
+  const canSubmit = isPhoneValid && phone.length >= 10;
 
   return (
     <section className="bg-white">
@@ -181,7 +212,7 @@ export default function OfferCards() {
           </div>
         </div>
 
-        {/* Форма с кастомными стилями */}
+        {/* Форма с валидацией */}
         <div
           className="bg-white absolute"
           style={{
@@ -216,35 +247,45 @@ export default function OfferCards() {
           </h3>
 
           <form onSubmit={handleSubmit} className="w-full" style={{ maxWidth: '280px' }}>
-            {/* Поле телефона с кастомными стилями */}
-            <div className="mb-6 w-full">
-            <PhoneInput
-              international
-              defaultCountry="RU"
-              countryCallingCodeEditable={false}
-              value={phone}
-              onChange={setPhone}
-              onCountryChange={setCountry}
-              placeholder="(000) 000-00-00"
-              className="PhoneInputCustom"
-              inputProps={{
-                required: false,
-              }}
-            />
+            <div className="mb-4 w-full">
+              <PhoneInput
+                international
+                defaultCountry="RU"
+                countryCallingCodeEditable={false}
+                value={phone}
+                onChange={handlePhoneChange}
+                onCountryChange={setCountry}
+                className={`PhoneInputCustom ${error ? 'error' : ''}`}
+              />
+              
+              {/* Сообщение об ошибке */}
+              {error && (
+                <p 
+                  className="mt-2 text-sm"
+                  style={{ 
+                    color: '#d5302c', 
+                    fontFamily: '"TildaSans", Arial, sans-serif',
+                    textAlign: 'left',
+                    minHeight: '20px'
+                  }}
+                >
+                  ⚠️ {error}
+                </p>
+              )}
             </div>
 
             <button
               type="submit"
-              disabled={!phone?.length || phone.length < 10}
+              disabled={!canSubmit}
               className={`w-full text-white font-bold py-4 rounded-xl transition-all ${
-                phone?.length && phone.length >= 10
+                canSubmit
                   ? 'bg-[#d5302c] hover:bg-[#b52824] cursor-pointer'
                   : 'bg-[#f5a6a6] cursor-not-allowed'
               }`}
               style={{
                 fontSize: '16px',
                 fontFamily: '"TildaSans", Arial, sans-serif',
-                boxShadow: phone?.length && phone.length >= 10 ? '0 4px 12px rgba(213, 48, 44, 0.3)' : 'none',
+                boxShadow: canSubmit ? '0 4px 12px rgba(213, 48, 44, 0.3)' : 'none',
               }}
             >
               ПОЛУЧИТЬ РАСЧЕТ

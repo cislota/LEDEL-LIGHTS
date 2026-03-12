@@ -185,6 +185,16 @@ body {
   background: #9ca3af;
 }
 
+/* Подсветка поля при ошибке */
+.PhoneInputCustom.error {
+  border-color: #d5302c !important;
+  box-shadow: 0 0 0 3px rgba(213, 48, 44, 0.2) !important;
+}
+
+.PhoneInputCustom.error .PhoneInputCountry {
+  background: #fef2f2 !important;
+}
+
 /* Адаптив для мобильных */
 @media (max-width: 640px) {
   .PhoneInputCustom {

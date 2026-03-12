@@ -976,7 +976,7 @@ export default function CatalogSection() {
               ))}
             </div>
 
-            {/* Кнопка "Загрузить ещё" */}
+            {/* Кнопка "Загрузить ещё" — центрирована под второй колонкой */}
             {hasMore && (
               <div className="flex justify-center mt-12">
                 <button
@@ -985,6 +985,8 @@ export default function CatalogSection() {
                   style={{
                     fontSize: '16px',
                     fontFamily: '"TildaSans", Arial, sans-serif',
+                    marginLeft: 'calc(279px + 50px + 139.5px)', // Центрирование под 2-й колонкой
+                    transform: 'translateX(-164%)', // центрирование
                   }}
                 >
                   ЗАГРУЗИТЬ ЕЩЁ
@@ -993,7 +995,13 @@ export default function CatalogSection() {
             )}
 
             {/* Счётчик товаров */}
-            <div className="text-center mt-6">
+            <div 
+              className="text-center mt-6"
+              style={{
+                marginLeft: 'calc(279px + 50px + 139.5px)', // центр второй колонки
+                transform: 'translateX(-50%)', // центрирование
+              }}
+            >
               <p 
                 className="text-gray-600"
                 style={{ 

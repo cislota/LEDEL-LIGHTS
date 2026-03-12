@@ -1,11 +1,15 @@
 // src/components/sections/CatalogSection.tsx
 'use client';
 
+import { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
 
 export default function CatalogSection() {
-const products = [
+  const [activeCategory, setActiveCategory] = useState('Все');
+  const [visibleCount, setVisibleCount] = useState(9); // Изначально 9 товаров
 
+  const products = [
+  
   // ПРОМЫШЛЕННОЕ ОСВЕЩЕНИЕ (19 товаров) /media/prom.webp
 
   {
@@ -733,7 +737,8 @@ const products = [
     type: 'Светильник',
     category: 'Архитектурно-парковое освещение',
   },
-];
+ ];
+
 
   const categories = [
     'Все',
@@ -743,6 +748,30 @@ const products = [
     'Коммерческое освещение',
     'Архитектурно-парковое освещение',
   ];
+
+  // Фильтрация товаров по категории
+  const filteredProducts = useMemo(() => {
+    if (activeCategory === 'Все') {
+      return products;
+    }
+    return products.filter(p => p.category === activeCategory);
+  }, [activeCategory]);
+
+  // Отображаемые товары (с учётом видимого количества)
+  const visibleProducts = filteredProducts.slice(0, visibleCount);
+
+  // Сброс количества при смене категории
+  useEffect(() => {
+    setVisibleCount(9);
+  }, [activeCategory]);
+
+  // Обработчик загрузки ещё
+  const handleLoadMore = () => {
+    setVisibleCount(prev => prev + 9);
+  };
+
+  // Показывать кнопку, если есть ещё товары
+  const hasMore = visibleCount < filteredProducts.length;
 
   return (
     <section id="catalog" className="bg-white py-12">
@@ -781,21 +810,30 @@ const products = [
 
         {/* Основной контент */}
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Левое меню */}
+          {/* Левое меню — динамическая высота */}
           <div
             className="bg-gray-100 p-6 rounded-2xl"
-            style={{ width: '290px', height: '1375px', flexShrink: 0 }}
+            style={{ 
+              width: '290px', 
+              flexShrink: 0,
+              height: 'fit-content',
+              minHeight: '500px',
+            }}
           >
             <ul className="space-y-4">
               {categories.map((cat, i) => (
                 <li key={i}>
                   <button
-                    className="w-full text-left py-3 px-4 rounded-lg hover:bg-gray-200 transition"
+                    onClick={() => setActiveCategory(cat)}
+                    className={`w-full text-left py-3 px-4 rounded-lg transition ${
+                      activeCategory === cat 
+                        ? 'bg-[#d5302c] text-white font-semibold' 
+                        : 'hover:bg-gray-200'
+                    }`}
                     style={{
                       fontSize: '16px',
                       fontFamily: '"TildaSans", Arial, sans-serif',
-                      color: '#000000',
-                      fontWeight: 'normal',
+                      fontWeight: activeCategory === cat ? '600' : '400',
                     }}
                   >
                     {cat}
@@ -806,15 +844,12 @@ const products = [
           </div>
 
           {/* Каталог справа */}
-          <div
-            className="bg-white p-6 rounded-2xl"
-            style={{ width: '870px', height: '1375px', flexShrink: 0 }}
-          >
+          <div className="flex-1">
             <div 
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" 
               style={{ gap: '100px 50px' }}
             >
-              {products.map((product) => (
+              {visibleProducts.map((product) => (
                 <div
                   key={product.id}
                   className="flex flex-col"
@@ -939,6 +974,36 @@ const products = [
                   </div>
                 </div>
               ))}
+            </div>
+
+            {/* Кнопка "Загрузить ещё" */}
+            {hasMore && (
+              <div className="flex justify-center mt-12">
+                <button
+                  onClick={handleLoadMore}
+                  className="px-12 py-4 bg-[#d5302c] text-white font-bold rounded-[30px] hover:bg-[#b52824] transition"
+                  style={{
+                    fontSize: '16px',
+                    fontFamily: '"TildaSans", Arial, sans-serif',
+                  }}
+                >
+                  ЗАГРУЗИТЬ ЕЩЁ
+                </button>
+              </div>
+            )}
+
+            {/* Счётчик товаров */}
+            <div className="text-center mt-6">
+              <p 
+                className="text-gray-600"
+                style={{ 
+                  fontSize: '16px', 
+                  fontFamily: '"TildaSans", Arial, sans-serif' 
+                }}
+              >
+                Показано {visibleProducts.length} из {filteredProducts.length} товаров
+                {activeCategory !== 'Все' && ` в категории "${activeCategory}"`}
+              </p>
             </div>
           </div>
         </div>

@@ -88,7 +88,7 @@ export default function ContactManagerSection() {
             {/* Подзаголовок — слева, отступ сверху 24px */}
             <p
               style={{
-                fontSize: '20px',
+                fontSize: '24px',
                 fontFamily: '"TildaSans", Arial, sans-serif',
                 color: '#000000',
                 fontWeight: 'normal',
@@ -121,7 +121,7 @@ export default function ContactManagerSection() {
                   />
                   <span
                     style={{
-                      fontSize: '16px',
+                      fontSize: '20px',
                       fontFamily: '"TildaSans", Arial, sans-serif',
                       color: '#000000',
                       lineHeight: 1.5,

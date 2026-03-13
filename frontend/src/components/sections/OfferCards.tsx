@@ -269,7 +269,7 @@ export default function OfferCards() {
                     minHeight: '20px'
                   }}
                 >
-                  ⚠️ {error}
+                  {error}
                 </p>
               )}
             </div>

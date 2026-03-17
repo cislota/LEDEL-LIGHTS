@@ -14,6 +14,26 @@ interface Product {
   price?: string;
 }
 
+// Функция для разбиения названия после N слов
+const splitProductName = (text: string, splitAfter: number = 3) => {
+  const parts = text.split(' ');
+  
+  if (parts.length <= splitAfter) {
+    return text;
+  }
+  
+  const firstPart = parts.slice(0, splitAfter).join(' ');
+  const secondPart = parts.slice(splitAfter).join(' ');
+  
+  return (
+    <>
+      {firstPart}
+      <br />
+      {secondPart}
+    </>
+  );
+};
+
 export default function CatalogSection() {
   const [activeCategory, setActiveCategory] = useState('Все');
   const [visibleCount, setVisibleCount] = useState(9);
@@ -41,25 +61,21 @@ export default function CatalogSection() {
 
         // Извлекаем массив products из ответа API
         const productsData = data.products || [];
-        console.log('📦 Продуктов найдено:', productsData.length);
-
-        // 🔍 Отладка: смотрим структуру первого товара
-        if (productsData.length > 0) {
-          console.log('🔍 Структура первого товара:', Object.keys(productsData[0]));
-          console.log('🔍 images поле:', productsData[0].images);
-          console.log('🔍 title:', productsData[0].title);
-        }
+        console.log('Продуктов найдено:', productsData.length);
 
         // Фильтруем и преобразуем данные
         const formattedProducts: Product[] = productsData
           .filter((p: any) => {
-            // Более мягкий фильтр: проверяем только наличие названия с "Светильник"
-            const hasTitle = p.title?.includes('Светильник') && p.title?.length > 10;
-            return hasTitle;
+            // Проверяем что есть название и оно содержит "Светильник"
+            return (
+              p.title &&
+              p.title.includes('Светильник') &&
+              p.title.length > 10
+            );
           })
           .map((p: any, i: number) => {
             // Разделяем title на nameMain и nameSpec
-            const nameParts = p.title?.split('/') || ['Светильник'];
+            const nameParts = p.title.split('/');
             const nameMain = nameParts[0] || 'Светильник';
             const nameSpec = nameParts.slice(1).join('/') || p.text || '';
             
@@ -75,19 +91,11 @@ export default function CatalogSection() {
               category = 'Архитектурно-парковое освещение';
             }
 
-            // 🔍 Получаем изображение: пробуем разные поля
-            let imgUrl = '/media/prom.webp'; // заглушка по умолчанию
-            
-            // Вариант 1: images[0].url (стандартный формат Tilda API)
+            // Получаем изображение
+            let imgUrl = '/media/prom.webp';
             if (p.images?.[0]?.url) {
               imgUrl = p.images[0].url;
-            }
-            // Вариант 2: img (если данные уже преобразованы)
-            else if (p.img) {
-              imgUrl = p.img;
-            }
-            // Вариант 3: определяем по категории
-            else if (category === 'Уличное освещение') {
+            } else if (category === 'Уличное освещение') {
               imgUrl = '/media/ul.webp';
             } else if (category === 'Офисное освещение') {
               imgUrl = '/media/of.webp';
@@ -104,7 +112,7 @@ export default function CatalogSection() {
               nameSpec: nameSpec.trim(),
               type: category === 'Промышленное освещение' ? 'Прожектор' : 'Светильник',
               category: category,
-              price: p.price?.display || '',
+              price: '',
             };
           });
 
@@ -222,7 +230,7 @@ export default function CatalogSection() {
 
         {/* Основной контент */}
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Левое меню — динамическая высота */}
+          {/* Левое меню */}
           <div
             className="bg-gray-100 p-6 rounded-2xl"
             style={{
@@ -306,42 +314,44 @@ export default function CatalogSection() {
                           className="flex flex-col justify-center"
                           style={{
                             width: '279px',
-                            height: '54px',
+                            height: '70px',
                             textAlign: 'center',
                           }}
                         >
                           <h3
-                            style={{
-                              fontSize: '20px',
-                              fontFamily: '"TildaSans", Arial, sans-serif',
-                              color: '#000000',
-                              fontWeight: 600,
-                              lineHeight: 1.2,
-                              margin: 0,
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                              display: '-webkit-box',
-                              WebkitLineClamp: 2,
-                              WebkitBoxOrient: 'vertical',
-                            }}
-                          >
-                            {product.nameMain}
-                          </h3>
-                          <div
                             style={{
                               fontSize: '18px',
                               fontFamily: '"TildaSans", Arial, sans-serif',
                               color: '#000000',
                               fontWeight: 600,
                               lineHeight: 1.2,
-                              marginTop: '2px',
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                              whiteSpace: 'nowrap',
+                              margin: 0,
+                              textAlign: 'center',
+                              minHeight: '50px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
                             }}
                           >
-                            {product.nameSpec}
-                          </div>
+                            {splitProductName(product.nameMain, 4)}
+                          </h3>
+                        </div>
+
+                        <div
+                          style={{
+                            fontSize: '16px',
+                            fontFamily: '"TildaSans", Arial, sans-serif',
+                            color: '#000000',
+                            fontWeight: 600,
+                            lineHeight: 1.2,
+                            marginTop: '2px',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            textAlign: 'center',
+                          }}
+                        >
+                          {product.nameSpec}
                         </div>
 
                         <div

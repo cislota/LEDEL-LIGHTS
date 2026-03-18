@@ -3,9 +3,11 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface Product {
   id: number;
+  uid: string;
   img: string;
   nameMain: string;
   nameSpec: string;
@@ -14,22 +16,40 @@ interface Product {
   price?: string;
 }
 
-// Функция для разбиения названия после N слов
-const splitProductName = (text: string, splitAfter: number = 3) => {
-  const parts = text.split(' ');
+// Функция для умного разбиения названия на 2-3 строки
+const splitProductName = (text: string) => {
+  const words = text.split(' ');
   
-  if (parts.length <= splitAfter) {
+  if (words.length <= 3) {
     return text;
   }
   
-  const firstPart = parts.slice(0, splitAfter).join(' ');
-  const secondPart = parts.slice(splitAfter).join(' ');
+  if (words.length <= 6) {
+    const firstPart = words.slice(0, 3).join(' ');
+    const secondPart = words.slice(3).join(' ');
+    return (
+      <>
+        {firstPart}
+        <br />
+        {secondPart}
+      </>
+    );
+  }
+  
+  const thirdIndex = Math.ceil(words.length / 3);
+  const sixthIndex = Math.ceil((words.length * 2) / 3);
+  
+  const firstPart = words.slice(0, thirdIndex).join(' ');
+  const secondPart = words.slice(thirdIndex, sixthIndex).join(' ');
+  const thirdPart = words.slice(sixthIndex).join(' ');
   
   return (
     <>
       {firstPart}
       <br />
       {secondPart}
+      <br />
+      {thirdPart}
     </>
   );
 };
@@ -59,27 +79,23 @@ export default function CatalogSection() {
         const data = await response.json();
         console.log('📦 Получены данные:', data);
 
-        // Извлекаем массив products из ответа API
+        // ✅ Правильно извлекаем products из ответа API
         const productsData = data.products || [];
-        console.log('Продуктов найдено:', productsData.length);
+        console.log('📦 Продуктов найдено:', productsData.length);
 
-        // Фильтруем и преобразуем данные
+        // ✅ Фильтруем и преобразуем данные
         const formattedProducts: Product[] = productsData
           .filter((p: any) => {
-            // Проверяем что есть название и оно содержит "Светильник"
-            return (
-              p.title &&
-              p.title.includes('Светильник') &&
-              p.title.length > 10
-            );
+            // Оставляем только товары с названием "Светильник"
+            return p.title && p.title.includes('Светильник');
           })
-          .map((p: any, i: number) => {
-            // Разделяем title на nameMain и nameSpec
-            const nameParts = p.title.split('/');
-            const nameMain = nameParts[0] || 'Светильник';
-            const nameSpec = nameParts.slice(1).join('/') || p.text || '';
+          .map((p: any, index: number) => {
+            // Разделяем title на nameMain и nameSpec по первому "/"
+            const titleParts = p.title.split('/');
+            const nameMain = titleParts[0];
+            const nameSpec = titleParts.slice(1).join('/');
             
-            // Определяем категорию по nameMain
+            // Определяем категорию по названию товара (nameMain)
             let category = 'Промышленное освещение';
             if (nameMain.includes('L-street')) {
               category = 'Уличное освещение';
@@ -91,11 +107,9 @@ export default function CatalogSection() {
               category = 'Архитектурно-парковое освещение';
             }
 
-            // Получаем изображение
-            let imgUrl = '/media/prom.webp';
-            if (p.images?.[0]?.url) {
-              imgUrl = p.images[0].url;
-            } else if (category === 'Уличное освещение') {
+            // Определяем изображение по категории
+            let imgUrl = '/media/prom.webp'; // по умолчанию
+            if (category === 'Уличное освещение') {
               imgUrl = '/media/ul.webp';
             } else if (category === 'Офисное освещение') {
               imgUrl = '/media/of.webp';
@@ -106,7 +120,8 @@ export default function CatalogSection() {
             }
 
             return {
-              id: i + 1,
+              id: index + 1,
+              uid: p.uid,
               img: imgUrl,
               nameMain: nameMain.trim(),
               nameSpec: nameSpec.trim(),
@@ -159,7 +174,6 @@ export default function CatalogSection() {
     setVisibleCount(9);
   }, [activeCategory]);
 
-  // Обработчик загрузки ещё
   const handleLoadMore = () => {
     setVisibleCount((prev) => prev + 9);
   };
@@ -276,126 +290,128 @@ export default function CatalogSection() {
                   style={{ gap: '100px 50px' }}
                 >
                   {visibleProducts.map((product) => (
-                    <div
-                      key={product.id}
-                      className="flex flex-col"
-                      style={{ width: '279px', height: '300px' }}
+                    <Link
+                      key={product.uid}
+                      href={`/product/${product.uid}`}
+                      className="block hover:opacity-90 transition"
                     >
                       <div
-                        className="overflow-hidden"
-                        style={{
-                          width: '279px',
-                          height: '209px',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <Image
-                          src={product.img}
-                          alt={product.nameMain}
-                          width={279}
-                          height={157}
-                          className="w-full h-auto object-cover"
-                          priority={product.id <= 9}
-                        />
-                      </div>
-
-                      <div
                         className="flex flex-col"
-                        style={{
-                          width: '279px',
-                          height: '188px',
-                          gap: '8px',
-                        }}
+                        style={{ width: '279px', height: '320px' }}
                       >
                         <div
-                          className="flex flex-col justify-center"
+                          className="overflow-hidden"
                           style={{
                             width: '279px',
-                            height: '70px',
-                            textAlign: 'center',
+                            height: '209px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
                           }}
                         >
-                          <h3
+                          <Image
+                            src={product.img}
+                            alt={product.nameMain}
+                            width={279}
+                            height={157}
+                            className="w-full h-auto object-cover"
+                            priority={product.id <= 9}
+                          />
+                        </div>
+
+                        <div
+                          className="flex flex-col"
+                          style={{
+                            width: '279px',
+                            height: '188px',
+                            gap: '4px',
+                          }}
+                        >
+                          <div
+                            className="flex flex-col justify-center"
+                            style={{
+                              width: '279px',
+                              minHeight: '60px',
+                              textAlign: 'center',
+                            }}
+                          >
+                            <h3
+                              style={{
+                                fontSize: '18px',
+                                fontFamily: '"TildaSans", Arial, sans-serif',
+                                color: '#000000',
+                                fontWeight: 600,
+                                lineHeight: 1.3,
+                                margin: 0,
+                              }}
+                            >
+                              {splitProductName(product.nameMain)}
+                            </h3>
+                          </div>
+
+                          <div
                             style={{
                               fontSize: '18px',
                               fontFamily: '"TildaSans", Arial, sans-serif',
                               color: '#000000',
                               fontWeight: 600,
-                              lineHeight: 1.2,
-                              margin: 0,
+                              lineHeight: 1.3,
+                              marginTop: '2px',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              display: '-webkit-box',
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: 'vertical',
                               textAlign: 'center',
-                              minHeight: '50px',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
                             }}
                           >
-                            {splitProductName(product.nameMain, 4)}
-                          </h3>
-                        </div>
+                            {product.nameSpec}
+                          </div>
 
-                        <div
-                          style={{
-                            fontSize: '16px',
-                            fontFamily: '"TildaSans", Arial, sans-serif',
-                            color: '#000000',
-                            fontWeight: 600,
-                            lineHeight: 1.2,
-                            marginTop: '2px',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                            textAlign: 'center',
-                          }}
-                        >
-                          {product.nameSpec}
-                        </div>
-
-                        <div
-                          className="flex items-center justify-center"
-                          style={{
-                            width: '279px',
-                            height: '21px',
-                          }}
-                        >
-                          <p
+                          <div
+                            className="flex items-center justify-center"
                             style={{
-                              fontSize: '14px',
-                              fontFamily: '"TildaSans", Arial, sans-serif',
-                              color: '#666666',
-                              fontWeight: 'normal',
-                              lineHeight: 1,
-                              margin: 0,
-                              textAlign: 'center',
+                              width: '279px',
+                              height: '21px',
                             }}
                           >
-                            {product.type}
-                          </p>
-                        </div>
+                            <p
+                              style={{
+                                fontSize: '14px',
+                                fontFamily: '"TildaSans", Arial, sans-serif',
+                                color: '#666666',
+                                fontWeight: 'normal',
+                                lineHeight: 1,
+                                margin: 0,
+                                textAlign: 'center',
+                              }}
+                            >
+                              {product.type}
+                            </p>
+                          </div>
 
-                        <div
-                          className="flex items-center justify-center"
-                          style={{
-                            width: '279px',
-                            height: '53px',
-                          }}
-                        >
-                          <button
-                            className="w-[143px] h-[45px] bg-red-600 text-white font-bold rounded-[30px] hover:bg-red-700 transition flex items-center justify-center"
+                          <div
+                            className="flex items-center justify-center"
                             style={{
-                              fontSize: '14px',
-                              fontFamily: '"TildaSans", Arial, sans-serif',
-                              textAlign: 'center',
+                              width: '279px',
+                              height: '53px',
                             }}
                           >
-                            ПОДРОБНЕЕ
-                          </button>
+                            <button
+                              className="w-[143px] h-[45px] bg-red-600 text-white font-bold rounded-[30px] hover:bg-red-700 transition flex items-center justify-center"
+                              style={{
+                                fontSize: '14px',
+                                fontFamily: '"TildaSans", Arial, sans-serif',
+                                textAlign: 'center',
+                              }}
+                            >
+                              ПОДРОБНЕЕ
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    </Link>
                   ))}
                 </div>
 

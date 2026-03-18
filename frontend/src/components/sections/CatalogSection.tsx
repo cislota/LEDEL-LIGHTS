@@ -1,64 +1,27 @@
 // src/components/sections/CatalogSection.tsx
 'use client';
 
-import { useState, useMemo, useEffect, ReactNode } from 'react'; // ✅ Добавлен ReactNode
+import { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-
-interface Product {
-  id: number;
-  uid: string;
-  img: string;
-  nameMain: string;
-  nameSpec: string;
-  type: string;
-  category: string;
-  price?: string;
-}
-
-// ✅ Фикс #1: Явный тип возврата ReactNode
-const splitProductName = (text: string): ReactNode => {
-  const words = text.split(' ');
-  
-  if (words.length <= 3) {
-    return text;
-  }
-  
-  if (words.length <= 6) {
-    const firstPart = words.slice(0, 3).join(' ');
-    const secondPart = words.slice(3).join(' ');
-    return (
-      <>
-        {firstPart}
-        <br />
-        {secondPart}
-      </>
-    );
-  }
-  
-  const thirdIndex = Math.ceil(words.length / 3);
-  const sixthIndex = Math.ceil((words.length * 2) / 3);
-  
-  const firstPart = words.slice(0, thirdIndex).join(' ');
-  const secondPart = words.slice(thirdIndex, sixthIndex).join(' ');
-  const thirdPart = words.slice(sixthIndex).join(' ');
-  
-  return (
-    <>
-      {firstPart}
-      <br />
-      {secondPart}
-      <br />
-      {thirdPart}
-    </>
-  );
-};
+// ✅ Импорт утилит
+import { 
+  Product, 
+  TildaApiResponse,
+  CategoryValue,
+  formatProduct, 
+  extractProductsFromResponse, 
+  filterLightingProducts,
+  getUniqueCategories,
+  splitProductName,
+  CATEGORIES,
+} from '@/utils/product-helpers';
 
 export default function CatalogSection() {
-  const [activeCategory, setActiveCategory] = useState('Все');
+  const [activeCategory, setActiveCategory] = useState<CategoryValue>(CATEGORIES.ALL);
   const [visibleCount, setVisibleCount] = useState(9);
   const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<string[]>(['Все']);
+  const [categories, setCategories] = useState<CategoryValue[]>([CATEGORIES.ALL]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -76,74 +39,23 @@ export default function CatalogSection() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        const data = await response.json();
+        const data: TildaApiResponse = await response.json();
         console.log('📦 Получены данные:', data);
 
-        const productsData = data.products || [];
+        // ✅ Используем утилиты для обработки данных
+        const productsData = extractProductsFromResponse(data);
         console.log('📦 Продуктов найдено:', productsData.length);
 
-        const formattedProducts: Product[] = productsData
-          .filter((p: any) => {
-            return p.title && p.title.includes('Светильник');
-          })
-          .map((p: any, index: number) => {
-            const titleParts = p.title.split('/');
-            const nameMain = titleParts[0];
-            const nameSpec = titleParts.slice(1).join('/');
-            
-            let category = 'Промышленное освещение';
-            if (nameMain.includes('L-street')) {
-              category = 'Уличное освещение';
-            } else if (nameMain.includes('L-office') || nameMain.includes('L-fusion Office')) {
-              category = 'Офисное освещение';
-            } else if (nameMain.includes('L-fusion Retail')) {
-              category = 'Коммерческое освещение';
-            } else if (nameMain.includes('L-contour') || nameMain.includes('L-facade')) {
-              category = 'Архитектурно-парковое освещение';
-            }
-
-            // ✅ Фикс #2: Приоритет реального изображения из API
-            let imgUrl = '/media/prom.webp';
-            if (p.images?.[0]?.url) {
-              imgUrl = p.images[0].url;
-            } else if (p.img) {
-              imgUrl = p.img;
-            } else if (category === 'Уличное освещение') {
-              imgUrl = '/media/ul.webp';
-            } else if (category === 'Офисное освещение') {
-              imgUrl = '/media/of.webp';
-            } else if (category === 'Коммерческое освещение') {
-              imgUrl = '/media/kom.webp';
-            } else if (category === 'Архитектурно-парковое освещение') {
-              imgUrl = '/media/arch.webp';
-            }
-
-            return {
-              id: index + 1,
-              uid: p.uid,
-              img: imgUrl,
-              nameMain: nameMain.trim(),
-              nameSpec: nameSpec.trim(),
-              type: category === 'Промышленное освещение' ? 'Прожектор' : 'Светильник',
-              category: category,
-              price: '',
-            };
-          });
+        const filtered = filterLightingProducts(productsData);
+        
+        const formattedProducts: Product[] = filtered.map((p, index) => 
+          formatProduct(p, index)
+        );
 
         console.log('✅ Отформатировано товаров:', formattedProducts.length);
-        if (formattedProducts.length > 0) {
-          console.log('📋 Пример первого товара:', formattedProducts[0]);
-        }
         
         setProducts(formattedProducts);
-
-        const uniqueCategories = [
-          'Все',
-          ...Array.from(new Set(formattedProducts.map((p: Product) => p.category).filter(Boolean))) as string[],
-        ];
-        
-        console.log('📂 Категории:', uniqueCategories);
-        setCategories(uniqueCategories);
+        setCategories(getUniqueCategories(formattedProducts));
 
       } catch (err) {
         console.error('❌ Ошибка загрузки товаров:', err);
@@ -157,7 +69,7 @@ export default function CatalogSection() {
   }, []);
 
   const filteredProducts = useMemo(() => {
-    if (activeCategory === 'Все') {
+    if (activeCategory === CATEGORIES.ALL) {
       return products;
     }
     return products.filter((p) => p.category === activeCategory);
@@ -169,10 +81,7 @@ export default function CatalogSection() {
     setVisibleCount(9);
   }, [activeCategory]);
 
-  const handleLoadMore = () => {
-    setVisibleCount((prev) => prev + 9);
-  };
-
+  const handleLoadMore = () => setVisibleCount((prev) => prev + 9);
   const hasMore = visibleCount < filteredProducts.length;
 
   if (loading) {
@@ -247,8 +156,8 @@ export default function CatalogSection() {
             }}
           >
             <ul className="space-y-4">
-              {categories.map((cat, i) => (
-                <li key={i}>
+              {categories.map((cat) => (
+                <li key={cat}>
                   <button
                     onClick={() => setActiveCategory(cat)}
                     className={`w-full text-left py-3 px-4 rounded-lg transition ${
@@ -283,7 +192,6 @@ export default function CatalogSection() {
                 >
                   {visibleProducts.map((product) => (
                     <Link
-                      // ✅ Фикс #3: Надёжный ключ с фолбэком
                       key={`${product.uid}-${product.id}`}
                       href={`/product/${product.uid}`}
                       className="block hover:opacity-90 transition"
@@ -309,7 +217,6 @@ export default function CatalogSection() {
                             width={279}
                             height={157}
                             className="w-full h-auto object-cover"
-                            // ✅ Фикс #4: Убран некорректный priority
                           />
                         </div>
 
@@ -339,6 +246,7 @@ export default function CatalogSection() {
                                 margin: 0,
                               }}
                             >
+                              {/* ✅ Используем утилиту */}
                               {splitProductName(product.nameMain)}
                             </h3>
                           </div>
@@ -440,7 +348,7 @@ export default function CatalogSection() {
                     }}
                   >
                     Показано {visibleProducts.length} из {filteredProducts.length} товаров
-                    {activeCategory !== 'Все' && ` в категории "${activeCategory}"`}
+                    {activeCategory !== CATEGORIES.ALL && ` в категории "${activeCategory}"`}
                   </p>
                 </div>
               </>

@@ -4,25 +4,20 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-
-interface Product {
-  id: number;
-  uid: string;
-  img: string;
-  nameMain: string;
-  nameSpec: string;
-  type: string;
-  category: string;
-  text?: string;
-  sku?: string;
-}
+// ✅ Импорт утилит
+import { 
+  Product,
+  TildaApiResponse,
+  formatProduct,
+  extractProductsFromResponse,
+  CATEGORIES,
+} from '@/utils/product-helpers';
 
 export default function ProductPage() {
   const params = useParams();
   const router = useRouter();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
-  // ✅ Фикс #1: Добавлено состояние ошибки
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -37,66 +32,23 @@ export default function ProductPage() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        const data = await response.json();
+        const data: TildaApiResponse = await response.json();
+        const productsData = extractProductsFromResponse(data);
         
-        const productsData = Array.isArray(data) ? data : (data.products || []);
-        
-        // ✅ Фикс #2: Безопасное получение id
+        // ✅ Безопасное получение id
         const productId = Array.isArray(params.id) ? params.id[0] : params.id;
         
-        const foundProduct = productsData.find(
-          (p: any) => p.uid === productId
-        );
+        const foundRaw = productsData.find((p) => p.uid === productId);
 
-        if (foundProduct) {
-          const nameParts = foundProduct.title?.split('/') || [];
-          const nameMain = nameParts[0] || 'Светильник';
-          const nameSpec = nameParts.slice(1).join('/') || '';
-          
-          let category = 'Промышленное освещение';
-          if (nameMain.includes('L-street')) {
-            category = 'Уличное освещение';
-          } else if (nameMain.includes('L-office') || nameMain.includes('L-fusion Office')) {
-            category = 'Офисное освещение';
-          } else if (nameMain.includes('L-fusion Retail')) {
-            category = 'Коммерческое освещение';
-          } else if (nameMain.includes('L-contour') || nameMain.includes('L-facade')) {
-            category = 'Архитектурно-парковое освещение';
-          }
-
-          // ✅ Фикс #3: Приоритет реального изображения
-          let imgUrl = '/media/prom.webp';
-          if (foundProduct.images?.[0]?.url) {
-            imgUrl = foundProduct.images[0].url;
-          } else if (foundProduct.img) {
-            imgUrl = foundProduct.img;
-          } else if (category === 'Уличное освещение') {
-            imgUrl = '/media/ul.webp';
-          } else if (category === 'Офисное освещение') {
-            imgUrl = '/media/of.webp';
-          } else if (category === 'Коммерческое освещение') {
-            imgUrl = '/media/kom.webp';
-          } else if (category === 'Архитектурно-парковое освещение') {
-            imgUrl = '/media/arch.webp';
-          }
-
-          setProduct({
-            id: foundProduct.id || 0,
-            uid: foundProduct.uid,
-            img: imgUrl,
-            nameMain: nameMain.trim(),
-            nameSpec: nameSpec.trim(),
-            type: category === 'Промышленное освещение' ? 'Прожектор' : 'Светильник',
-            category: category,
-            text: foundProduct.text || '',
-            sku: foundProduct.sku || '',
-          });
+        if (foundRaw) {
+          // ✅ Используем утилиту форматирования
+          const formatted = formatProduct(foundRaw, 0);
+          setProduct(formatted);
         } else {
           setError('Товар не найден');
         }
       } catch (err) {
         console.error('Ошибка загрузки товара:', err);
-        // ✅ Фикс #1: Установка сообщения об ошибке
         setError(`Не удалось загрузить товар: ${err instanceof Error ? err.message : 'Неизвестная ошибка'}`);
       } finally {
         setLoading(false);
@@ -106,7 +58,6 @@ export default function ProductPage() {
     fetchProduct();
   }, [params.id]);
 
-  // ✅ Фикс #1: Обработка состояния ошибки
   if (error) {
     return (
       <div className="min-h-screen bg-white py-12">
@@ -138,7 +89,6 @@ export default function ProductPage() {
     );
   }
 
-  // Товар не найден
   if (!product) {
     return (
       <div className="min-h-screen bg-white py-12">
@@ -163,7 +113,6 @@ export default function ProductPage() {
   return (
     <div className="min-h-screen bg-white py-12">
       <div className="container mx-auto px-4">
-        {/* Кнопка назад */}
         <button
           onClick={() => router.back()}
           className="mb-8 text-[#d5302c] hover:text-[#b52824] transition flex items-center gap-2"
@@ -173,7 +122,6 @@ export default function ProductPage() {
         </button>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-          {/* Изображение товара */}
           <div className="flex items-center justify-center bg-gray-50 rounded-2xl p-8">
             <Image
               src={product.img}
@@ -185,7 +133,6 @@ export default function ProductPage() {
             />
           </div>
 
-          {/* Информация о товаре */}
           <div className="flex flex-col">
             <h1
               className="text-3xl font-bold mb-4"
@@ -212,7 +159,6 @@ export default function ProductPage() {
               </p>
             )}
 
-            {/* Кнопка запросить прайс */}
             <button
               className="w-full sm:w-auto px-12 py-4 bg-[#d5302c] text-white font-bold rounded-[30px] hover:bg-[#b52824] transition mb-8"
               style={{
@@ -223,7 +169,6 @@ export default function ProductPage() {
               ЗАПРОСИТЬ ПРАЙС
             </button>
 
-            {/* Описание */}
             {product.text && (
               <div
                 className="bg-gray-50 rounded-2xl p-6"

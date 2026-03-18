@@ -4,7 +4,6 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-// ✅ Импорт утилит
 import { 
   Product,
   TildaApiResponse,
@@ -26,30 +25,57 @@ export default function ProductPage() {
         setLoading(true);
         setError(null);
         
+        console.log('🔍 Поиск товара с ID:', params.id);
+        
         const response = await fetch('/api/tilda-products');
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        const data: TildaApiResponse = await response.json();
+        const data = await response.json();
         const productsData = extractProductsFromResponse(data);
         
-        // ✅ Безопасное получение id
+        console.log(' Всего товаров в API:', productsData.length);
+        
         const productId = Array.isArray(params.id) ? params.id[0] : params.id;
         
-        const foundRaw = productsData.find((p) => p.uid === productId);
-
-        if (foundRaw) {
-          // ✅ Используем утилиту форматирования
-          const formatted = formatProduct(foundRaw, 0);
-          setProduct(formatted);
-        } else {
-          setError('Товар не найден');
+        if (!productId) {
+          throw new Error('ID товара не указан в URL');
         }
+        
+        console.log(' Ищем товар с uid:', productId);
+        
+        // ✅ ИСПРАВЛЕНИЕ: Сравниваем как строки (приводим оба значения к String)
+        const foundRaw = productsData.find((p: any) => {
+          const productUid = String(p.uid);
+          const searchId = String(productId);
+          
+          // Логируем только первые 5 товаров для отладки
+          if (productsData.indexOf(p) < 5) {
+            console.log(`  - Товар uid: ${productUid} (${typeof productUid}), ищем: ${searchId} (${typeof searchId}), совпадение: ${productUid === searchId}`);
+          }
+          
+          return productUid === searchId;
+        });
+        
+        if (!foundRaw) {
+          console.error(' Товар не найден! Доступные uid:');
+          productsData.slice(0, 5).forEach((p: any) => {
+            console.log(`  - ${p.uid} (${typeof p.uid}): ${p.title?.substring(0, 50)}...`);
+          });
+          throw new Error(`Товар с ID "${productId}" не найден. Доступно товаров: ${productsData.length}`);
+        }
+        
+        console.log(' Товар найден:', foundRaw.title);
+        
+        const formatted = formatProduct(foundRaw, 0);
+        console.log('📦 Отформатированный товар:', formatted);
+        
+        setProduct(formatted);
       } catch (err) {
-        console.error('Ошибка загрузки товара:', err);
-        setError(`Не удалось загрузить товар: ${err instanceof Error ? err.message : 'Неизвестная ошибка'}`);
+        console.error(' Ошибка загрузки товара:', err);
+        setError(err instanceof Error ? err.message : 'Неизвестная ошибка');
       } finally {
         setLoading(false);
       }
@@ -63,14 +89,25 @@ export default function ProductPage() {
       <div className="min-h-screen bg-white py-12">
         <div className="container mx-auto px-4">
           <div className="text-center py-20">
-            <p className="text-red-600 text-xl mb-4">❌ {error}</p>
-            <button
-              onClick={() => router.push('/')}
-              className="px-8 py-3 bg-[#d5302c] text-white rounded-full hover:bg-[#b52824] transition"
-              style={{ fontFamily: '"TildaSans", Arial, sans-serif' }}
-            >
-              Вернуться на главную
-            </button>
+            <div className="text-red-600 text-6xl mb-4">✕</div>
+            <h1 className="text-2xl font-bold mb-4 text-red-600">Товар не найден</h1>
+            <p className="text-gray-600 mb-6 max-w-md mx-auto">{error}</p>
+            <div className="flex gap-4 justify-center">
+              <button
+                onClick={() => router.push('/#catalog')}
+                className="px-8 py-3 bg-[#d5302c] text-white rounded-full hover:bg-[#b52824] transition"
+                style={{ fontFamily: '"TildaSans", Arial, sans-serif' }}
+              >
+                Вернуться в каталог
+              </button>
+              <button
+                onClick={() => window.location.reload()}
+                className="px-8 py-3 bg-gray-200 text-gray-800 rounded-full hover:bg-gray-300 transition"
+                style={{ fontFamily: '"TildaSans", Arial, sans-serif' }}
+              >
+                Обновить страницу
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -98,7 +135,7 @@ export default function ProductPage() {
               Товар не найден
             </h1>
             <button
-              onClick={() => router.push('/')}
+              onClick={() => router.push('/#catalog')}
               className="px-8 py-3 bg-[#d5302c] text-white rounded-full hover:bg-[#b52824] transition"
               style={{ fontFamily: '"TildaSans", Arial, sans-serif' }}
             >

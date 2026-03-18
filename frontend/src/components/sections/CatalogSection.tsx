@@ -192,8 +192,8 @@ export default function CatalogSection() {
                 >
                   {visibleProducts.map((product) => (
                     <Link
-                      key={`${product.uid}-${product.id}`}
-                      href={`/product/${product.uid}`}
+                      key={`${product.uid || product.id}`}
+                      href={`/product/${product.uid || product.id}`}
                       className="block hover:opacity-90 transition"
                     >
                       <div

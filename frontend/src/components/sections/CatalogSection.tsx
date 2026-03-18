@@ -1,7 +1,7 @@
 // src/components/sections/CatalogSection.tsx
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, ReactNode } from 'react'; // ✅ Добавлен ReactNode
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -16,8 +16,8 @@ interface Product {
   price?: string;
 }
 
-// Функция для умного разбиения названия на 2-3 строки
-const splitProductName = (text: string) => {
+// ✅ Фикс #1: Явный тип возврата ReactNode
+const splitProductName = (text: string): ReactNode => {
   const words = text.split(' ');
   
   if (words.length <= 3) {
@@ -79,23 +79,18 @@ export default function CatalogSection() {
         const data = await response.json();
         console.log('📦 Получены данные:', data);
 
-        // ✅ Правильно извлекаем products из ответа API
         const productsData = data.products || [];
         console.log('📦 Продуктов найдено:', productsData.length);
 
-        // ✅ Фильтруем и преобразуем данные
         const formattedProducts: Product[] = productsData
           .filter((p: any) => {
-            // Оставляем только товары с названием "Светильник"
             return p.title && p.title.includes('Светильник');
           })
           .map((p: any, index: number) => {
-            // Разделяем title на nameMain и nameSpec по первому "/"
             const titleParts = p.title.split('/');
             const nameMain = titleParts[0];
             const nameSpec = titleParts.slice(1).join('/');
             
-            // Определяем категорию по названию товара (nameMain)
             let category = 'Промышленное освещение';
             if (nameMain.includes('L-street')) {
               category = 'Уличное освещение';
@@ -107,9 +102,13 @@ export default function CatalogSection() {
               category = 'Архитектурно-парковое освещение';
             }
 
-            // Определяем изображение по категории
-            let imgUrl = '/media/prom.webp'; // по умолчанию
-            if (category === 'Уличное освещение') {
+            // ✅ Фикс #2: Приоритет реального изображения из API
+            let imgUrl = '/media/prom.webp';
+            if (p.images?.[0]?.url) {
+              imgUrl = p.images[0].url;
+            } else if (p.img) {
+              imgUrl = p.img;
+            } else if (category === 'Уличное освещение') {
               imgUrl = '/media/ul.webp';
             } else if (category === 'Офисное освещение') {
               imgUrl = '/media/of.webp';
@@ -138,7 +137,6 @@ export default function CatalogSection() {
         
         setProducts(formattedProducts);
 
-        // Получаем уникальные категории
         const uniqueCategories = [
           'Все',
           ...Array.from(new Set(formattedProducts.map((p: Product) => p.category).filter(Boolean))) as string[],
@@ -158,7 +156,6 @@ export default function CatalogSection() {
     fetchProducts();
   }, []);
 
-  // Фильтрация товаров по категории
   const filteredProducts = useMemo(() => {
     if (activeCategory === 'Все') {
       return products;
@@ -166,10 +163,8 @@ export default function CatalogSection() {
     return products.filter((p) => p.category === activeCategory);
   }, [activeCategory, products]);
 
-  // Отображаемые товары
   const visibleProducts = filteredProducts.slice(0, visibleCount);
 
-  // Сброс при смене категории
   useEffect(() => {
     setVisibleCount(9);
   }, [activeCategory]);
@@ -178,7 +173,6 @@ export default function CatalogSection() {
     setVisibleCount((prev) => prev + 9);
   };
 
-  // Показывать кнопку, если есть ещё товары
   const hasMore = visibleCount < filteredProducts.length;
 
   if (loading) {
@@ -210,7 +204,7 @@ export default function CatalogSection() {
   return (
     <section id="catalog" className="bg-white py-12">
       <div className="container mx-auto px-4">
-        {/* Заголовок */}
+        {/* Заголовок и подзаголовок без изменений */}
         <h2
           className="text-center mb-6"
           style={{
@@ -224,7 +218,6 @@ export default function CatalogSection() {
           Тысячи светильников под любые задачи с доставкой от 1 дня
         </h2>
 
-        {/* Подзаголовок */}
         <p
           className="text-center max-w-4xl mx-auto mb-12"
           style={{
@@ -242,7 +235,6 @@ export default function CatalogSection() {
           Свяжитесь с нами, и мы подберем идеальные светильники для вашего проекта!
         </p>
 
-        {/* Основной контент */}
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Левое меню */}
           <div
@@ -291,7 +283,8 @@ export default function CatalogSection() {
                 >
                   {visibleProducts.map((product) => (
                     <Link
-                      key={product.uid}
+                      // ✅ Фикс #3: Надёжный ключ с фолбэком
+                      key={`${product.uid}-${product.id}`}
                       href={`/product/${product.uid}`}
                       className="block hover:opacity-90 transition"
                     >
@@ -316,7 +309,7 @@ export default function CatalogSection() {
                             width={279}
                             height={157}
                             className="w-full h-auto object-cover"
-                            priority={product.id <= 9}
+                            // ✅ Фикс #4: Убран некорректный priority
                           />
                         </div>
 

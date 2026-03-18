@@ -22,28 +22,37 @@ export default function ProductPage() {
   const router = useRouter();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+  // ✅ Фикс #1: Добавлено состояние ошибки
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
+        setLoading(true);
+        setError(null);
+        
         const response = await fetch('/api/tilda-products');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const data = await response.json();
         
-        // 🔧 Правильно извлекаем массив products из ответа API
         const productsData = Array.isArray(data) ? data : (data.products || []);
         
-        // Находим товар по uid (параметр из URL)
+        // ✅ Фикс #2: Безопасное получение id
+        const productId = Array.isArray(params.id) ? params.id[0] : params.id;
+        
         const foundProduct = productsData.find(
-          (p: any) => p.uid === params.id
+          (p: any) => p.uid === productId
         );
 
         if (foundProduct) {
-          // Разделяем title на nameMain и nameSpec по первому "/"
           const nameParts = foundProduct.title?.split('/') || [];
           const nameMain = nameParts[0] || 'Светильник';
           const nameSpec = nameParts.slice(1).join('/') || '';
           
-          // Определяем категорию по названию товара (nameMain)
           let category = 'Промышленное освещение';
           if (nameMain.includes('L-street')) {
             category = 'Уличное освещение';
@@ -55,9 +64,13 @@ export default function ProductPage() {
             category = 'Архитектурно-парковое освещение';
           }
 
-          // Определяем изображение по категории
-          let imgUrl = '/media/prom.webp'; // по умолчанию
-          if (category === 'Уличное освещение') {
+          // ✅ Фикс #3: Приоритет реального изображения
+          let imgUrl = '/media/prom.webp';
+          if (foundProduct.images?.[0]?.url) {
+            imgUrl = foundProduct.images[0].url;
+          } else if (foundProduct.img) {
+            imgUrl = foundProduct.img;
+          } else if (category === 'Уличное освещение') {
             imgUrl = '/media/ul.webp';
           } else if (category === 'Офисное освещение') {
             imgUrl = '/media/of.webp';
@@ -78,9 +91,13 @@ export default function ProductPage() {
             text: foundProduct.text || '',
             sku: foundProduct.sku || '',
           });
+        } else {
+          setError('Товар не найден');
         }
-      } catch (error) {
-        console.error('Ошибка загрузки товара:', error);
+      } catch (err) {
+        console.error('Ошибка загрузки товара:', err);
+        // ✅ Фикс #1: Установка сообщения об ошибке
+        setError(`Не удалось загрузить товар: ${err instanceof Error ? err.message : 'Неизвестная ошибка'}`);
       } finally {
         setLoading(false);
       }
@@ -89,7 +106,26 @@ export default function ProductPage() {
     fetchProduct();
   }, [params.id]);
 
-  // Состояние загрузки
+  // ✅ Фикс #1: Обработка состояния ошибки
+  if (error) {
+    return (
+      <div className="min-h-screen bg-white py-12">
+        <div className="container mx-auto px-4">
+          <div className="text-center py-20">
+            <p className="text-red-600 text-xl mb-4">❌ {error}</p>
+            <button
+              onClick={() => router.push('/')}
+              className="px-8 py-3 bg-[#d5302c] text-white rounded-full hover:bg-[#b52824] transition"
+              style={{ fontFamily: '"TildaSans", Arial, sans-serif' }}
+            >
+              Вернуться на главную
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-white py-12">
@@ -112,7 +148,7 @@ export default function ProductPage() {
               Товар не найден
             </h1>
             <button
-              onClick={() => router.push('/#catalog')}
+              onClick={() => router.push('/')}
               className="px-8 py-3 bg-[#d5302c] text-white rounded-full hover:bg-[#b52824] transition"
               style={{ fontFamily: '"TildaSans", Arial, sans-serif' }}
             >

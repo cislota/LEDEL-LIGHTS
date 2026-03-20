@@ -7,6 +7,7 @@ import Image from 'next/image';
 export default function ClientTestimonialsSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const testimonials = [
     {
@@ -87,6 +88,28 @@ export default function ClientTestimonialsSection() {
     }
   }, [isAnimating]);
 
+  //  Обработчики для модального окна
+  const openModal = () => {
+    setIsModalOpen(true);
+    document.body.style.overflow = 'hidden'; // Блокируем прокрутку страницы
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    document.body.style.overflow = 'unset'; // Восстанавливаем прокрутку
+  };
+
+  // Закрытие по клавише Escape
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isModalOpen) {
+        closeModal();
+      }
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [isModalOpen]);
+
   const current = testimonials[currentIndex];
 
   return (
@@ -118,7 +141,7 @@ export default function ClientTestimonialsSection() {
             maxWidth: '100%',
           }}
         >
-          {/* ✅ Анимированный слайд */}
+          {/* Анимированный слайд */}
           <div 
             key={currentIndex} 
             className="flex flex-col h-full animate-fade-slide"
@@ -171,14 +194,18 @@ export default function ClientTestimonialsSection() {
                 </p>
               </div>
 
-              {/* Правая часть: изображение документа — 267×400 */}
-              <div className="flex-shrink-0" style={{ width: '267px', height: '400px' }}>
+              {/*  Правая часть: изображение документа с кликом для открытия модалки */}
+              <div 
+                className="flex-shrink-0 cursor-pointer group" 
+                style={{ width: '267px', height: '400px' }}
+                onClick={openModal}
+              >
                 <Image
                   src={current.docImg}
                   alt="Благодарственное письмо"
                   width={267}
                   height={400}
-                  className="w-full h-full object-cover rounded-lg"
+                  className="w-full h-full object-cover rounded-lg transition group-hover:opacity-90"
                   priority={currentIndex === 0}
                 />
               </div>
@@ -216,7 +243,7 @@ export default function ClientTestimonialsSection() {
                   onClick={prevSlide}
                   aria-label="Предыдущий отзыв"
                   disabled={isAnimating}
-                  className="flex items-center justify-center rounded-lg transition "
+                  className="flex items-center justify-center rounded-lg transition hover:opacity-80 disabled:opacity-50"
                   style={{
                     width: '42px',
                     height: '42px',
@@ -238,7 +265,7 @@ export default function ClientTestimonialsSection() {
                   onClick={nextSlide}
                   aria-label="Следующий отзыв"
                   disabled={isAnimating}
-                  className="flex items-center justify-center rounded-lg transition"
+                  className="flex items-center justify-center rounded-lg transition hover:opacity-80 disabled:opacity-50"
                   style={{
                     width: '42px',
                     height: '42px',
@@ -258,6 +285,46 @@ export default function ClientTestimonialsSection() {
           </div>
         </div>
       </div>
+
+      {/*  Модальное окно для просмотра изображения */}
+      {isModalOpen && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90"
+          onClick={closeModal}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Увеличенное изображение документа"
+        >
+          {/* Кнопка закрытия — справа сверху */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              closeModal();
+            }}
+            className="absolute top-6 right-6 w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition text-white text-3xl font-bold"
+            aria-label="Закрыть"
+            style={{ border: 'none', cursor: 'pointer' }}
+          >
+            ✕
+          </button>
+
+          {/* Изображение — центрированное, с ограничением по размеру */}
+          <div 
+            className="relative"
+            style={{ width: '640px', height: '890px' }}
+            onClick={(e) => e.stopPropagation()} // Чтобы клик по изображению не закрывал модалку
+          >
+            <Image
+              src={current.docImg}
+              alt={current.badge}
+              width={640}
+              height={890}
+              className="w-full h-full object-cover rounded-lg shadow-2xl"
+              priority
+            />
+          </div>
+        </div>
+      )}
     </section>
   );
 }

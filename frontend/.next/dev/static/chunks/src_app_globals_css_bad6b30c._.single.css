@@ -318,6 +318,10 @@ img, video {
   }
 }
 
+.pointer-events-none {
+  pointer-events: none;
+}
+
 .fixed {
   position: fixed;
 }
@@ -352,6 +356,10 @@ img, video {
 
 .top-0 {
   top: 0;
+}
+
+.top-6 {
+  top: 1.5rem;
 }
 
 .z-40 {
@@ -515,6 +523,14 @@ img, video {
   max-height: 600px;
 }
 
+.max-h-\[85vh\] {
+  max-height: 85vh;
+}
+
+.max-h-\[90vh\] {
+  max-height: 90vh;
+}
+
 .min-h-screen {
   min-height: 100vh;
 }
@@ -549,6 +565,10 @@ img, video {
 
 .w-full {
   width: 100%;
+}
+
+.w-auto {
+  width: auto;
 }
 
 .min-w-0 {
@@ -605,6 +625,18 @@ img, video {
 
 .max-w-xl {
   max-width: 36rem;
+}
+
+.max-w-\[90vw\] {
+  max-width: 90vw;
+}
+
+.max-w-\[900vw\] {
+  max-width: 900vw;
+}
+
+.max-w-\[50vw\] {
+  max-width: 50vw;
 }
 
 .flex-1 {
@@ -873,6 +905,14 @@ img, video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
 }
 
+.bg-black\/90 {
+  background-color: #000000e6;
+}
+
+.bg-white\/10 {
+  background-color: #ffffff1a;
+}
+
 .bg-gradient-to-r {
   background-image: linear-gradient(to right, var(--tw-gradient-stops));
 }
@@ -1134,6 +1174,12 @@ img, video {
 .shadow-md {
   --tw-shadow: 0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a;
   --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.shadow-2xl {
+  --tw-shadow: 0 25px 50px -12px #00000040;
+  --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
@@ -1430,6 +1476,10 @@ body {
   background-color: rgb(185 28 28 / var(--tw-bg-opacity, 1));
 }
 
+.hover\:bg-white\/20:hover {
+  background-color: #fff3;
+}
+
 .hover\:text-\[\#b52824\]:hover {
   --tw-text-opacity: 1;
   color: rgb(181 40 36 / var(--tw-text-opacity, 1));
@@ -1514,6 +1564,14 @@ body {
 .group:hover .group-hover\:text-red-500 {
   --tw-text-opacity: 1;
   color: rgb(239 68 68 / var(--tw-text-opacity, 1));
+}
+
+.group:hover .group-hover\:opacity-100 {
+  opacity: 1;
+}
+
+.group:hover .group-hover\:opacity-90 {
+  opacity: .9;
 }
 
 @media (min-width: 640px) {

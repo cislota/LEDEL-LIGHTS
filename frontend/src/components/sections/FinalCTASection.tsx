@@ -21,6 +21,7 @@ export default function FinalCTASection() {
               width: '1162px',
               height: '626px',
               backgroundColor: '#d5302c',
+              borderRadius: '20px',
             }}
           >
             {/* 1. Логотип */}
@@ -124,6 +125,7 @@ export default function FinalCTASection() {
                   />
                 </div>
                 <div>
+                 <div className="flex flex-col whitespace-nowrap">
                   <div
                     style={{
                       fontSize: '20px',
@@ -144,6 +146,7 @@ export default function FinalCTASection() {
                   >
                     отвечаем в течение 5 минут
                   </div>
+                 </div>
                 </div>
               </div>
 
@@ -161,6 +164,7 @@ export default function FinalCTASection() {
                   />
                 </div>
                 <div>
+                  <div className="flex flex-col whitespace-nowrap">
                   <div
                     style={{
                       fontSize: '20px',
@@ -184,6 +188,7 @@ export default function FinalCTASection() {
                     info@ledl-lights.ru
                   </a>
                 </div>
+                </div>
               </div>
 
               {/* Телефон */}
@@ -200,6 +205,7 @@ export default function FinalCTASection() {
                   />
                 </div>
                 <div>
+                  <div className="flex flex-col whitespace-nowrap">
                   <div
                     style={{
                       fontSize: '20px',
@@ -222,6 +228,7 @@ export default function FinalCTASection() {
                   >
                     8 (800) 351-09-75
                   </a>
+                </div>
                 </div>
               </div>
             </div>

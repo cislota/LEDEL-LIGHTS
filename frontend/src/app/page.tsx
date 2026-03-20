@@ -26,9 +26,6 @@ export default function HomePage() {
         <ProjectSliderSection />
         <ClientTestimonialsSection />
         <FinalCTASection />
-
-
-        <ContactForm />
         
       </main>
       <Footer />

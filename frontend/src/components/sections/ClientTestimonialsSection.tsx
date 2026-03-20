@@ -1,15 +1,15 @@
 // src/components/sections/ClientTestimonialsSection.tsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
 export default function ClientTestimonialsSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const testimonials = [
     {
-      // Слайд 1: Ланит-Терком
       title: '«В КАЧЕСТВЕ БОНУСА НАМ БЫЛА ОРГАНИЗОВАНА ДОСТАВКА ЗА СЧЁТ ПОСТАВЩИКА»',
       text: 'Стояла задача создать стильный, современный и в то же время светлый офис. Производство, доставка и монтаж пришел в заранее оговоренные в договоре сроки. Рекомендуем «СветКонсалт» для сотрудничества!',
       signature: 'Генеральный директор Сарычев И. Ф.',
@@ -17,7 +17,6 @@ export default function ClientTestimonialsSection() {
       badge: 'Благодарственное письмо от компании Ланит-Терком',
     },
     {
-      // Слайд 2: Беляна
       title: '«НА ДАННЫЙ МОМЕНТ У НАС УЖЕ ОСУЩЕСТВЛЕНО 3 ПОСТАВКИ И 1 ПРОЕКТ НА СТАДИИ РЕАЛИЗАЦИИ»',
       text: 'Сотрудничество началось в 2018 году при подборе необходимого оборудования для освещения наших объектов (внутренних помещений музейного комплекса и уличной территории комплекса). Спасибо компании "СветКонсалт" и лично менеджеру за проявленный профессионализм! Надеемся на дальнейшее долгое и плодотворное сотрудничество!',
       signature: 'Главный инженер Шалаев А. А.',
@@ -25,7 +24,6 @@ export default function ClientTestimonialsSection() {
       badge: 'Благодарственное письмо от компании Беляна',
     },
     {
-      // Слайд 3: Гросс
       title: '«ВСЯ ПРОДУКЦИЯ БЫЛА АККУРАТНО И НАДЕЖНО УПАКОВАНА И ДОСТАВЛЕНА В УСТАНОВЛЕННЫЙ СРОК»',
       text: 'Благодарю Вас за помощь в реализации Государственного контракта на поставку уличных светильников!',
       signature: 'Генеральный директор Чиркова Н.Г.',
@@ -33,7 +31,6 @@ export default function ClientTestimonialsSection() {
       badge: 'Благодарственное письмо от компании Гросс',
     },
     {
-      // Слайд 4: Евраз
       title: '«ВСЕ ПОЖЕЛАНИЯ НАШЕЙ КОМПАНИИ, ВОЗНИКШИЕ В ХОДЕ РАБОТЫ И ПОСЛЕ МОНТАЖА, УЧИТЫВАЛИСЬ И ИСПОЛНЯЛИСЬ В КРАТЧАЙШИЕ СРОКИ!»',
       text: 'Выражаем благодарность «СветКонсалт» за проделанную работу и можем порекомендовать ее как надежного партнера.',
       signature: 'Директор филиала А. Г. Нефедов',
@@ -41,7 +38,6 @@ export default function ClientTestimonialsSection() {
       badge: 'Благодарственное письмо от компании Евраз',
     },
     {
-      // Слайд 5: РЭС
       title: '«МЫ ИСКРЕННЕ РАДЫ ВОЗМОЖНОСТИ РАБОТАТЬ С ВАМИ НАД СОВМЕСТНЫМИ ПРОЕКТАМИ»',
       text: 'ООО "РЭС" спешит поблагодарить Вас за сотрудничество! Особенно мы признательны Вам и Вашему коллективу в лице менеджера, за порядочность, взаимовыручку и серьезное отношение к работе!',
       signature: 'Генеральный директор Третьяков А. А.',
@@ -49,7 +45,6 @@ export default function ClientTestimonialsSection() {
       badge: 'Благодарственное письмо от компании РЭС',
     },
     {
-      // Слайд 6: Сокол
       title: '«ОСОБЕННАЯ БЛАГОДАРНОСТЬ МЕНЕДЖЕРУ ПО ПРОДАЖАМ!»',
       text: 'АО, «Сокол» выражает признательность вашей фирме за проделанную работу по освещению фасада нашего предприятия!',
       signature: 'Управляющий В. Г. Орешко',
@@ -57,7 +52,6 @@ export default function ClientTestimonialsSection() {
       badge: 'Благодарственное письмо от компании Сокол',
     },
     {
-      // Слайд 7: СПАРЗ
       title: '«ПОСЛЕ УСТАНОВКИ ПРЕДЛОЖЕННЫХ ВАШИМИ СПЕЦИАЛИСТАМИ СВЕТИЛЬНИКОВ ИЗМЕНИЛСЯ УРОВЕНЬ ОСВЕЩЕННОСТИ В ЛУЧШУЮ СТОРОНУ!»',
       text: 'В краткие сроки приехал Ваш специалист — произвел замер освещенности, продемонстрировал образцы светильников. В этот же день были предложены светодиодные панели с равномерной засветкой. Далее планируем произвести замену прожекторов наружного освещения, сотрудничать будем снова с Вашей компанией, что и рекомендуем другим!',
       signature: 'Генеральный директор А. В. Соколов',
@@ -65,7 +59,6 @@ export default function ClientTestimonialsSection() {
       badge: 'Благодарственное письмо от компании СПАРЗ',
     },
     {
-      // Слайд 8: Терминал Западный
       title: '«РЕКОНСТРУКЦИЯ ПОЗВОЛИЛА СУЩЕСТВЕННО СОКРАТИТЬ ЗАТРАТЫ НА ЭЛЕКТРОЭНЕРГИЮ И ОБСЛУЖИВАНИЕ!»',
       text: 'С ГК «СветКонсалт» нам удалось успешно реализовать комплексный проект освещения нашего объекта, а именно внутрицеховое и офисное освещение. Надеемся на дальнейшее плодотворное сотрудничество!',
       signature: 'Главный инженер Бурмистенко С. А.',
@@ -75,12 +68,24 @@ export default function ClientTestimonialsSection() {
   ];
 
   const nextSlide = () => {
+    if (isAnimating) return;
+    setIsAnimating(true);
     setCurrentIndex((prev) => (prev + 1) % testimonials.length);
   };
 
   const prevSlide = () => {
+    if (isAnimating) return;
+    setIsAnimating(true);
     setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
+
+  // Сбрасываем анимацию после завершения
+  useEffect(() => {
+    if (isAnimating) {
+      const timer = setTimeout(() => setIsAnimating(false), 350);
+      return () => clearTimeout(timer);
+    }
+  }, [isAnimating]);
 
   const current = testimonials[currentIndex];
 
@@ -105,6 +110,7 @@ export default function ClientTestimonialsSection() {
         <div
           className="bg-white rounded-2xl shadow-lg mx-auto overflow-hidden"
           style={{
+            borderRadius: '40px',
             padding: '40px',
             width: '1044px',
             height: '532px',
@@ -112,8 +118,11 @@ export default function ClientTestimonialsSection() {
             maxWidth: '100%',
           }}
         >
-          {/* Слайд */}
-          <div className="flex flex-col h-full">
+          {/* ✅ Анимированный слайд */}
+          <div 
+            key={currentIndex} 
+            className="flex flex-col h-full animate-fade-slide"
+          >
             {/* Верхняя часть: текст и изображение */}
             <div className="flex flex-col lg:flex-row items-start gap-8 flex-1 overflow-hidden">
               {/* Левая часть: текст отзыва */}
@@ -124,12 +133,12 @@ export default function ClientTestimonialsSection() {
                   style={{
                     letterSpacing: '0.5px',
                     fontSize: '16px',
-                    width: '575px',      
-                    height: '53px',      
-                    display: 'flex',     
+                    width: '575px',
+                    height: '53px',
+                    display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    boxSizing: 'border-box', 
+                    boxSizing: 'border-box',
                   }}
                 >
                   {current.badge}
@@ -175,15 +184,16 @@ export default function ClientTestimonialsSection() {
               </div>
             </div>
 
-            {/* Нижняя часть: ФИО и кнопки — зафиксированы внизу с отступом 20px */}
+            {/* Нижняя часть: ФИО и кнопки — зафиксированы внизу с отступом */}
             <div
               className="flex items-center gap-4 mt-auto pt-4"
               style={{ paddingBottom: '5px' }}
             >
               {/* Подпись */}
               <div
-                className="px-6 py-3 bg-gray-200 rounded-lg "
+                className="px-6 py-3 bg-gray-200 rounded-lg"
                 style={{
+                  borderRadius: '20px',
                   width: '340px',
                   height: '42px',
                   fontSize: '16px',
@@ -205,7 +215,8 @@ export default function ClientTestimonialsSection() {
                   type="button"
                   onClick={prevSlide}
                   aria-label="Предыдущий отзыв"
-                  className="flex items-center justify-center rounded-lg transition hover:opacity-80"
+                  disabled={isAnimating}
+                  className="flex items-center justify-center rounded-lg transition "
                   style={{
                     width: '42px',
                     height: '42px',
@@ -214,7 +225,8 @@ export default function ClientTestimonialsSection() {
                     fontWeight: 'bold',
                     color: '#000000',
                     border: 'none',
-                    cursor: 'pointer',
+                    cursor: isAnimating ? 'not-allowed' : 'pointer',
+                    borderRadius: '8px',
                   }}
                 >
                   &lt;
@@ -225,7 +237,8 @@ export default function ClientTestimonialsSection() {
                   type="button"
                   onClick={nextSlide}
                   aria-label="Следующий отзыв"
-                  className="flex items-center justify-center rounded-lg transition hover:opacity-80"
+                  disabled={isAnimating}
+                  className="flex items-center justify-center rounded-lg transition"
                   style={{
                     width: '42px',
                     height: '42px',
@@ -234,7 +247,8 @@ export default function ClientTestimonialsSection() {
                     fontWeight: 'bold',
                     color: '#ffffff',
                     border: 'none',
-                    cursor: 'pointer',
+                    cursor: isAnimating ? 'not-allowed' : 'pointer',
+                    borderRadius: '8px',
                   }}
                 >
                   &gt;

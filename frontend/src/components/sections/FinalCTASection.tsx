@@ -112,12 +112,12 @@ export default function FinalCTASection() {
             >
               {/* WhatsApp */}
               <div className="flex items-start gap-4 mb-6">
-                <div className="flex-shrink-0 w-6 h-6">
+                <div className="flex-shrink-0 w-17 h-17">
                   <Image
                     src="/media/question_riddle.svg"
                     alt="WhatsApp"
-                    width={24}
-                    height={24}
+                    width={78}
+                    height={78}
                     className="object-contain"
                     style={{ filter: 'brightness(0) invert(1)' }}
                     aria-hidden="true"
@@ -126,7 +126,7 @@ export default function FinalCTASection() {
                 <div>
                   <div
                     style={{
-                      fontSize: '16px',
+                      fontSize: '20px',
                       fontFamily: '"TildaSans", Arial, sans-serif',
                       color: '#ffffff',
                       fontWeight: 'bold',
@@ -137,7 +137,7 @@ export default function FinalCTASection() {
                   </div>
                   <div
                     style={{
-                      fontSize: '14px',
+                      fontSize: '20px',
                       fontFamily: '"TildaSans", Arial, sans-serif',
                       color: 'rgba(255,255,255,0.9)',
                     }}
@@ -149,12 +149,12 @@ export default function FinalCTASection() {
 
               {/* Email */}
               <div className="flex items-start gap-4 mb-6">
-                <div className="flex-shrink-0 w-6 h-6">
+                <div className="flex-shrink-0 w-17 h-17">
                   <Image
                     src="/media/envelope_e-mail_mail.svg"
                     alt="Email"
-                    width={24}
-                    height={24}
+                    width={78}
+                    height={78}
                     className="object-contain"
                     style={{ filter: 'brightness(0) invert(1)' }}
                     aria-hidden="true"
@@ -163,7 +163,7 @@ export default function FinalCTASection() {
                 <div>
                   <div
                     style={{
-                      fontSize: '16px',
+                      fontSize: '20px',
                       fontFamily: '"TildaSans", Arial, sans-serif',
                       color: '#ffffff',
                       fontWeight: 'bold',
@@ -175,7 +175,7 @@ export default function FinalCTASection() {
                   <a
                     href="mailto:info@ledl-lights.ru"
                     style={{
-                      fontSize: '14px',
+                      fontSize: '20px',
                       fontFamily: '"TildaSans", Arial, sans-serif',
                       color: 'rgba(255,255,255,0.9)',
                       textDecoration: 'underline',
@@ -188,12 +188,12 @@ export default function FinalCTASection() {
 
               {/* Телефон */}
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-6 h-6">
+                <div className="flex-shrink-0 w-17 h-17">
                   <Image
                     src="/media/phone_contact_call_r.svg"
                     alt="Телефон"
-                    width={24}
-                    height={24}
+                    width={78}
+                    height={78}
                     className="object-contain"
                     style={{ filter: 'brightness(0) invert(1)' }}
                     aria-hidden="true"
@@ -202,7 +202,7 @@ export default function FinalCTASection() {
                 <div>
                   <div
                     style={{
-                      fontSize: '16px',
+                      fontSize: '20px',
                       fontFamily: '"TildaSans", Arial, sans-serif',
                       color: '#ffffff',
                       fontWeight: 'bold',
@@ -214,7 +214,7 @@ export default function FinalCTASection() {
                   <a
                     href="tel:88003510975"
                     style={{
-                      fontSize: '14px',
+                      fontSize: '20px',
                       fontFamily: '"TildaSans", Arial, sans-serif',
                       color: 'rgba(255,255,255,0.9)',
                       textDecoration: 'underline',

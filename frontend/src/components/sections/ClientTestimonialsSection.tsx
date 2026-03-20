@@ -9,25 +9,68 @@ export default function ClientTestimonialsSection() {
 
   const testimonials = [
     {
-      title: '«Заголовок»',
-      text: 'Описание',
-      signature: 'ФИО',
-      docImg: '/media/-.jpg',
-      badge: 'Инф кнопка',
+      // Слайд 1: Ланит-Терком
+      title: '«В КАЧЕСТВЕ БОНУСА НАМ БЫЛА ОРГАНИЗОВАНА ДОСТАВКА ЗА СЧЁТ ПОСТАВЩИКА»',
+      text: 'Стояла задача создать стильный, современный и в то же время светлый офис. Производство, доставка и монтаж пришел в заранее оговоренные в договоре сроки. Рекомендуем «СветКонсалт» для сотрудничества!',
+      signature: 'Генеральный директор Сарычев И. Ф.',
+      docImg: '/media/-_.jpg.webp',
+      badge: 'Благодарственное письмо от компании Ланит-Терком',
     },
     {
-      title: '«Заголовок»',
-      text: 'Описание',
-      signature: 'ФИО',
-      docImg: '/media/-.jpg',
-      badge: 'Инф кнопка',
+      // Слайд 2: Беляна
+      title: '«НА ДАННЫЙ МОМЕНТ У НАС УЖЕ ОСУЩЕСТВЛЕНО 3 ПОСТАВКИ И 1 ПРОЕКТ НА СТАДИИ РЕАЛИЗАЦИИ»',
+      text: 'Сотрудничество началось в 2018 году при подборе необходимого оборудования для освещения наших объектов (внутренних помещений музейного комплекса и уличной территории комплекса). Спасибо компании "СветКонсалт" и лично менеджеру за проявленный профессионализм! Надеемся на дальнейшее долгое и плодотворное сотрудничество!',
+      signature: 'Главный инженер Шалаев А. А.',
+      docImg: '/media/_.jpg.webp',
+      badge: 'Благодарственное письмо от компании Беляна',
     },
     {
-      title: '«Заголовок»',
-      text: 'Описание',
-      signature: 'ФИО',
-      docImg: '/media/-.jpg',
-      badge: 'Инф кнопка',
+      // Слайд 3: Гросс
+      title: '«ВСЯ ПРОДУКЦИЯ БЫЛА АККУРАТНО И НАДЕЖНО УПАКОВАНА И ДОСТАВЛЕНА В УСТАНОВЛЕННЫЙ СРОК»',
+      text: 'Благодарю Вас за помощь в реализации Государственного контракта на поставку уличных светильников!',
+      signature: 'Генеральный директор Чиркова Н.Г.',
+      docImg: '/media/__.jpg.webp',
+      badge: 'Благодарственное письмо от компании Гросс',
+    },
+    {
+      // Слайд 4: Евраз
+      title: '«ВСЕ ПОЖЕЛАНИЯ НАШЕЙ КОМПАНИИ, ВОЗНИКШИЕ В ХОДЕ РАБОТЫ И ПОСЛЕ МОНТАЖА, УЧИТЫВАЛИСЬ И ИСПОЛНЯЛИСЬ В КРАТЧАЙШИЕ СРОКИ!»',
+      text: 'Выражаем благодарность «СветКонсалт» за проделанную работу и можем порекомендовать ее как надежного партнера.',
+      signature: 'Директор филиала А. Г. Нефедов',
+      docImg: '/media/photo.jpg.webp',
+      badge: 'Благодарственное письмо от компании Евраз',
+    },
+    {
+      // Слайд 5: РЭС
+      title: '«МЫ ИСКРЕННЕ РАДЫ ВОЗМОЖНОСТИ РАБОТАТЬ С ВАМИ НАД СОВМЕСТНЫМИ ПРОЕКТАМИ»',
+      text: 'ООО "РЭС" спешит поблагодарить Вас за сотрудничество! Особенно мы признательны Вам и Вашему коллективу в лице менеджера, за порядочность, взаимовыручку и серьезное отношение к работе!',
+      signature: 'Генеральный директор Третьяков А. А.',
+      docImg: '/media/_(1).jpg.webp',
+      badge: 'Благодарственное письмо от компании РЭС',
+    },
+    {
+      // Слайд 6: Сокол
+      title: '«ОСОБЕННАЯ БЛАГОДАРНОСТЬ МЕНЕДЖЕРУ ПО ПРОДАЖАМ!»',
+      text: 'АО, «Сокол» выражает признательность вашей фирме за проделанную работу по освещению фасада нашего предприятия!',
+      signature: 'Управляющий В. Г. Орешко',
+      docImg: '/media/_(2).jpg.webp',
+      badge: 'Благодарственное письмо от компании Сокол',
+    },
+    {
+      // Слайд 7: СПАРЗ
+      title: '«ПОСЛЕ УСТАНОВКИ ПРЕДЛОЖЕННЫХ ВАШИМИ СПЕЦИАЛИСТАМИ СВЕТИЛЬНИКОВ ИЗМЕНИЛСЯ УРОВЕНЬ ОСВЕЩЕННОСТИ В ЛУЧШУЮ СТОРОНУ!»',
+      text: 'В краткие сроки приехал Ваш специалист — произвел замер освещенности, продемонстрировал образцы светильников. В этот же день были предложены светодиодные панели с равномерной засветкой. Далее планируем произвести замену прожекторов наружного освещения, сотрудничать будем снова с Вашей компанией, что и рекомендуем другим!',
+      signature: 'Генеральный директор А. В. Соколов',
+      docImg: '/media/-2_.jpg.webp',
+      badge: 'Благодарственное письмо от компании СПАРЗ',
+    },
+    {
+      // Слайд 8: Терминал Западный
+      title: '«РЕКОНСТРУКЦИЯ ПОЗВОЛИЛА СУЩЕСТВЕННО СОКРАТИТЬ ЗАТРАТЫ НА ЭЛЕКТРОЭНЕРГИЮ И ОБСЛУЖИВАНИЕ!»',
+      text: 'С ГК «СветКонсалт» нам удалось успешно реализовать комплексный проект освещения нашего объекта, а именно внутрицеховое и офисное освещение. Надеемся на дальнейшее плодотворное сотрудничество!',
+      signature: 'Главный инженер Бурмистенко С. А.',
+      docImg: '/media/__(1).jpg.webp',
+      badge: 'Благодарственное письмо от компании Терминал Западный',
     },
   ];
 
@@ -58,111 +101,146 @@ export default function ClientTestimonialsSection() {
           Что о нас говорят клиенты?
         </h2>
 
-        {/* Белый контейнер */}
+        {/* Белый контейнер — фиксированный размер */}
         <div
-          className="bg-white rounded-2xl shadow-lg mx-auto max-w-[1200px] overflow-hidden"
-          style={{ padding: '40px' }}
+          className="bg-white rounded-2xl shadow-lg mx-auto overflow-hidden"
+          style={{
+            padding: '40px',
+            width: '1044px',
+            height: '532px',
+            boxSizing: 'border-box',
+            maxWidth: '100%',
+          }}
         >
           {/* Слайд */}
-          <div className="flex flex-col lg:flex-row items-start gap-8">
-            {/* Левая часть: текст и подпись */}
-            <div className="flex-1 min-w-0">
-              {/* Бейдж */}
-              <div
-                className="inline-block mb-6 px-6 py-2 bg-red-600 text-white font-bold rounded-full text-sm"
-                style={{ letterSpacing: '0.5px' }}
-              >
-                {current.badge}
+          <div className="flex flex-col h-full">
+            {/* Верхняя часть: текст и изображение */}
+            <div className="flex flex-col lg:flex-row items-start gap-8 flex-1 overflow-hidden">
+              {/* Левая часть: текст отзыва */}
+              <div className="flex-1 min-w-0 flex flex-col">
+                {/* Бейдж */}
+                <div
+                  className="inline-block mb-6 py-2 bg-red-600 text-white font-normal rounded-full text-center"
+                  style={{
+                    letterSpacing: '0.5px',
+                    fontSize: '16px',
+                    width: '575px',      
+                    height: '53px',      
+                    display: 'flex',     
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxSizing: 'border-box', 
+                  }}
+                >
+                  {current.badge}
+                </div>
+
+                {/* Заголовок отзыва */}
+                <h3
+                  className="mb-4"
+                  style={{
+                    fontSize: '28px',
+                    fontFamily: '"TildaSans", Arial, sans-serif',
+                    fontWeight: 'bold',
+                    color: '#000000',
+                    lineHeight: 1.4,
+                  }}
+                >
+                  {current.title}
+                </h3>
+
+                {/* Текст отзыва */}
+                <p
+                  className="mb-6 text-lg flex-1 overflow-y-auto"
+                  style={{
+                    fontFamily: '"TildaSans", Arial, sans-serif',
+                    color: '#000000',
+                    lineHeight: 1.6,
+                  }}
+                >
+                  {current.text}
+                </p>
               </div>
 
-              {/* Заголовок отзыва */}
-              <h3
-                className="mb-4"
-                style={{
-                  fontSize: '28px',
-                  fontFamily: '"TildaSans", Arial, sans-serif',
-                  fontWeight: 'bold',
-                  color: '#000000',
-                  lineHeight: 1.4,
-                }}
-              >
-                {current.title}
-              </h3>
+              {/* Правая часть: изображение документа — 267×400 */}
+              <div className="flex-shrink-0" style={{ width: '267px', height: '400px' }}>
+                <Image
+                  src={current.docImg}
+                  alt="Благодарственное письмо"
+                  width={267}
+                  height={400}
+                  className="w-full h-full object-cover rounded-lg"
+                  priority={currentIndex === 0}
+                />
+              </div>
+            </div>
 
-              {/* Текст отзыва */}
-              <p
-                className="mb-6 text-lg"
-                style={{
-                  fontFamily: '"TildaSans", Arial, sans-serif',
-                  color: '#000000',
-                  lineHeight: 1.6,
-                }}
-              >
-                {current.text}
-              </p>
-
+            {/* Нижняя часть: ФИО и кнопки — зафиксированы внизу с отступом 20px */}
+            <div
+              className="flex items-center gap-4 mt-auto pt-4"
+              style={{ paddingBottom: '5px' }}
+            >
               {/* Подпись */}
               <div
-                className="px-6 py-3 bg-gray-200 rounded-lg inline-block"
+                className="px-6 py-3 bg-gray-200 rounded-lg "
                 style={{
+                  width: '340px',
+                  height: '42px',
                   fontSize: '16px',
                   fontFamily: '"TildaSans", Arial, sans-serif',
                   color: '#000000',
-                  fontWeight: 'normal',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxSizing: 'border-box',
                 }}
               >
                 {current.signature}
               </div>
-            </div>
 
-            {/* Правая часть: изображение документа */}
-            <div className="flex-shrink-0 w-full lg:w-[400px]">
-              <Image
-                src={current.docImg}
-                alt="Благодарственное письмо"
-                width={400}
-                height={300}
-                className="w-full h-auto object-cover rounded-lg shadow-md"
-                priority={currentIndex === 0}
-              />
-            </div>
-          </div>
+              {/* Стрелки навигации */}
+              <div className="flex gap-2">
+                {/* Кнопка влево — светло-розовая */}
+                <button
+                  type="button"
+                  onClick={prevSlide}
+                  aria-label="Предыдущий отзыв"
+                  className="flex items-center justify-center rounded-lg transition hover:opacity-80"
+                  style={{
+                    width: '42px',
+                    height: '42px',
+                    backgroundColor: '#ffc4c2',
+                    fontSize: '20px',
+                    fontWeight: 'bold',
+                    color: '#000000',
+                    border: 'none',
+                    cursor: 'pointer',
+                  }}
+                >
+                  &lt;
+                </button>
 
-          {/* Стрелки навигации */}
-          <div
-            className="mt-8 flex justify-center gap-4"
-            style={{ maxWidth: '1200px', margin: '0 auto' }}
-          >
-            <button
-              type="button"
-              onClick={prevSlide}
-              aria-label="Предыдущий отзыв"
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 transition"
-            >
-              <Image
-                src="/media/Group_9.svg"
-                alt="←"
-                width={17}
-                height={32}
-                className="object-contain"
-              />
-            </button>
-            <button
-              type="button"
-              onClick={nextSlide}
-              aria-label="Следующий отзыв"
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 transition"
-            >
-              <Image
-                src="/media/Group_9.svg"
-                alt="→"
-                width={17}
-                height={32}
-                className="object-contain"
-                style={{ transform: 'scaleX(-1)' }}
-                
-              />
-            </button>
+                {/* Кнопка вправо — красная */}
+                <button
+                  type="button"
+                  onClick={nextSlide}
+                  aria-label="Следующий отзыв"
+                  className="flex items-center justify-center rounded-lg transition hover:opacity-80"
+                  style={{
+                    width: '42px',
+                    height: '42px',
+                    backgroundColor: '#d5302c',
+                    fontSize: '20px',
+                    fontWeight: 'bold',
+                    color: '#ffffff',
+                    border: 'none',
+                    cursor: 'pointer',
+                  }}
+                >
+                  &gt;
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

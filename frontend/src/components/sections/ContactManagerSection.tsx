@@ -192,19 +192,19 @@ export default function ContactManagerSection() {
             
             {/* WhatsApp */}
             <div className="flex items-center gap-3">
-              <div className="flex-shrink-0 w-6 h-6">
+              <div className="flex-shrink-0 w-10 h-10">
                 <Image
                   src="/media/question_riddle.svg"
                   alt="WhatsApp"
-                  width={24}
-                  height={24}
+                  width={35}
+                  height={35}
                   className="object-contain"
                 />
               </div>
               <div>
                 <div
                   style={{
-                    fontSize: 'clamp(14px, 2vw, 16px)',
+                    fontSize: 'clamp(14px, 2vw, 18px)',
                     fontFamily: '"TildaSans", Arial, sans-serif',
                     color: '#000000',
                     fontWeight: 'bold',
@@ -214,7 +214,7 @@ export default function ContactManagerSection() {
                 </div>
                 <div
                   style={{
-                    fontSize: '12px',
+                    fontSize: '16px',
                     fontFamily: '"TildaSans", Arial, sans-serif',
                     color: '#666666',
                     marginTop: '4px',
@@ -227,19 +227,19 @@ export default function ContactManagerSection() {
 
             {/* Email */}
             <div className="flex items-center gap-3">
-              <div className="flex-shrink-0 w-6 h-6">
+              <div className="flex-shrink-0 w-10 h-10">
                 <Image
                   src="/media/envelope_e-mail_mail.svg"
                   alt="Email"
-                  width={24}
-                  height={24}
+                  width={35}
+                  height={35}
                   className="object-contain"
                 />
               </div>
               <div>
                 <div
                   style={{
-                    fontSize: 'clamp(14px, 2vw, 16px)',
+                    fontSize: 'clamp(14px, 2vw, 18px)',
                     fontFamily: '"TildaSans", Arial, sans-serif',
                     color: '#000000',
                     fontWeight: 'bold',
@@ -251,7 +251,7 @@ export default function ContactManagerSection() {
                   href="mailto:info@ledl-lights.ru"
                   className="block mt-1 text-red-600 hover:text-red-700"
                   style={{
-                    fontSize: '12px',
+                    fontSize: '16px',
                     fontFamily: '"TildaSans", Arial, sans-serif',
                     color: '#d5302c',
                   }}
@@ -263,19 +263,19 @@ export default function ContactManagerSection() {
 
             {/* Телефон */}
             <div className="flex items-center gap-3">
-              <div className="flex-shrink-0 w-6 h-6">
+              <div className="flex-shrink-0 w-10 h-10">
                 <Image
                   src="/media/phone_contact_call_r.svg"
                   alt="Телефон"
-                  width={24}
-                  height={24}
+                  width={35}
+                  height={35}
                   className="object-contain"
                 />
               </div>
               <div>
                 <div
                   style={{
-                    fontSize: 'clamp(14px, 2vw, 16px)',
+                    fontSize: 'clamp(14px, 2vw, 18px)',
                     fontFamily: '"TildaSans", Arial, sans-serif',
                     color: '#000000',
                     fontWeight: 'bold',
@@ -285,7 +285,7 @@ export default function ContactManagerSection() {
                 </div>
                 <div
                   style={{
-                    fontSize: '12px',
+                    fontSize: '16px',
                     fontFamily: '"TildaSans", Arial, sans-serif',
                     color: '#d5302c',
                     marginTop: '4px',

@@ -11,6 +11,7 @@ import ContactManagerSection from '@/components/sections/ContactManagerSection';
 import ProjectSliderSection from '@/components/sections/ProjectSliderSection';
 import ClientTestimonialsSection from '@/components/sections/ClientTestimonialsSection';
 import FinalCTASection from '@/components/sections/FinalCTASection';
+import QuizModal from '@/components/sections/QuizModal';
 
 export default function HomePage() {
   return (
@@ -26,7 +27,8 @@ export default function HomePage() {
         <ProjectSliderSection />
         <ClientTestimonialsSection />
         <FinalCTASection />
-        
+        <QuizModal />
+
       </main>
       <Footer />
     </>

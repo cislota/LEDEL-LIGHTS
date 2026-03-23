@@ -26,49 +26,66 @@ export default function AvailabilityModal({ catalogRef, finalCTARef }: Availabil
   const [phoneError, setPhoneError] = useState('');
   const [lampNameError, setLampNameError] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  
+  //  Раздельные флаги показа для каждой секции
+  const [shownInCatalog, setShownInCatalog] = useState(false);
+  const [shownInFinalCTA, setShownInFinalCTA] = useState(false);
 
-  // Проверка: заполнил ли пользователь форму ранее
+  // Инициализация флагов из localStorage
   useEffect(() => {
     const hasFilledForm = localStorage.getItem('availabilityFormFilled');
     if (hasFilledForm === 'true') {
-      return; // Не показываем модальное окно
+      setIsSubmitted(true); // Не показываем вообще, если форма уже заполнена
+      return;
     }
+    
+    // Загружаем состояние показа для каждой секции
+    const catalogShown = localStorage.getItem('availabilityModalShownCatalog') === 'true';
+    const finalCTAShown = localStorage.getItem('availabilityModalShownFinalCTA') === 'true';
+    
+    setShownInCatalog(catalogShown);
+    setShownInFinalCTA(finalCTAShown);
   }, []);
 
-  // Отслеживание скролла до CatalogSection и FinalCTASection
+  // Отслеживание скролла до секций
   useEffect(() => {
-    const hasFilledForm = localStorage.getItem('availabilityFormFilled');
-    if (hasFilledForm === 'true' || isSubmitted) {
+    // Если форма уже заполнена — не показываем вообще
+    if (isSubmitted) {
       return;
     }
 
     const handleScroll = () => {
-      const scrollPosition = window.scrollY + window.innerHeight;
+      const scrollPosition = window.scrollY + window.innerHeight * 0.5;
       
-      // Проверяем CatalogSection
-      if (catalogRef?.current) {
+      //  Проверка CatalogSection
+      if (catalogRef?.current && !isOpen && !shownInCatalog) {
         const catalogRect = catalogRef.current.getBoundingClientRect();
         const catalogTop = window.scrollY + catalogRect.top;
         
-        if (scrollPosition >= catalogTop && !isOpen) {
+        if (scrollPosition >= catalogTop) {
           setIsOpen(true);
+          setShownInCatalog(true);
+          localStorage.setItem('availabilityModalShownCatalog', 'true'); //  Сохраняем в localStorage
+          return;
         }
       }
       
-      // Проверяем FinalCTASection
-      if (finalCTARef?.current && !isOpen) {
+      //  Проверка FinalCTASection (независимо от CatalogSection)
+      if (finalCTARef?.current && !isOpen && !shownInFinalCTA) {
         const finalCTARect = finalCTARef.current.getBoundingClientRect();
         const finalCTATop = window.scrollY + finalCTARect.top;
         
         if (scrollPosition >= finalCTATop) {
           setIsOpen(true);
+          setShownInFinalCTA(true);
+          localStorage.setItem('availabilityModalShownFinalCTA', 'true'); //  Сохраняем в localStorage
         }
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [catalogRef, finalCTARef, isOpen, isSubmitted]);
+  }, [catalogRef, finalCTARef, isOpen, isSubmitted, shownInCatalog, shownInFinalCTA]);
 
   // Закрытие по ESC
   useEffect(() => {
@@ -118,14 +135,13 @@ export default function AvailabilityModal({ catalogRef, finalCTARef }: Availabil
     console.log('Отправка данных на бэкенд:', formData);
     
     // TODO: Интеграция с бэкендом
-    // await fetch('/api/availability', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(formData),
-    // });
+    // await fetch('/api/availability', { ... });
 
-    // Помечаем форму как заполненную
+    //  Помечаем форму как заполненную и очищаем флаги секций
     localStorage.setItem('availabilityFormFilled', 'true');
+    localStorage.removeItem('availabilityModalShownCatalog');
+    localStorage.removeItem('availabilityModalShownFinalCTA');
+    
     setIsSubmitted(true);
     
     // Закрываем через 2 секунды
@@ -137,6 +153,10 @@ export default function AvailabilityModal({ catalogRef, finalCTARef }: Availabil
   // Функция для принудительного показа (для отладки)
   const forceShowModal = () => {
     localStorage.removeItem('availabilityFormFilled');
+    localStorage.removeItem('availabilityModalShownCatalog');
+    localStorage.removeItem('availabilityModalShownFinalCTA');
+    setShownInCatalog(false);
+    setShownInFinalCTA(false);
     setIsSubmitted(false);
     setIsOpen(true);
   };
@@ -156,7 +176,7 @@ export default function AvailabilityModal({ catalogRef, finalCTARef }: Availabil
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
       onClick={closeModal}
     >
-      {/* Кнопка закрытия — в правом верхнем углу экрана */}
+      {/* Кнопка закрытия */}
       <button
         onClick={closeModal}
         className="fixed top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition z-50"
@@ -307,7 +327,7 @@ export default function AvailabilityModal({ catalogRef, finalCTARef }: Availabil
             </div>
           </div>
 
-          {/* Правая часть: изображение светильника */}
+          {/* Правая часть: изображение */}
           <div 
             className="flex items-center justify-center pr-8"
             style={{ width: '204px' }}

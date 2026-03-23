@@ -1017,11 +1017,6 @@ img, video {
   padding-bottom: 2rem;
 }
 
-.px-0 {
-  padding-left: 0;
-  padding-right: 0;
-}
-
 .pb-4 {
   padding-bottom: 1rem;
 }
@@ -1040,6 +1035,10 @@ img, video {
 
 .pt-8 {
   padding-top: 2rem;
+}
+
+.pr-8 {
+  padding-right: 2rem;
 }
 
 .text-left {
@@ -1103,6 +1102,10 @@ img, video {
 
 .font-semibold {
   font-weight: 600;
+}
+
+.uppercase {
+  text-transform: uppercase;
 }
 
 .leading-relaxed {
@@ -1547,9 +1550,9 @@ body {
   --tw-ring-color: rgb(209 213 219 / var(--tw-ring-opacity, 1));
 }
 
-.focus\:border-red-500:focus {
+.focus\:border-red-600:focus {
   --tw-border-opacity: 1;
-  border-color: rgb(239 68 68 / var(--tw-border-opacity, 1));
+  border-color: rgb(220 38 38 / var(--tw-border-opacity, 1));
 }
 
 .focus\:outline-none:focus {

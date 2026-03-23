@@ -1,23 +1,28 @@
 // src/components/sections/CatalogSection.tsx
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, forwardRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-// ✅ Импорт утилит
-import { 
-  Product, 
+
+// Импорт утилит
+import {
+  Product,
   TildaApiResponse,
   CategoryValue,
-  formatProduct, 
-  extractProductsFromResponse, 
+  formatProduct,
+  extractProductsFromResponse,
   filterLightingProducts,
   getUniqueCategories,
   splitProductName,
   CATEGORIES,
 } from '@/utils/product-helpers';
 
-export default function CatalogSection() {
+interface CatalogSectionProps {
+  ref?: React.RefObject<HTMLElement>;
+}
+
+const CatalogSection = forwardRef((props: CatalogSectionProps, ref: React.RefObject<HTMLElement>) => {
   const [activeCategory, setActiveCategory] = useState<CategoryValue>(CATEGORIES.ALL);
   const [visibleCount, setVisibleCount] = useState(9);
   const [products, setProducts] = useState<Product[]>([]);
@@ -30,7 +35,7 @@ export default function CatalogSection() {
       try {
         setLoading(true);
         setError(null);
-
+        
         console.log('🔄 Загрузка товаров...');
         
         const response = await fetch('/api/tilda-products');
@@ -42,7 +47,7 @@ export default function CatalogSection() {
         const data: TildaApiResponse = await response.json();
         console.log('📦 Получены данные:', data);
 
-        // ✅ Используем утилиты для обработки данных
+        // Используем утилиты для обработки данных
         const productsData = extractProductsFromResponse(data);
         console.log('📦 Продуктов найдено:', productsData.length);
 
@@ -86,12 +91,9 @@ export default function CatalogSection() {
 
   if (loading) {
     return (
-      <section id="catalog" className="bg-white py-12">
+      <section className="py-16">
         <div className="container mx-auto px-4">
-          <h2 className="text-center mb-6 text-4xl font-bold">Загрузка каталога...</h2>
-          <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-[#d5302c]"></div>
-          </div>
+          Загрузка каталога...
         </div>
       </section>
     );
@@ -99,19 +101,22 @@ export default function CatalogSection() {
 
   if (error) {
     return (
-      <section id="catalog" className="bg-white py-12">
+      <section className="py-16">
         <div className="container mx-auto px-4">
-          <div className="text-center py-20">
-            <p className="text-red-600 text-xl mb-4">❌ {error}</p>
-            <p className="text-gray-600">Откройте консоль браузера (F12) для деталей</p>
-          </div>
+          ❌ {error}
+          <br />
+          Откройте консоль браузера (F12) для деталей
         </div>
       </section>
     );
   }
 
   return (
-    <section id="catalog" className="bg-white py-12">
+    <section 
+      ref={ref} 
+      id="catalog" 
+      className="bg-white py-16"
+    >
       <div className="container mx-auto px-4">
         {/* Заголовок и подзаголовок без изменений */}
         <h2
@@ -246,7 +251,7 @@ export default function CatalogSection() {
                                 margin: 0,
                               }}
                             >
-                              {/* ✅ Используем утилиту */}
+                              {/* Используем утилиту */}
                               {splitProductName(product.nameMain)}
                             </h3>
                           </div>
@@ -358,4 +363,8 @@ export default function CatalogSection() {
       </div>
     </section>
   );
-}
+});
+
+CatalogSection.displayName = 'CatalogSection';
+
+export default CatalogSection;

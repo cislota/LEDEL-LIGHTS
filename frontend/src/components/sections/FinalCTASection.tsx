@@ -1,11 +1,20 @@
 // src/components/sections/FinalCTASection.tsx
 'use client';
 
+import { forwardRef } from 'react';
 import Image from 'next/image';
 
-export default function FinalCTASection() {
+interface FinalCTASectionProps {
+  ref?: React.Ref<HTMLElement>;
+}
+
+const FinalCTASection = forwardRef<HTMLElement, FinalCTASectionProps>((props, ref) => {
   return (
-    <section className="bg-white py-16">
+    <section 
+      ref={ref} 
+      id="final-cta" 
+      className="bg-white py-16"
+    >
       <div className="container mx-auto px-4">
         {/* Общий контейнер: 1560×670 */}
         <div
@@ -125,28 +134,28 @@ export default function FinalCTASection() {
                   />
                 </div>
                 <div>
-                 <div className="flex flex-col whitespace-nowrap">
-                  <div
-                    style={{
-                      fontSize: '20px',
-                      fontFamily: '"TildaSans", Arial, sans-serif',
-                      color: '#ffffff',
-                      fontWeight: 'bold',
-                      marginBottom: '4px',
-                    }}
-                  >
-                    Обсудим проект в WhatsApp:
+                  <div className="flex flex-col whitespace-nowrap">
+                    <div
+                      style={{
+                        fontSize: '20px',
+                        fontFamily: '"TildaSans", Arial, sans-serif',
+                        color: '#ffffff',
+                        fontWeight: 'bold',
+                        marginBottom: '4px',
+                      }}
+                    >
+                      Обсудим проект в WhatsApp:
+                    </div>
+                    <div
+                      style={{
+                        fontSize: '20px',
+                        fontFamily: '"TildaSans", Arial, sans-serif',
+                        color: 'rgba(255,255,255,0.9)',
+                      }}
+                    >
+                      отвечаем в течение 5 минут
+                    </div>
                   </div>
-                  <div
-                    style={{
-                      fontSize: '20px',
-                      fontFamily: '"TildaSans", Arial, sans-serif',
-                      color: 'rgba(255,255,255,0.9)',
-                    }}
-                  >
-                    отвечаем в течение 5 минут
-                  </div>
-                 </div>
                 </div>
               </div>
 
@@ -165,29 +174,29 @@ export default function FinalCTASection() {
                 </div>
                 <div>
                   <div className="flex flex-col whitespace-nowrap">
-                  <div
-                    style={{
-                      fontSize: '20px',
-                      fontFamily: '"TildaSans", Arial, sans-serif',
-                      color: '#ffffff',
-                      fontWeight: 'bold',
-                      marginBottom: '4px',
-                    }}
-                  >
-                    Задайте вопрос на эл. почту:
+                    <div
+                      style={{
+                        fontSize: '20px',
+                        fontFamily: '"TildaSans", Arial, sans-serif',
+                        color: '#ffffff',
+                        fontWeight: 'bold',
+                        marginBottom: '4px',
+                      }}
+                    >
+                      Задайте вопрос на эл. почту:
+                    </div>
+                    <a
+                      href="mailto:info@ledl-lights.ru"
+                      style={{
+                        fontSize: '20px',
+                        fontFamily: '"TildaSans", Arial, sans-serif',
+                        color: 'rgba(255,255,255,0.9)',
+                        textDecoration: 'underline',
+                      }}
+                    >
+                      info@ledl-lights.ru
+                    </a>
                   </div>
-                  <a
-                    href="mailto:info@ledl-lights.ru"
-                    style={{
-                      fontSize: '20px',
-                      fontFamily: '"TildaSans", Arial, sans-serif',
-                      color: 'rgba(255,255,255,0.9)',
-                      textDecoration: 'underline',
-                    }}
-                  >
-                    info@ledl-lights.ru
-                  </a>
-                </div>
                 </div>
               </div>
 
@@ -206,29 +215,29 @@ export default function FinalCTASection() {
                 </div>
                 <div>
                   <div className="flex flex-col whitespace-nowrap">
-                  <div
-                    style={{
-                      fontSize: '20px',
-                      fontFamily: '"TildaSans", Arial, sans-serif',
-                      color: '#ffffff',
-                      fontWeight: 'bold',
-                      marginBottom: '4px',
-                    }}
-                  >
-                    Позвоните нам:
+                    <div
+                      style={{
+                        fontSize: '20px',
+                        fontFamily: '"TildaSans", Arial, sans-serif',
+                        color: '#ffffff',
+                        fontWeight: 'bold',
+                        marginBottom: '4px',
+                      }}
+                    >
+                      Позвоните нам:
+                    </div>
+                    <a
+                      href="tel:88003510975"
+                      style={{
+                        fontSize: '20px',
+                        fontFamily: '"TildaSans", Arial, sans-serif',
+                        color: 'rgba(255,255,255,0.9)',
+                        textDecoration: 'underline',
+                      }}
+                    >
+                      8 (800) 351-09-75
+                    </a>
                   </div>
-                  <a
-                    href="tel:88003510975"
-                    style={{
-                      fontSize: '20px',
-                      fontFamily: '"TildaSans", Arial, sans-serif',
-                      color: 'rgba(255,255,255,0.9)',
-                      textDecoration: 'underline',
-                    }}
-                  >
-                    8 (800) 351-09-75
-                  </a>
-                </div>
                 </div>
               </div>
             </div>
@@ -237,4 +246,8 @@ export default function FinalCTASection() {
       </div>
     </section>
   );
-}
+});
+
+FinalCTASection.displayName = 'FinalCTASection';
+
+export default FinalCTASection;

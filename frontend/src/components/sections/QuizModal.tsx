@@ -116,7 +116,9 @@ export default function QuizModal() {
     //   headers: { 'Content-Type': 'application/json' },
     //   body: JSON.stringify(formData),
     // });
+    
 
+    // localStorage.removeItem('quizCompleted') для отладки в консоли браузера
     // Помечаем опрос как пройденный
     localStorage.setItem('quizCompleted', 'true');
     setIsSubmitted(true);
@@ -318,7 +320,7 @@ export default function QuizModal() {
                       key={index}
                       className="flex items-center cursor-pointer group"
                       style={{ 
-                        padding: '12px 0',
+                        padding: '6px 0',
                         borderBottom: '1px solid #f0f0f0',
                       }}
                     >

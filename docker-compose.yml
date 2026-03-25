@@ -4,24 +4,38 @@ services:
   db:
     image: postgres:15
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER:-ledl_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ledl_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-ledl_db}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-ledl_user}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   backend:
     build: ./backend
     ports:
       - "8000:8000"
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-ledl_user}:${POSTGRES_PASSWORD:-ledl_pass}@db:5432/${POSTGRES_DB:-ledl_db}
+      DEBUG: ${DEBUG:-True}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000}
+      TILDA_API_URL: ${TILDA_API_URL:-https://store.tildacdn.com/api/getproductslist/}
+      TILDA_STORE_PART_UID: ${TILDA_STORE_PART_UID:-508199045462}
+      TILDA_RECID: ${TILDA_RECID:-766672722}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     volumes:
-      - ./backend:/app  # для hot-reload при локальной разработке
+      - ./backend:/app
+    command: >
+      sh -c "python -c \"from database import Base, engine; Base.metadata.create_all(bind=engine)\" &&
+             uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
 
   frontend:
     build: ./frontend
@@ -29,11 +43,22 @@ services:
       - "3000:3000"
     environment:
       NEXT_PUBLIC_API_BASE_URL: http://localhost:8000/api
+      NEXT_PUBLIC_APP_NAME: ${NEXT_PUBLIC_APP_NAME:-LEDS-LIGHTS}
     depends_on:
       - backend
     volumes:
       - ./frontend:/app
-      - /app/node_modules  # сохраняем node_modules из образа
+      - /app/node_modules
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - frontend
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
 
 volumes:
   postgres_data:

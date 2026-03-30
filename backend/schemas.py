@@ -1,4 +1,5 @@
 # Pydantic схемы для валидации данных
+
 from datetime import datetime
 from typing import Optional, List, Any
 from pydantic import BaseModel, Field, EmailStr, ConfigDict

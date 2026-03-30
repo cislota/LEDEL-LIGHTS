@@ -78,13 +78,13 @@ class Category(Base):
     parent_id = Column(Integer, ForeignKey("categories.id"), nullable=True)
     sort_order = Column(Integer, default=0)
     is_active = Column(Boolean, default=True)
-    
+
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    
+
     # Связи
     parent = relationship("Category", remote_side=[id], backref="children")
-    products = relationship("Product", backref="category_obj")
+    # products relationship удалён, т.к. Product.category — это строка, а не ForeignKey
 
 
 class Order(Base):

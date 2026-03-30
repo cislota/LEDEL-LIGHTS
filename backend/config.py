@@ -25,5 +25,9 @@ BACKEND_PORT = int(os.getenv("BACKEND_PORT", "8000"))
 # CORS
 ALLOWED_ORIGINS = os.getenv(
     "ALLOWED_ORIGINS",
-    "http://localhost:3000,http://127.0.0.1:3000"
+    "http://localhost:3000, http://127.0.0.1:3000"
 ).split(",")
+
+# Admin Panel Authentication
+ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin123")

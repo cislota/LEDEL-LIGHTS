@@ -17,7 +17,7 @@ import ProjectSliderSection from '@/components/sections/ProjectSliderSection';
 import ClientTestimonialsSection from '@/components/sections/ClientTestimonialsSection';
 import FinalCTASection from '@/components/sections/FinalCTASection';
 import QuizModal from '@/components/sections/QuizModal';
-import AvailabilityModal from '@/components/sections/AvailabilityModal';
+import AvailabilityModal from '@/components/sections/AvailabilityModal';  
 
 export default function HomePage() {
   const catalogRef = useRef<HTMLElement>(null);

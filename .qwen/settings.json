@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python *)",
+      "Bash(npm run *)",
+      "Bash(findstr *)",
+      "Bash(alembic *)",
+      "Bash(pip show *)",
+      "Bash(pip install *)",
+      "Bash(pg_ctl *)"
+    ]
+  },
+  "$version": 3
+}

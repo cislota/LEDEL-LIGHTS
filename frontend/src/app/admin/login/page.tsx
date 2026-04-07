@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { setAuthToken, api } from '@/lib/api';
+import { setAuthToken } from '@/lib/api';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -17,17 +17,23 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      // Устанавливаем токен авторизации
-      setAuthToken(username, password);
-      
-      // Проверяем доступ к API
-      await api.health();
-      
-      // Перенаправляем на dashboard
-      router.push('/admin');
+      // setAuthToken уже делает POST запрос к /api/auth/login
+      // и сохраняет токен в localStorage
+      const success = await setAuthToken(username, password);
+
+      if (success) {
+        console.log('✅ Вход успешен, редирект на /admin');
+        router.push('/admin/orders');
+        // Небольшая задержка для завершения навигации
+        setTimeout(() => {
+          router.refresh();
+        }, 100);
+      } else {
+        setError('Неверное имя пользователя или пароль');
+      }
     } catch (err: any) {
-      setError('Неверное имя пользователя или пароль');
-      console.error('Login error:', err);
+      console.error('❌ Ошибка входа:', err);
+      setError(err.message || 'Ошибка входа');
     } finally {
       setLoading(false);
     }

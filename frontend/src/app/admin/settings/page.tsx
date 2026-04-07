@@ -20,7 +20,7 @@ export default function SettingsPage() {
 
   const loadSyncData = async () => {
     try {
-      const res = await api.sync.status();
+      const res = await api.products.getSyncStatus();
       if (res.data.data?.success) {
         setLastSync(res.data.data.data);
       }
@@ -43,7 +43,7 @@ export default function SettingsPage() {
   const handleSync = async () => {
     setSyncing(true);
     try {
-      const res = await api.sync.start();
+      const res = await api.products.syncTilda();
       if (res.data.success) {
         alert('Синхронизация запущена');
         loadSyncData();

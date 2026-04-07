@@ -1,11 +1,13 @@
 # API роутеры для продуктов
 from typing import Optional, List
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 import math
 
 from ..database import get_db
 from .. import schemas, crud
+from ..services.tilda_sync import sync_all_products
+from ..services.auth import require_admin
 
 router = APIRouter(prefix="/api/products", tags=["products"])
 
@@ -23,6 +25,7 @@ def list_products(
 ):
     """
     Получить список продуктов с фильтрацией и пагинацией.
+    Данные берутся из локальной БД (синхронизируется с Tilda).
     """
     skip = (page - 1) * page_size
 
@@ -97,3 +100,72 @@ def get_product_by_id(product_id: int, db: Session = Depends(get_db)):
     if product is None:
         raise HTTPException(status_code=404, detail="Product not found")
     return product
+
+
+# === Админ-функции для управления товарами (защищено JWT) ===
+
+@router.post("/admin/sync/tilda", response_model=schemas.APIResponse)
+def sync_tilda_products(
+    db: Session = Depends(get_db),
+    admin: dict = Depends(require_admin),
+):
+    """
+    Запустить синхронизацию товаров с Tilda API.
+    Требуется JWT аутентификация администратора.
+    """
+    try:
+        result = sync_all_products(db)
+        return schemas.APIResponse(
+            success=True,
+            message="Синхронизация завершена",
+            data=result,
+        )
+    except Exception as e:
+        return schemas.APIResponse(
+            success=False,
+            message=f"Ошибка синхронизации: {str(e)}",
+        )
+
+
+@router.get("/admin/sync/status", response_model=schemas.APIResponse)
+def get_sync_status(
+    db: Session = Depends(get_db),
+    admin: dict = Depends(require_admin),
+):
+    """
+    Получить статус последней синхронизации.
+    Требуется JWT аутентификация администратора.
+    """
+    from ..models.sync_log import SyncLog
+
+    last_sync = (
+        db.query(SyncLog)
+        .filter(SyncLog.sync_type == "products")
+        .order_by(SyncLog.started_at.desc())
+        .first()
+    )
+
+    if last_sync:
+        return schemas.APIResponse(
+            success=True,
+            message="Статус синхронизации получен",
+            data={
+                "sync_type": last_sync.sync_type,
+                "status": last_sync.status,
+                "items_processed": last_sync.items_processed,
+                "items_created": last_sync.items_created,
+                "items_updated": last_sync.items_updated,
+                "items_failed": last_sync.items_failed,
+                "error_message": last_sync.error_message,
+                "started_at": last_sync.started_at.isoformat(),
+                "completed_at": last_sync.completed_at.isoformat()
+                if last_sync.completed_at
+                else None,
+            },
+        )
+    else:
+        return schemas.APIResponse(
+            success=True,
+            message="Синхронизация еще не выполнялась",
+            data=None,
+        )

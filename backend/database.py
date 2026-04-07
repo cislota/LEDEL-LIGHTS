@@ -3,7 +3,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from .config import DATABASE_URL
+try:
+    from .config import DATABASE_URL
+except ImportError:
+    from config import DATABASE_URL
 
 # Создание движка SQLAlchemy
 engine = create_engine(DATABASE_URL)

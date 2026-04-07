@@ -120,10 +120,15 @@ class CategoryResponse(CategoryBase):
 
 
 class OrderStatusEnum(str, Enum):
-    NEW = "new"
-    IN_PROGRESS = "in_progress"
-    COMPLETED = "completed"
-    CANCELLED = "cancelled"
+    """
+    Статусы заказа.
+    Соответствуют OrderStatus в models.order
+    """
+    PROCESSING = "processing"  # В обработке
+    CONFIRMED = "confirmed"    # Подтверждён
+    CANCELLED = "cancelled"    # Отменён
+    COMPLETED = "completed"    # Выполнен
+    SHIPPED = "shipped"        # Отправлен
 
 
 class OrderItemBase(BaseModel):
@@ -169,6 +174,12 @@ class OrderUpdate(BaseModel):
     manager_comment: Optional[str] = None
 
 
+class OrderStatusUpdate(BaseModel):
+    """Схема для обновления статуса заказа"""
+    status: OrderStatusEnum
+    manager_comment: Optional[str] = None
+
+
 class OrderItemResponse(OrderItemBase):
     """Схема ответа позиции заказа"""
     model_config = ConfigDict(from_attributes=True)
@@ -180,7 +191,7 @@ class OrderItemResponse(OrderItemBase):
 class OrderResponse(OrderBase):
     """Схема ответа заказа"""
     model_config = ConfigDict(from_attributes=True)
-    
+
     id: int
     order_number: Optional[str] = None
     status: str
@@ -188,6 +199,13 @@ class OrderResponse(OrderBase):
     created_at: datetime
     updated_at: datetime
     items: List[OrderItemResponse] = []
+    
+    # Новые поля
+    total_amount: Optional[float] = None
+    currency: str = "RUB"
+    delivery_address: Optional[str] = None
+    manager_comment: Optional[str] = None
+    status_changed_at: Optional[datetime] = None
 
 
 class OrderListResponse(BaseModel):
@@ -296,3 +314,19 @@ class HealthResponse(BaseModel):
     status: str
     database: Optional[str] = None
     timestamp: datetime = Field(default_factory=datetime.utcnow)
+
+
+# Auth Schemas
+
+
+class LoginRequest(BaseModel):
+    """Схема для запроса логина"""
+    username: str = Field(..., min_length=1, max_length=100)
+    password: str = Field(..., min_length=1)
+
+
+class TokenResponse(BaseModel):
+    """Схема для ответа с токеном"""
+    access_token: str
+    token_type: str = "bearer"
+    expires_in: int  # секунды до истечения

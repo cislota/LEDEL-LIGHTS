@@ -1,5 +1,7 @@
 # LEDS-LIGHTS Backend API
 import logging
+import atexit
+from contextlib import asynccontextmanager
 from datetime import datetime
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -8,9 +10,13 @@ from sqlalchemy.orm import Session
 from .database import engine, get_db, Base
 from .config import ALLOWED_ORIGINS, DEBUG
 from . import schemas
-from .routers import products_router, orders_router, categories_router, quiz_router, contact_router
-from .utils import sync_all_products
+from .routers import (
+    products_router, orders_router, categories_router,
+    quiz_router, contact_router, auth_router,
+)
 from .admin import setup_admin_panel
+from .services.scheduler import start_scheduler, stop_scheduler, get_scheduler_status
+from .services.auth import require_admin
 
 # Настройка логирования
 logging.basicConfig(
@@ -19,24 +25,46 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Управление жизненным циклом приложения.
+    Запускаем планировщик при старте, останавливаем при завершении.
+    """
+    # Startup
+    logger.info("Запуск приложения LEDS-LIGHTS API...")
+    start_scheduler(interval_minutes=60)  # Синхронизация каждый час
+    logger.info("Планировщик синхронизации Tilda запущен")
+
+    yield
+
+    # Shutdown
+    logger.info("Остановка приложения...")
+    stop_scheduler()
+    logger.info("Планировщик остановлен")
+
+
 # Инициализация приложения
 app = FastAPI(
     title="LEDS-LIGHTS API",
     description="API для интернет-магазина светильников",
-    version="1.0.0",
+    version="2.0.0",
     debug=DEBUG,
+    lifespan=lifespan,
 )
 
 # Настройка CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
+    allow_origins=["http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # Подключение роутеров
+app.include_router(auth_router)
 app.include_router(products_router)
 app.include_router(orders_router)
 app.include_router(categories_router)
@@ -111,9 +139,13 @@ def init_database():
 
 
 @app.post("/api/sync/products", response_model=schemas.APIResponse)
-def sync_products(db: Session = Depends(get_db)):
+def sync_products(
+    db: Session = Depends(get_db),
+    admin: dict = Depends(require_admin),
+):
     """
     Синхронизировать продукты с Tilda API.
+    Требуется JWT аутентификация администратора.
     """
     try:
         result = sync_all_products(db)
@@ -166,3 +198,22 @@ def get_sync_status(db: Session = Depends(get_db)):
             message="Синхронизация еще не выполнялась",
             data=None,
         )
+
+
+# Scheduler Endpoints (Админ)
+
+
+@app.get("/api/scheduler/status", response_model=schemas.APIResponse)
+def get_scheduler_status_endpoint(
+    admin: dict = Depends(require_admin),
+):
+    """
+    Получить статус планировщика автоматической синхронизации.
+    Требуется JWT аутентификация администратора.
+    """
+    status = get_scheduler_status()
+    return schemas.APIResponse(
+        success=True,
+        message="Статус планировщика получен",
+        data=status,
+    )

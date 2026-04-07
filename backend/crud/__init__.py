@@ -32,9 +32,9 @@ from .orders import (
     generate_order_number,
     create_order,
     update_order,
-    delete_order,
-    add_order_item,
-    remove_order_item,
+    update_order_status,
+    cancel_order,
+    complete_order,
 )
 
 from .quiz_results import (
@@ -81,9 +81,9 @@ __all__ = [
     "generate_order_number",
     "create_order",
     "update_order",
-    "delete_order",
-    "add_order_item",
-    "remove_order_item",
+    "update_order_status",
+    "cancel_order",
+    "complete_order",
     # Quiz Results
     "get_quiz_result",
     "get_quiz_results",

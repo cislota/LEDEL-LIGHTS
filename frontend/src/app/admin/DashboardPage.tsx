@@ -26,10 +26,10 @@ export default function DashboardPage() {
   const loadDashboardData = async () => {
     try {
       const [ordersRes, quizRes, contactsRes, syncRes] = await Promise.all([
-        api.orders.list({ page: 1, page_size: 5, status: 'new' }),
+        api.orders.list({ page: 1, page_size: 5, status: 'processing' }),
         api.quiz.list({ page: 1, page_size: 5, is_processed: false }),
         api.contacts.list({ page: 1, page_size: 5, is_processed: false }),
-        api.sync.status().catch(() => ({ data: { success: false, data: null } })),
+        api.products.getSyncStatus().catch(() => ({ data: { success: false, data: null } })),
       ]);
 
       const ordersNew = ordersRes.data.data?.items || [];
@@ -37,7 +37,7 @@ export default function DashboardPage() {
       const contactsUnprocessed = contactsRes.data.data?.items || [];
 
       // Получаем общее количество заказов в работе
-      const ordersInProgressRes = await api.orders.list({ page: 1, page_size: 1, status: 'in_progress' });
+      const ordersInProgressRes = await api.orders.list({ page: 1, page_size: 1, status: 'confirmed' });
       const ordersInProgressTotal = ordersInProgressRes.data.data?.total || 0;
 
       setStats({

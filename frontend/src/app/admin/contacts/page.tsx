@@ -34,9 +34,10 @@ export default function ContactsPage() {
         params.form_type = filterFormType;
       }
       const res = await api.contacts.list(params);
-      const data = res.data.data;
+      const data = res.data.data?.items ? res.data.data : (res.data.items ? res.data : {});
       setSubmissions(data.items || []);
       setTotal(data.total || 0);
+      console.log('✅ Contacts loaded:', data.items?.length, 'из', data.total);
     } catch (error) {
       console.error('Failed to load contact submissions:', error);
     } finally {

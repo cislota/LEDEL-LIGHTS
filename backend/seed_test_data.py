@@ -40,7 +40,7 @@ def seed_products():
             "text": "Профессиональный светодиодный светильник для уличного освещения. Мощность 50Вт, защита IP65. Срок службы 50 000 часов.",
             "price": 15000.00,
             "currency": "RUB",
-            "image_url": "https://via.placeholder.com/600x400/d5302c/ffffff?text=L-street+Pro",
+            "image_url": "https://placehold.co/600x400/d5302c/ffffff?text=L-street+Pro",
             "category": "Уличное освещение",
             "type": "Светильник",
             "brand": "Ledel",
@@ -60,7 +60,7 @@ def seed_products():
             "text": "Офисный светильник с мощностью 40Вт. Равномерное освещение без мерцания. Подходит для офисов, школ, больниц.",
             "price": 8500.00,
             "currency": "RUB",
-            "image_url": "https://via.placeholder.com/600x400/2196f3/ffffff?text=L-office+Premium",
+            "image_url": "https://placehold.co/600x400/2196f3/ffffff?text=L-office+Premium",
             "category": "Офисное освещение",
             "type": "Светильник",
             "brand": "Ledel",
@@ -80,7 +80,7 @@ def seed_products():
             "text": "Мощный прожектор для коммерческого использования. 100Вт, высокая яркость, точечное освещение.",
             "price": 25000.00,
             "currency": "RUB",
-            "image_url": "https://via.placeholder.com/600x400/4caf50/ffffff?text=L-fusion+Retail",
+            "image_url": "https://placehold.co/600x400/4caf50/ffffff?text=L-fusion+Retail",
             "category": "Коммерческое освещение",
             "type": "Прожектор",
             "brand": "Ledel",
@@ -100,7 +100,7 @@ def seed_products():
             "text": "Архитектурно-парковый светильник для декоративной подсветки фасадов. Мощность 30Вт, широкий угол рассеивания.",
             "price": 12000.00,
             "currency": "RUB",
-            "image_url": "https://via.placeholder.com/600x400/ff9800/ffffff?text=L-contour+Facade",
+            "image_url": "https://placehold.co/600x400/ff9800/ffffff?text=L-contour+Facade",
             "category": "Архитектурно-парковое освещение",
             "type": "Светильник",
             "brand": "Ledel",
@@ -120,7 +120,7 @@ def seed_products():
             "text": "Мощный промышленный прожектор. 200Вт, IP54, для складов, цехов, производственных помещений.",
             "price": 45000.00,
             "currency": "RUB",
-            "image_url": "https://via.placeholder.com/600x400/9c27b0/ffffff?text=L-industrial",
+            "image_url": "https://placehold.co/600x400/9c27b0/ffffff?text=L-industrial",
             "category": "Промышленное освещение",
             "type": "Прожектор",
             "brand": "Ledel",
@@ -413,12 +413,40 @@ def seed_sync_logs():
     print(f"  📊 Всего логов: {db.query(SyncLog).count()}\n")
 
 
+def seed_categories():
+    """Создаём категории товаров"""
+    print("📂 Создание категорий...")
+
+    from models.category import Category
+
+    categories = [
+        {"name": "Уличное освещение", "slug": "ulichnoe-osveshchenie", "sort_order": 10, "is_active": True},
+        {"name": "Офисное освещение", "slug": "ofisnoe-osveshchenie", "sort_order": 20, "is_active": True},
+        {"name": "Коммерческое освещение", "slug": "kommercheskoe-osveshchenie", "sort_order": 30, "is_active": True},
+        {"name": "Архитектурно-парковое освещение", "slug": "arhitekturno-parkovoe-osveshchenie", "sort_order": 40, "is_active": True},
+        {"name": "Промышленное освещение", "slug": "promyshlennoe-osveshchenie", "sort_order": 50, "is_active": True},
+    ]
+
+    for data in categories:
+        exists = db.query(Category).filter(Category.name == data["name"]).first()
+        if not exists:
+            cat = Category(**data)
+            db.add(cat)
+            print(f"  ✅ Добавлена: {data['name']}")
+        else:
+            print(f"  ⏭️ Пропущена: {data['name']}")
+
+    db.commit()
+    print(f"  📊 Всего категорий: {db.query(Category).count()}\n")
+
+
 if __name__ == "__main__":
     print("=" * 60)
     print("  ЗАПОЛНЕНИЕ БД ТЕСТОВЫМИ ДАННЫМИ — LEDS-LIGHTS")
     print("=" * 60 + "\n")
 
     try:
+        seed_categories()
         seed_products()
         seed_orders()
         seed_quiz_results()

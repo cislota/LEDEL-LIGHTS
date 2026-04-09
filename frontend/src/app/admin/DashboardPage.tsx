@@ -32,19 +32,19 @@ export default function DashboardPage() {
         api.products.getSyncStatus().catch(() => ({ data: { success: false, data: null } })),
       ]);
 
-      const ordersNew = ordersRes.data.data?.items || [];
-      const quizUnprocessed = quizRes.data.data?.items || [];
-      const contactsUnprocessed = contactsRes.data.data?.items || [];
+      const ordersNew = ordersRes.data?.items || [];
+      const quizUnprocessed = quizRes.data?.items || [];
+      const contactsUnprocessed = contactsRes.data?.items || [];
 
       // Получаем общее количество заказов в работе
       const ordersInProgressRes = await api.orders.list({ page: 1, page_size: 1, status: 'confirmed' });
-      const ordersInProgressTotal = ordersInProgressRes.data.data?.total || 0;
+      const ordersInProgressTotal = ordersInProgressRes.data?.total || 0;
 
       setStats({
-        ordersNew: ordersRes.data.data?.total || 0,
+        ordersNew: ordersRes.data?.total || 0,
         ordersInProgress: ordersInProgressTotal,
-        quizUnprocessed: quizRes.data.data?.total || 0,
-        contactsUnprocessed: contactsRes.data.data?.total || 0,
+        quizUnprocessed: quizRes.data?.total || 0,
+        contactsUnprocessed: contactsRes.data?.total || 0,
         lastSync: syncRes.data.data?.success ? syncRes.data.data.data : null,
       });
 

@@ -467,6 +467,10 @@ img, video {
   margin-top: auto;
 }
 
+.ml-3 {
+  margin-left: .75rem;
+}
+
 .block {
   display: block;
 }

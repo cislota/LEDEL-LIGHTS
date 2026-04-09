@@ -15,11 +15,53 @@ export default function ProductsPage() {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
+  const [categories, setCategories] = useState<string[]>([]);
   const pageSize = 20;
+
+  // Загружаем категории при монтировании
+  useEffect(() => {
+    loadCategories();
+  }, []);
 
   useEffect(() => {
     loadProducts();
   }, [page, filterCategory, filterAvailable]);
+
+  const loadCategories = async () => {
+    try {
+      // Загружаем все товары (page_size макс 100 по ограничению бэкенда)
+      const res = await api.products.list({ page: 1, page_size: 100 });
+      const data = res.data.data?.items ? res.data.data : (res.data.items ? res.data : {});
+      const allProducts = data.items || [];
+
+      // Собираем уникальные категории из товаров
+      const fromProducts = allProducts
+        .map((p: Product) => p.category)
+        .filter((c: string | null | undefined): c is string => !!c);
+
+      // Стандартные категории (fallback)
+      const standardCats = [
+        'Уличное освещение',
+        'Офисное освещение',
+        'Коммерческое освещение',
+        'Архитектурно-парковое освещение',
+        'Промышленное освещение',
+      ];
+
+      // Объединяем и сортируем
+      const unique = [...new Set([...fromProducts, ...standardCats])].sort();
+      setCategories(unique);
+    } catch (error) {
+      // Если API недоступен — используем стандартные категории
+      setCategories([
+        'Уличное освещение',
+        'Офисное освещение',
+        'Коммерческое освещение',
+        'Архитектурно-парковое освещение',
+        'Промышленное освещение',
+      ]);
+    }
+  };
 
   const loadProducts = async () => {
     setLoading(true);
@@ -37,9 +79,10 @@ export default function ProductsPage() {
         params.search = search;
       }
       const res = await api.products.list(params);
-      const data = res.data.data;
+      const data = res.data.data?.items ? res.data.data : (res.data.items ? res.data : {});
       setProducts(data.items || []);
       setTotal(data.total || 0);
+      console.log('✅ Products loaded:', data.items?.length, 'из', data.total);
     } catch (error) {
       console.error('Failed to load products:', error);
     } finally {
@@ -52,11 +95,24 @@ export default function ProductsPage() {
       key: 'image_url', 
       label: 'Фото',
       render: (product: Product) => (
-        <div className="w-12 h-12 bg-gray-100 rounded-lg overflow-hidden">
+        <div className="w-12 h-12 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
           {product.image_url ? (
-            <img src={product.image_url} alt={product.title} className="w-full h-full object-cover" />
+            <img 
+              src={product.image_url} 
+              alt={product.title} 
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = 'none';
+                const parent = (e.target as HTMLImageElement).parentElement;
+                if (parent) {
+                  parent.innerHTML = '📷';
+                  parent.style.fontSize = '20px';
+                  parent.style.color = '#9ca3af';
+                }
+              }}
+            />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-gray-400">📷</div>
+            <span className="text-gray-400 text-lg">📷</span>
           )}
         </div>
       )
@@ -126,7 +182,9 @@ export default function ProductsPage() {
               className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="all">Все категории</option>
-              {/* Категории можно загрузить динамически */}
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
             </select>
             <select
               value={filterAvailable}
@@ -187,7 +245,15 @@ export default function ProductsPage() {
             </div>
 
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-sm text-yellow-800">
-              💡 Для редактирования товаров используйте <a href="/admin" className="underline font-medium">SQLAdmin панель</a>
+              💡 Для редактирования товаров используйте{' '}
+              <a
+                href="http://localhost:8000/admin"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline font-medium"
+              >
+                SQLAdmin панель →
+              </a>
             </div>
           </>
         )}

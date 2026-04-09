@@ -21,8 +21,9 @@ export default function SettingsPage() {
   const loadSyncData = async () => {
     try {
       const res = await api.products.getSyncStatus();
-      if (res.data.data?.success) {
-        setLastSync(res.data.data.data);
+      const data = res.data.data || res.data;
+      if (data) {
+        setLastSync(data);
       }
     } catch (error) {
       console.error('Failed to load sync status:', error);
@@ -44,11 +45,17 @@ export default function SettingsPage() {
     setSyncing(true);
     try {
       const res = await api.products.syncTilda();
-      if (res.data.success) {
-        alert('Синхронизация запущена');
+      const data = res.data.data || res.data;
+      if (res.data.success !== false && data?.stats) {
+        const { created, updated, failed, total } = data.stats;
+        let msg = `Синхронизация завершена!\nВсего: ${total}, Создано: ${created}, Обновлено: ${updated}`;
+        if (failed > 0) msg += `\n⚠️ Ошибок: ${failed}`;
+        alert(msg);
         loadSyncData();
+      } else if (data?.error) {
+        alert('Ошибка: ' + data.error);
       } else {
-        alert('Ошибка: ' + res.data.message);
+        alert('Ответ сервера: ' + JSON.stringify(res.data));
       }
     } catch (error: any) {
       console.error('Sync error:', error);
@@ -102,7 +109,18 @@ export default function SettingsPage() {
         {/* Sync Section */}
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-lg font-semibold text-gray-800 mb-4">Синхронизация с Tilda</h2>
-          
+
+          <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-800">
+            <strong>ℹ️ Информация:</strong> Синхронизация загружает товары из Tilda API. 
+            Если товар с таким же UID уже есть в базе — он обновится. 
+            Новые товары будут добавлены.
+            {lastSync && lastSync.items_processed === 0 && (
+              <span className="block mt-1">
+                ⚠️ Последняя синхронизация не нашла новых товаров. Проверьте Tilda API credentials.
+              </span>
+            )}
+          </div>
+
           <div className="mb-6">
             <button
               onClick={handleSync}
@@ -111,6 +129,11 @@ export default function SettingsPage() {
             >
               {syncing ? '⏳ Синхронизация...' : '🔄 Запустить синхронизацию'}
             </button>
+            {syncing && (
+              <span className="ml-3 text-sm text-gray-500">
+                Это может занять 30-60 секунд...
+              </span>
+            )}
           </div>
 
           {lastSync && (

@@ -30,9 +30,10 @@ export default function QuizPage() {
         params.is_processed = false;
       }
       const res = await api.quiz.list(params);
-      const data = res.data.data;
+      const data = res.data.data?.items ? res.data.data : (res.data.items ? res.data : {});
       setResults(data.items || []);
       setTotal(data.total || 0);
+      console.log('✅ Quiz loaded:', data.items?.length, 'из', data.total);
     } catch (error) {
       console.error('Failed to load quiz results:', error);
     } finally {

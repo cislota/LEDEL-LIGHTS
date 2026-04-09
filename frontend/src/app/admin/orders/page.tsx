@@ -77,9 +77,11 @@ export default function OrdersPage() {
         params.status = filterStatus;
       }
       const res = await api.orders.list(params);
-      const data = res.data.data;
+      // Orders endpoint возвращает OrderListResponse напрямую: { items, total, page, page_size }
+      const data = res.data;
       setOrders(data.items || []);
       setTotal(data.total || 0);
+      console.log('✅ Orders loaded:', data.items?.length, 'из', data.total);
     } catch (error: any) {
       if (error.response?.status === 401) {
         router.push('/admin/login');

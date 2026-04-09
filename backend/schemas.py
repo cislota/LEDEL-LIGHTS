@@ -189,7 +189,7 @@ class OrderItemResponse(OrderItemBase):
 
 
 class OrderResponse(OrderBase):
-    """Схема ответа заказа"""
+    """Схема ответа заказа (с позициями)"""
     model_config = ConfigDict(from_attributes=True)
 
     id: int
@@ -199,8 +199,6 @@ class OrderResponse(OrderBase):
     created_at: datetime
     updated_at: datetime
     items: List[OrderItemResponse] = []
-    
-    # Новые поля
     total_amount: Optional[float] = None
     currency: str = "RUB"
     delivery_address: Optional[str] = None
@@ -208,9 +206,26 @@ class OrderResponse(OrderBase):
     status_changed_at: Optional[datetime] = None
 
 
+class OrderSummary(BaseModel):
+    """Краткая информация о заказе (для списка, без позиций)"""
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    order_number: Optional[str] = None
+    name: str
+    phone: str
+    email: Optional[str] = None
+    status: str
+    source: Optional[str] = None
+    total_amount: Optional[float] = None
+    currency: str = "RUB"
+    created_at: datetime
+    updated_at: datetime
+
+
 class OrderListResponse(BaseModel):
     """Схема списка заказов"""
-    items: List[OrderResponse]
+    items: List[OrderSummary]
     total: int
     page: int
     page_size: int
@@ -235,14 +250,34 @@ class QuizResultCreate(QuizResultBase):
     pass
 
 
+class QuizResultSummary(BaseModel):
+    """Краткая информация о результате квиза (для списка)"""
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    name: Optional[str] = None
+    phone: Optional[str] = None
+    email: Optional[str] = None
+    result_type: Optional[str] = None
+    is_processed: bool
+    created_at: datetime
+
+
 class QuizResultResponse(QuizResultBase):
     """Схема ответа результата квиза"""
     model_config = ConfigDict(from_attributes=True)
-    
+
     id: int
     is_processed: bool
     manager_comment: Optional[str] = None
     created_at: datetime
+
+
+class QuizResultListResponse(BaseModel):
+    items: List[QuizResultSummary]
+    total: int
+    page: int
+    page_size: int
 
 
 
@@ -264,14 +299,34 @@ class ContactFormCreate(ContactFormBase):
     pass
 
 
+class ContactFormSummary(BaseModel):
+    """Краткая информация о заявке (для списка)"""
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    name: str
+    phone: Optional[str] = None
+    email: Optional[str] = None
+    form_type: Optional[str] = None
+    is_processed: bool
+    created_at: datetime
+
+
 class ContactFormResponse(ContactFormBase):
     """Схема ответа заявки из формы"""
     model_config = ConfigDict(from_attributes=True)
-    
+
     id: int
     is_processed: bool
     manager_comment: Optional[str] = None
     created_at: datetime
+
+
+class ContactFormListResponse(BaseModel):
+    items: List[ContactFormSummary]
+    total: int
+    page: int
+    page_size: int
 
 
 

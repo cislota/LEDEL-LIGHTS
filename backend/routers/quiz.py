@@ -59,3 +59,25 @@ def get_quiz_result(result_id: int, db: Session = Depends(get_db)):
     if result is None:
         raise HTTPException(status_code=404, detail="Quiz result not found")
     return result
+
+
+@router.patch("/results/{result_id}", response_model=schemas.QuizResultResponse)
+def update_quiz_result(
+    result_id: int,
+    update_data: dict,
+    db: Session = Depends(get_db),
+):
+    """Обновить результат квиза (статус обработки, комментарий менеджера)."""
+    result = crud.get_quiz_result(db, result_id)
+    if result is None:
+        raise HTTPException(status_code=404, detail="Quiz result not found")
+
+    # Обновляем переданные поля
+    if "is_processed" in update_data:
+        result.is_processed = update_data["is_processed"]
+    if "manager_comment" in update_data:
+        result.manager_comment = update_data["manager_comment"]
+
+    db.commit()
+    db.refresh(result)
+    return result

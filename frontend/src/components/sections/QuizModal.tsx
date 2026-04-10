@@ -9,6 +9,7 @@ import PhoneInput, {
   isValidPhoneNumber
 }
 from 'react-phone-number-input';
+import { submitQuizResult } from '@/utils/api';
 
 export default function QuizModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -100,33 +101,29 @@ export default function QuizModal() {
     }
     setPhoneError('');
 
-    // Заглушка для отправки на бэкенд
-    const formData = {
-      email,
-      phone: phone?.replace(/\D/g, ''),
-      country,
-      answers,
-    };
+    try {
+      // Отправка данных на бэкенд
+      await submitQuizResult({
+        name: '',
+        email: email.trim(),
+        phone: phone?.replace(/\D/g, '') || '',
+        answers: JSON.stringify(answers),
+        result_type: 'quiz_result',
+      });
 
-    console.log('Отправка данных на бэкенд:', formData);
-    
-    // TODO: Интеграция с бэкендом
-    // await fetch('/api/quiz', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(formData),
-    // });
-    
+      // localStorage.removeItem('quizCompleted') для отладки в консоли браузера
+      // Помечаем опрос как пройденный
+      localStorage.setItem('quizCompleted', 'true');
+      setIsSubmitted(true);
 
-    // localStorage.removeItem('quizCompleted') для отладки в консоли браузера
-    // Помечаем опрос как пройденный
-    localStorage.setItem('quizCompleted', 'true');
-    setIsSubmitted(true);
-    
-    // Закрываем через 2 секунды
-    setTimeout(() => {
-      setIsOpen(false);
-    }, 2000);
+      // Закрываем через 2 секунды
+      setTimeout(() => {
+        setIsOpen(false);
+      }, 2000);
+    } catch (error) {
+      console.error('Ошибка отправки квиза:', error);
+      setEmailError('Произошла ошибка при отправке. Попробуйте снова.');
+    }
   };
 
   const isAnswered = (questionId: number) => {

@@ -8,33 +8,45 @@ import PhoneInput, {
   type Value,
   isValidPhoneNumber
 } from 'react-phone-number-input';
+import { submitCalculationRequest } from '@/utils/api';
 
 export default function ContactManagerSection() {
   //  Состояния для формы телефона
   const [phone, setPhone] = useState<any>('');
   const [country, setCountry] = useState<Country>('RU');
   const [error, setError] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const handlePhoneChange = (value: Value) => {
     setPhone(value);
     if (error) setError('');
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!phone || !isValidPhoneNumber(phone)) {
       setError('Введите корректный номер телефона');
       return;
     }
-    
+
     setError('');
-    console.log('Заявка отправлена:', { 
-      phone, 
-      country,
-      digits: phone?.replace(/\D/g, '') 
-    });
-    // TODO: интеграция с бэкендом
+    setIsSubmitting(true);
+
+    try {
+      await submitCalculationRequest({ phone });
+      setSubmitSuccess(true);
+      setPhone('');
+
+      // Сбрасываем успех через 3 секунды
+      setTimeout(() => setSubmitSuccess(false), 3000);
+    } catch (error) {
+      console.error('Ошибка отправки заявки:', error);
+      setError(error instanceof Error ? error.message : 'Ошибка отправки. Попробуйте снова.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const isPhoneValid = phone && isValidPhoneNumber(phone);
@@ -149,19 +161,19 @@ export default function ContactManagerSection() {
                 {/* Кнопка отправки */}
                 <button
                   type="submit"
-                  disabled={!canSubmit}
+                  disabled={!canSubmit || isSubmitting}
                   className={`w-full sm:w-[280px] h-[50px] text-white font-bold rounded-lg transition flex items-center justify-center flex-shrink-0 ${
-                    canSubmit
+                    canSubmit && !isSubmitting
                       ? 'bg-[#d5302c] hover:bg-[#b52824] cursor-pointer'
                       : 'bg-[#f5a6a6] cursor-not-allowed'
                   }`}
                   style={{
                     fontSize: '14px',
                     fontFamily: '"TildaSans", Arial, sans-serif',
-                    boxShadow: canSubmit ? '0 4px 12px rgba(213, 48, 44, 0.3)' : 'none',
+                    boxShadow: canSubmit && !isSubmitting ? '0 4px 12px rgba(213, 48, 44, 0.3)' : 'none',
                   }}
                 >
-                  ПОЛУЧИТЬ РАСЧЕТ
+                  {isSubmitting ? 'Отправка...' : submitSuccess ? '✅ Отправлено!' : 'ПОЛУЧИТЬ РАСЧЕТ'}
                 </button>
               </form>
             </div>

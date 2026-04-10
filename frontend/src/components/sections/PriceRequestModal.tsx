@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import PhoneInput from 'react-phone-number-input';
+import { submitPriceRequest } from '@/utils/api';
 
 interface PriceRequestModalProps {
   isOpen: boolean;
@@ -16,6 +17,8 @@ export default function PriceRequestModal({ isOpen, onClose }: PriceRequestModal
   const [phone, setPhone] = useState('');
   const [country, setCountry] = useState('RU');
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   if (!isOpen) return null;
 
@@ -37,14 +40,35 @@ export default function PriceRequestModal({ isOpen, onClose }: PriceRequestModal
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!phone || phone.length < 10) {
       setError('Введите корректный номер телефона');
       return;
     }
-    
-    console.log('Email:', email, 'Phone:', phone);
-    onClose();
+
+    setError('');
+    setIsSubmitting(true);
+
+    try {
+      await submitPriceRequest({
+        email: email.trim(),
+        phone: phone,
+      });
+
+      setSubmitSuccess(true);
+      setTimeout(() => {
+        onClose();
+        setSubmitSuccess(false);
+        setStep(1);
+        setEmail('');
+        setPhone('');
+      }, 2000);
+    } catch (error) {
+      console.error('Ошибка отправки запроса прайса:', error);
+      setError(error instanceof Error ? error.message : 'Ошибка отправки. Попробуйте снова.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleEmailKeyDown = (e: React.KeyboardEvent) => {
@@ -185,54 +209,77 @@ export default function PriceRequestModal({ isOpen, onClose }: PriceRequestModal
         {/* Шаг 2: Телефон */}
         {step === 2 && (
           <div className="flex-1 flex flex-col justify-center">
-            <p 
-              className="mb-6"
-              style={{
-                fontSize: '15px',
-                fontFamily: '"TildaSans", Arial, sans-serif',
-                color: '#666666',
-                lineHeight: 1.5,
-              }}
-            >
-              На случай, если письмо попадет в спам, пожалуйста,<br />
-              оставьте ваш телефон
-            </p>
-
-            {/* Форма с валидацией */}
-            <div className="w-full">
-              <PhoneInput
-                international
-                defaultCountry="RU"
-                countryCallingCodeEditable={false}
-                value={phone}
-                onChange={handlePhoneChange}
-                onCountryChange={setCountry}
-                placeholder="+7 (000) 000-00-00"
-                className={`PhoneInputCustom w-full h-[50px] ${error ? 'error' : ''}`}
-                inputProps={{
-                  onKeyDown: handlePhoneKeyDown,
-                  style: {
-                    fontSize: '16px',
+            {submitSuccess ? (
+              <div className="text-center">
+                <div className="text-5xl mb-4">✅</div>
+                <p
+                  className="mb-4"
+                  style={{
+                    fontSize: '18px',
                     fontFamily: '"TildaSans", Arial, sans-serif',
-                  }
-                }}
-              />
-              
-              {/* Сообщение об ошибке */}
-              {error && (
-                <p 
-                  className="mt-2 text-sm"
-                  style={{ 
-                    color: '#d5302c', 
-                    fontFamily: '"TildaSans", Arial, sans-serif',
-                    textAlign: 'left',
-                    minHeight: '20px'
+                    color: '#22c55e',
+                    fontWeight: 'bold',
                   }}
                 >
-                  {error}
+                  Заявка отправлена!
                 </p>
-              )}
-            </div>
+                <p
+                  style={{
+                    fontSize: '15px',
+                    fontFamily: '"TildaSans", Arial, sans-serif',
+                    color: '#666666',
+                    lineHeight: 1.5,
+                  }}
+                >
+                  Мы отправим прайс-лист на ваш email
+                </p>
+              </div>
+            ) : (
+              <>
+                <p
+                  className="mb-6"
+                  style={{
+                    fontSize: '15px',
+                    fontFamily: '"TildaSans", Arial, sans-serif',
+                    color: '#666666',
+                    lineHeight: 1.5,
+                  }}
+                >
+                  На случай, если письмо попадет в спам, пожалуйста,<br />
+                  оставьте ваш телефон
+                </p>
+
+                {/* Форма с валидацией */}
+                <div className="w-full">
+                  <PhoneInput
+                    international
+                    defaultCountry="RU"
+                    countryCallingCodeEditable={false}
+                    value={phone}
+                    onChange={handlePhoneChange}
+                    onCountryChange={setCountry}
+                    onKeyDown={handlePhoneKeyDown}
+                    placeholder="+7 (000) 000-00-00"
+                    className={`PhoneInputCustom w-full h-[50px] ${error ? 'error' : ''}`}
+                  />
+
+                  {/* Сообщение об ошибке */}
+                  {error && (
+                    <p
+                      className="mt-2 text-sm"
+                      style={{
+                        color: '#d5302c',
+                        fontFamily: '"TildaSans", Arial, sans-serif',
+                        textAlign: 'left',
+                        minHeight: '20px'
+                      }}
+                    >
+                      {error}
+                    </p>
+                  )}
+                </div>
+              </>
+            )}
             
             {/* Индикатор прогресса и кнопки - текст слева, круг справа */}
             <div className="relative flex items-center justify-between mt-8">
@@ -275,18 +322,20 @@ export default function PriceRequestModal({ isOpen, onClose }: PriceRequestModal
               </div>
 
               {/* Кнопка ОТПРАВИТЬ справа */}
-              <button
-                onClick={handleSubmit}
-                disabled={!phone}
-                className="px-8 py-3 bg-[#d5302c] text-white font-bold rounded-full hover:bg-[#b52824] transition disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{
-                  fontSize: '14px',
-                  fontFamily: '"TildaSans", Arial, sans-serif',
-                  minWidth: '120px',
-                }}
-              >
-                ОТПРАВИТЬ
-              </button>
+              {!submitSuccess && (
+                <button
+                  onClick={handleSubmit}
+                  disabled={!phone || isSubmitting}
+                  className="px-8 py-3 bg-[#d5302c] text-white font-bold rounded-full hover:bg-[#b52824] transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{
+                    fontSize: '14px',
+                    fontFamily: '"TildaSans", Arial, sans-serif',
+                    minWidth: '120px',
+                  }}
+                >
+                  {isSubmitting ? 'Отправка...' : 'ОТПРАВИТЬ'}
+                </button>
+              )}
             </div>
           </div>
         )}

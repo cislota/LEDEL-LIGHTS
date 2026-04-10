@@ -70,3 +70,25 @@ def get_contact_form_submission(submission_id: int, db: Session = Depends(get_db
     if submission is None:
         raise HTTPException(status_code=404, detail="Submission not found")
     return submission
+
+
+@router.patch("/submissions/{submission_id}", response_model=schemas.ContactFormResponse)
+def update_contact_form_submission(
+    submission_id: int,
+    update_data: dict,
+    db: Session = Depends(get_db),
+):
+    """Обновить заявку (статус обработки, комментарий менеджера)."""
+    submission = crud.get_contact_form_submission(db, submission_id)
+    if submission is None:
+        raise HTTPException(status_code=404, detail="Submission not found")
+
+    # Обновляем переданные поля
+    if "is_processed" in update_data:
+        submission.is_processed = update_data["is_processed"]
+    if "manager_comment" in update_data:
+        submission.manager_comment = update_data["manager_comment"]
+
+    db.commit()
+    db.refresh(submission)
+    return submission

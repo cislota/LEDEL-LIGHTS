@@ -282,3 +282,46 @@ export async function submitQuizResult(data: QuizResultSubmit): Promise<QuizResu
   });
   return handleResponse<QuizResultResponse>(response);
 }
+
+
+// Price Request API (uses Contact Form endpoint)
+
+
+export async function submitPriceRequest(data: { email: string; phone: string }): Promise<ContactFormResponse> {
+  const response = await fetch(`${API_BASE_URL}/contact/submit`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name: 'Запрос прайса',
+      email: data.email.trim(),
+      phone: data.phone.replace(/\D/g, ''),
+      message: 'Запрос оптового прайс-листа',
+      subject: 'Запрос прайса',
+      form_type: 'price_request',
+    }),
+  });
+  return handleResponse<ContactFormResponse>(response);
+}
+
+
+// Calculation Request API (uses Contact Form endpoint)
+
+
+export async function submitCalculationRequest(data: { phone: string; name?: string }): Promise<ContactFormResponse> {
+  const response = await fetch(`${API_BASE_URL}/contact/submit`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name: data.name?.trim() || 'Запрос расчёта',
+      phone: data.phone.replace(/\D/g, ''),
+      message: 'Запрос на расчёт освещения',
+      subject: 'Запрос расчёта',
+      form_type: 'calculation_request',
+    }),
+  });
+  return handleResponse<ContactFormResponse>(response);
+}

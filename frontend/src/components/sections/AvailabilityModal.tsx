@@ -9,6 +9,7 @@ import PhoneInput, {
   type Value,
   isValidPhoneNumber
 } from 'react-phone-number-input';
+import { submitAvailabilityRequest } from '@/utils/api';
 
 interface AvailabilityModalProps {
   catalogRef?: React.RefObject<HTMLElement>;
@@ -123,30 +124,29 @@ export default function AvailabilityModal({ catalogRef, finalCTARef }: Availabil
     }
     setLampNameError('');
 
-    // Заглушка для отправки на бэкенд
-    const formData = {
-      email,
-      phone: phone?.replace(/\D/g, ''),
-      country,
-      lampName,
-    };
+    try {
+      // Отправка данных на бэкенд
+      await submitAvailabilityRequest({
+        email: email.trim(),
+        phone: phone,
+        lamp_name: lampName.trim(),
+      });
 
-    console.log('Отправка данных на бэкенд:', formData);
-    
-    // TODO: Интеграция с бэкендом
-    // await fetch('/api/availability', { ... });
+      //  Помечаем форму как заполненную и очищаем флаги секций
+      localStorage.setItem('availabilityFormFilled', 'true');
+      localStorage.removeItem('availabilityModalShownCatalog');
+      localStorage.removeItem('availabilityModalShownFinalCTA');
 
-    //  Помечаем форму как заполненную и очищаем флаги секций
-    localStorage.setItem('availabilityFormFilled', 'true');
-    localStorage.removeItem('availabilityModalShownCatalog');
-    localStorage.removeItem('availabilityModalShownFinalCTA');
-    
-    setIsSubmitted(true);
-    
-    // Закрываем через 2 секунды
-    setTimeout(() => {
-      setIsOpen(false);
-    }, 2000);
+      setIsSubmitted(true);
+
+      // Закрываем через 2 секунды
+      setTimeout(() => {
+        setIsOpen(false);
+      }, 2000);
+    } catch (error) {
+      console.error('Ошибка отправки запроса наличия:', error);
+      setEmailError('Произошла ошибка при отправке. Попробуйте снова.');
+    }
   };
 
   // Функция для принудительного показа (для отладки)

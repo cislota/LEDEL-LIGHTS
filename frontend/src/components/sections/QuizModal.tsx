@@ -3,12 +3,12 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import PhoneInput, { 
-  type Country, 
+import PhoneInput, {
+  type Country,
   type Value,
-  isValidPhoneNumber 
-} from 'react-phone-number-input';
-import 'react-phone-number-input/style.css';
+  isValidPhoneNumber
+}
+from 'react-phone-number-input';
 
 export default function QuizModal() {
   const [isOpen, setIsOpen] = useState(false);

@@ -3,12 +3,11 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import PhoneInput, { 
-  type Country, 
+import PhoneInput, {
+  type Country,
   type Value,
-  isValidPhoneNumber 
+  isValidPhoneNumber
 } from 'react-phone-number-input';
-import 'react-phone-number-input/style.css';
 
 export default function OfferCards() {
   const [phone, setPhone] = useState<any>('');

@@ -4,13 +4,14 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import { 
+import {
   Product,
   TildaApiResponse,
   formatProduct,
   extractProductsFromResponse,
   CATEGORIES,
 } from '@/utils/product-helpers';
+import PriceRequestModal from '@/components/sections/PriceRequestModal';
 
 export default function ProductPage() {
   const params = useParams();
@@ -18,6 +19,7 @@ export default function ProductPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -197,6 +199,7 @@ export default function ProductPage() {
             )}
 
             <button
+              onClick={() => setIsModalOpen(true)}
               className="w-full sm:w-auto px-12 py-4 bg-[#d5302c] text-white font-bold rounded-[30px] hover:bg-[#b52824] transition mb-8"
               style={{
                 fontSize: '16px',
@@ -220,6 +223,11 @@ export default function ProductPage() {
           </div>
         </div>
       </div>
+
+      <PriceRequestModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 }

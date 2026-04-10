@@ -4,12 +4,11 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import PhoneInput, { 
-  type Country, 
+import PhoneInput, {
+  type Country,
   type Value,
-  isValidPhoneNumber 
+  isValidPhoneNumber
 } from 'react-phone-number-input';
-import 'react-phone-number-input/style.css';
 
 interface AvailabilityModalProps {
   catalogRef?: React.RefObject<HTMLElement>;

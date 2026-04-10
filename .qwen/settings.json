@@ -10,7 +10,8 @@
       "Bash(pg_ctl *)",
       "Bash(type *)",
       "Bash(curl *)",
-      "Bash(dir *)"
+      "Bash(dir *)",
+      "Bash(npx *)"
     ]
   },
   "$version": 3

@@ -3,6 +3,10 @@
 import { useEffect, useState } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import StatusBadge from '@/components/admin/StatusBadge';
+
+// URL backend админки (извлекаем из NEXT_PUBLIC_API_BASE_URL)
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api';
+const BACKEND_ADMIN_URL = API_BASE.replace(/\/api$/, '') + '/admin/sql';
 import { api } from '@/lib/api';
 import { SyncLog } from '@/types';
 
@@ -185,8 +189,8 @@ export default function SettingsPage() {
           <div className="space-y-3 text-sm text-gray-600">
             <div className="flex justify-between">
               <span>Backend админ-панель:</span>
-              <a href="/admin" className="text-blue-600 hover:underline" target="_blank">
-                /admin (SQLAdmin) →
+              <a href={BACKEND_ADMIN_URL} className="text-blue-600 hover:underline" target="_blank">
+                /admin/sql (SQLAdmin) →
               </a>
             </div>
             <div className="flex justify-between">
@@ -202,7 +206,7 @@ export default function SettingsPage() {
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
           <h3 className="text-sm font-semibold text-blue-900 mb-2">💡 Подсказка</h3>
           <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
-            <li>Для управления товарами используйте SQLAdmin панель (/admin)</li>
+            <li>Для управления товарами используйте SQLAdmin панель (/admin/sql)</li>
             <li>Синхронизация загружает товары из Tilda API</li>
             <li>Все изменения в заказах и заявках сохраняются автоматически</li>
             <li>Данные для входа: admin / admin123 (измените в .env)</li>

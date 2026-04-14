@@ -54,10 +54,10 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Настройка CORS
+# Настройка CORS (используем ALLOWED_ORIGINS из .env)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

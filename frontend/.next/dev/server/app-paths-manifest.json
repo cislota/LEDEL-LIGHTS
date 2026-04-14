@@ -1,12 +1,10 @@
 {
-  "/admin/contacts/page": "app/admin/contacts/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/admin/login/page": "app/admin/login/page.js",
   "/admin/orders/page": "app/admin/orders/page.js",
   "/admin/page": "app/admin/page.js",
   "/admin/products/page": "app/admin/products/page.js",
-  "/admin/quiz/page": "app/admin/quiz/page.js",
   "/admin/settings/page": "app/admin/settings/page.js",
   "/api/tilda-products/route": "app/api/tilda-products/route.js",
-  "/page": "app/page.js",
-  "/product/[id]/page": "app/product/[id]/page.js"
+  "/page": "app/page.js"
 }

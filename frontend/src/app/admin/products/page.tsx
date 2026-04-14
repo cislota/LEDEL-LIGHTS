@@ -6,6 +6,10 @@ import DataTable from '@/components/admin/DataTable';
 import { api } from '@/lib/api';
 import { Product } from '@/types';
 
+// URL backend админки (извлекаем из NEXT_PUBLIC_API_BASE_URL)
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api';
+const BACKEND_ADMIN_URL = API_BASE.replace(/\/api$/, '') + '/admin/sql';
+
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -247,7 +251,7 @@ export default function ProductsPage() {
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-sm text-yellow-800">
               💡 Для редактирования товаров используйте{' '}
               <a
-                href="http://localhost:8000/admin"
+                href={BACKEND_ADMIN_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="underline font-medium"
@@ -376,7 +380,7 @@ function ProductDetailModal({
           {/* Edit Link */}
           <div className="pt-4 border-t border-gray-200">
             <a
-              href="/admin"
+              href={BACKEND_ADMIN_URL}
               target="_blank"
               className="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
             >

@@ -31,8 +31,8 @@ class AdminAuthMiddleware:
     async def __call__(self, scope, receive, send):
         if scope["type"] == "http":
             path = scope["path"]
-            # Защищаем только /admin
-            if path.startswith("/admin"):
+            # Защищаем только SQLAdmin (/admin/sql)
+            if path.startswith("/admin/sql"):
                 # Проверяем авторизацию
                 auth = None
                 for name, value in scope.get("headers", []):
@@ -458,11 +458,15 @@ admin: Optional[Admin] = None
 
 
 def setup_admin_panel(app):
-    """Подключить админ-панель к FastAPI приложению"""
-    global admin
+    """Подключить админ-панель к FastAPI приложению.
     
-    # Инициализируем админ-панель
-    admin = Admin(app=app, engine=engine, base_url="/admin")
+    ВНИМАНИЕ: SQLAdmin доступен по пути /admin/sql
+    Основной /admin/* используется Next.js приложением.
+    """
+    global admin
+
+    # Инициализируем админ-панель на отдельном пути (чтобы не конфликтовать с Next.js)
+    admin = Admin(app=app, engine=engine, base_url="/admin/sql")
     
     # Регистрация представлений
     admin.add_view(ProductAdmin)

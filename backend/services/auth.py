@@ -12,8 +12,15 @@ from ..config import ADMIN_USERNAME, ADMIN_PASSWORD
 
 # === Конфигурация ===
 
-# Секретный ключ для подписи JWT (из env или генерируется)
-SECRET_KEY = os.getenv("JWT_SECRET_KEY", "super-secret-key-change-in-production")
+# Секретный ключ для подписи JWT (ОБЯЗАТЕЛЬНО задать в .env!)
+# ВНИМАНИЕ: Если JWT_SECRET_KEY не задан в окружении, приложение завершит работу с ошибкой
+SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+if not SECRET_KEY:
+    raise ValueError(
+        "JWT_SECRET_KEY не задан! Установите уникальное значение в .env файле. "
+        "Сгенерировать ключ можно командой: openssl rand -hex 32"
+    )
+
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("JWT_ACCESS_TOKEN_EXPIRE_MINUTES", "480"))  # 8 часов
 
@@ -68,7 +75,7 @@ def decode_access_token(token: str) -> Optional[dict]:
         return None
 
 
-# === FastAPI зависимости (Dependencies) ===
+# FastAPI зависимости (Dependencies) 
 
 async def get_current_admin_user(
     credentials: HTTPAuthorizationCredentials = Depends(security)
@@ -115,7 +122,7 @@ async def require_admin(
     return current_user
 
 
-# === Эндпоинт логина ===
+# Эндпоинт логина 
 
 class LoginRequest:
     """Схема для запроса логина (Pydantic модель в schemas.py)."""

@@ -25,6 +25,10 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER:-ledl_user}:${POSTGRES_PASSWORD:-ledl_pass}@db:5432/${POSTGRES_DB:-ledl_db}
       DEBUG: ${DEBUG:-True}
       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:?JWT_SECRET_KEY must be set in .env file}
+      JWT_ACCESS_TOKEN_EXPIRE_MINUTES: ${JWT_ACCESS_TOKEN_EXPIRE_MINUTES:-480}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:?ADMIN_USERNAME must be set in .env file}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?ADMIN_PASSWORD must be set in .env file}
       TILDA_API_URL: ${TILDA_API_URL:-https://store.tildacdn.com/api/getproductslist/}
       TILDA_STORE_PART_UID: ${TILDA_STORE_PART_UID:-508199045462}
       TILDA_RECID: ${TILDA_RECID:-766672722}
@@ -54,11 +58,21 @@ services:
     build: ./nginx
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - backend
       - frontend
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      # По умолчанию: development конфигурация (без SSL)
+      # Для production: замените на nginx.conf (с SSL)
+      - ./nginx/nginx-dev.conf:/etc/nginx/nginx.conf:ro
+      # SSL сертификаты (для production)
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./nginx/certbot/www:/var/www/certbot:ro
+    environment:
+      - SSL_DOMAIN=${SSL_DOMAIN:-localhost}
 
 volumes:
   postgres_data:
+  backups:
+    driver: local

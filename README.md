@@ -145,7 +145,7 @@ NEXT_PUBLIC_APP_NAME=LEDS-LIGHTS
 NEXT_PUBLIC_API_BASE_URL=http://localhost:8000/api
 ```
 
-> Важно: `JWT_SECRET_KEY`, `ADMIN_USERNAME` и `ADMIN_PASSWORD` должны быть заданы в реальном `.env` файле. Не используйте значения по умолчанию в production.
+> Важно: `JWT_SECRET_KEY`, `ADMIN_USERNAME` и `ADMIN_PASSWORD` должны быть заданы в реальном `.env` файле.
 
 ---
 

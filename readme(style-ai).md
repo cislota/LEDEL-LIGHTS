@@ -264,7 +264,7 @@ LEDEL-LIGHTS/
    docker compose ps
    ```
 
-## 🔗 Адреса сервисов
+## Адреса сервисов
 
 | Сервис | Адрес |
 |---|---|
@@ -286,7 +286,7 @@ docker compose down
 docker compose logs -f
 ```
 
-## 🔌 API
+## API
 
 | Возможность | Маршруты | Назначение |
 |---|---|---|

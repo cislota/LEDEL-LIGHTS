@@ -28,18 +28,7 @@ Full-stack веб-приложение для каталога светотех�
 ## Архитектура
 
 ```text
-Пользователь / администратор
-        |
-      Nginx
-   /        \
-Next.js   FastAPI
-Frontend  Backend API
-   |        |
-   |     PostgreSQL
-   |
-Tilda assets / media
 
-FastAPI <-> Tilda Store API
 ```
 
 Основные сервисы:
@@ -49,7 +38,7 @@ FastAPI <-> Tilda Store API
 - `db` - PostgreSQL.
 - `nginx` - единая точка входа, проксирование frontend/backend.
 
-## AI-assisted engineering
+## AI
 
 Проект разрабатывался в workflow совместной работы с ИИ-агентом Codex. Цель была не просто получить сгенерированный код, а выстроить управляемый процесс разработки: ставить задачи агенту, задавать контекст, проверять результат, уточнять архитектуру и доводить изменения до рабочего состояния.
 
@@ -174,9 +163,5 @@ docker compose logs backend
 docker compose logs frontend
 docker compose logs nginx
 ```
-
-## Резюме по проекту
-
-Этот проект можно описывать как full-stack кейс разработки интернет-магазина/каталога с использованием AI-агента:
 
 > Разработал full-stack веб-приложение на Next.js, FastAPI и PostgreSQL с Docker Compose-инфраструктурой, Nginx reverse proxy, REST API, Swagger/OpenAPI, Alembic-миграциями и интеграцией с Tilda Store API. Работал в AI-assisted workflow с Codex: формулировал задачи и промпты, задавал правила и контекст, управлял декомпозицией, проверял изменения, проводил ревью кода и курировал доработки до рабочего результата.

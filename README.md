@@ -1,28 +1,54 @@
-# О проекте
+<div align="center">
 
-LEDEL-LIGHTS - приложение, разработанное в ходе переноса проекта с Tilda на собственную архитектуру. Это интернет-магазин светильников с каталогом, формами заявок и панелью для менеджера. Товары загружаются из Tilda и сохраняются в собственной БД.
+# 💡 LEDEL-LIGHTS
 
-**Проект предназначен для демонстрационного и локального запуска.**
+### Интернет-магазин светильников на собственной frontend/backend-архитектуре
 
-**Стек проекта:**
-- **Next.js:** пользовательский интерфейс
-- **FastAPI:** backend и API
-- **PostgreSQL:** хранение данных
-- **Nginx:** единая точка входа и маршрутизация запросов
-- **Tilda Store API:** источник товаров для каталога
+[![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-Python_3.11-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://docs.docker.com/compose/)
 
-## Как устроен проект
+[![Top language](https://img.shields.io/github/languages/top/cislota/LEDEL-LIGHTS?style=flat-square)](https://github.com/cislota/LEDEL-LIGHTS)
+[![Last commit](https://img.shields.io/github/last-commit/cislota/LEDEL-LIGHTS?style=flat-square)](https://github.com/cislota/LEDEL-LIGHTS/commits)
+[![Repository size](https://img.shields.io/github/repo-size/cislota/LEDEL-LIGHTS?style=flat-square)](https://github.com/cislota/LEDEL-LIGHTS)
 
-1. Запросы приходят через Nginx.
-2. Пользовательские страницы обслуживает frontend, а обращения к `/api/*` передаются backend.
-3. Обработчики API находятся в `backend/routers/`, интеграции и фоновые задачи размещены в `backend/services/`, а модели данных описаны в `backend/models/`.
-4. Изменения структуры PostgreSQL оформляются миграциями Alembic.
+</div>
+
+---
+
+## О проекте
+
+**LEDEL-LIGHTS** — интернет-магазин светильников, перенесённый с Tilda на собственную архитектуру. Приложение включает каталог товаров, формы заявок, оформление заказов и панель управления для менеджера.
+
+Каталог автоматически загружается из **Tilda Store API**, нормализуется и сохраняется в PostgreSQL. Повторная синхронизация обновляет существующие товары без дублирования.
+
+> [!NOTE]
+> Проект предназначен для демонстрационного и локального запуска.
+
+## Технологии
+
+<div align="center">
+
+[![Technology stack](https://skillicons.dev/icons?i=nextjs,react,ts,tailwind,python,fastapi,postgres,docker,nginx&perline=9)](https://skillicons.dev)
+
+</div>
+
+| Область | Технологии |
+|---|---|
+| **Frontend** | Next.js 16, React 19, TypeScript, Tailwind CSS |
+| **Backend** | Python 3.11, FastAPI, SQLAlchemy 2, Alembic |
+| **Данные** | PostgreSQL 15, Tilda Store API |
+| **Инфраструктура** | Docker Compose, Nginx |
+| **Управление** | SQLAdmin, JWT-аутентификация |
+
+## Архитектура
 
 ```mermaid
-flowchart TB
+flowchart LR
     USER["Пользователь"]
 
-    subgraph APP["LEDEL-LIGHTS"]
+    subgraph APP["LEDEL-LIGHTS · Docker Compose"]
         NGINX["Nginx<br/>reverse proxy"]
         NGINX -->|"/"| FRONT["Next.js / React<br/>пользовательский интерфейс"]
         NGINX -->|"/api/*"| ROUTERS["FastAPI routers<br/>auth · products · orders · quiz"]
@@ -30,12 +56,12 @@ flowchart TB
 
         ROUTERS --> SERVICES["Сервисный слой<br/>auth · tilda_sync · scheduler · notifications"]
         SERVICES --> MODELS["SQLAlchemy models<br/>и операции с данными"]
-        MODELS --> DB[("PostgreSQL<br/>products · categories · orders · requests · sync_logs")]
+        MODELS --> DB[("PostgreSQL<br/>products · categories · orders · users · sync_logs")]
         MIGRATIONS["Alembic migrations"] --> DB
     end
 
     USER --> NGINX
-    SERVICES -->|"Tilda Store API"| TILDA["Tilda"]
+    SERVICES --> TILDA["Tilda Store API"]
 
     classDef edge fill:#eef2ff,stroke:#4f46e5,color:#1e1b4b;
     classDef app fill:#ecfeff,stroke:#0891b2,color:#164e63;
@@ -48,20 +74,16 @@ flowchart TB
     class TILDA external;
 ```
 
-Backend работает на Python 3.11, FastAPI, SQLAlchemy 2, Alembic и PostgreSQL 15. Frontend собран на Next.js 16, React 19, TypeScript и Tailwind CSS. Сервисы запускаются через Docker Compose, а Nginx служит единой точкой входа. Для административных операций используются JWT-аутентификация и SQLAdmin.
+<details>
+<summary><strong>Структура проекта</strong></summary>
 
 ```text
 LEDEL-LIGHTS/
-├── AGENTS.md
-├── .agents/
-│   └── skills/
-│       └── tilda-catalog-sync/
 ├── backend/
-│   ├── alembic/
-│   ├── crud/
-│   ├── models/
-│   ├── routers/
-│   ├── services/
+│   ├── alembic/       # миграции базы данных
+│   ├── models/        # модели SQLAlchemy
+│   ├── routers/       # HTTP-маршруты
+│   ├── services/      # бизнес-логика и интеграции
 │   └── main.py
 ├── frontend/
 │   ├── public/
@@ -72,100 +94,28 @@ LEDEL-LIGHTS/
 └── .env.example
 ```
 
-## Запуск проекта
-
-Для локального запуска нужны Git, Docker Engine или Docker Desktop и Docker Compose.
-
-1. Скопируйте пример настроек в локальный файл окружения:
-
-   ```powershell
-   Copy-Item .env.example .env
-   ```
-
-2. Замените в `.env` демонстрационные значения `JWT_SECRET_KEY`, `ADMIN_USERNAME` и `ADMIN_PASSWORD` на собственные.
-
-3. Соберите и запустите приложение:
-
-   ```bash
-   docker compose up -d --build
-   ```
-
-4. Убедитесь, что сервисы запущены:
-
-   ```bash
-   docker compose ps
-   ```
-
-Адреса сервисов после запуска: 
-frontend <http://localhost:3000>, 
-API <http://localhost:8000>, 
-Swagger UI <http://localhost:8000/docs>, 
-административная панель <http://localhost:8000/admin>. 
-
-Для остановки выполните `docker compose down`. Журналы всех сервисов можно посмотреть командой `docker compose logs -f`. Для просмотра только backend используйте `docker compose logs -f backend`.
-
-## Настройка окружения
-
-В корне лежит `.env.example` с полным набором параметров.
-
-| Переменная | Назначение | Пример безопасного значения |
-|---|---|---|
-| `POSTGRES_USER` | Пользователь PostgreSQL | `ledl_user` |
-| `POSTGRES_PASSWORD` | Пароль PostgreSQL | `<strong-password>` |
-| `POSTGRES_DB` | Имя базы данных | `ledl_db` |
-| `DATABASE_URL` | Строка подключения backend к PostgreSQL | `postgresql://ledl_user:<password>@db:5432/ledl_db` |
-| `DEBUG` | Режим отладки FastAPI | `True` |
-| `ALLOWED_ORIGINS` | Разрешённые CORS-домены через запятую | `http://localhost:3000` |
-| `JWT_SECRET_KEY` | Ключ подписи JWT | `<random-secret>` |
-| `JWT_ACCESS_TOKEN_EXPIRE_MINUTES` | Срок действия токена в минутах | `480` |
-| `ADMIN_USERNAME` | Имя администратора | `<admin-name>` |
-| `ADMIN_PASSWORD` | Пароль администратора | `<strong-admin-password>` |
-| `TILDA_API_URL` | Адрес Tilda Store API | `https://store.tildacdn.com/api/getproductslist/` |
-| `TILDA_STORE_PART_UID` | Идентификатор части магазина Tilda | `<store-part-uid>` |
-| `TILDA_RECID` | Идентификатор блока Tilda | `<recid>` |
-| `NEXT_PUBLIC_APP_NAME` | Название приложения во frontend | `LEDEL-LIGHTS` |
-| `NEXT_PUBLIC_API_BASE_URL` | Базовый адрес API для frontend | `http://localhost:8000/api` |
-| `SSL_DOMAIN` | Домен для production-конфигурации Nginx | `example.com` |
-| `BACKUP_RETENTION_DAYS` | Срок хранения резервных копий | `30` |
-
-
-## API
-
-API отвечает за каталог, оформление заказов, приём заявок и административные операции. Публичная часть используется витриной, а управление заказами и синхронизацией защищено JWT.
-
-| Часть API | Основной маршрут | Что делает |
-|---|---|---|
-| Состояние приложения | `GET /api/health` | Проверяет API и подключение к PostgreSQL |
-| Авторизация | `/api/auth/*` | Выдаёт и проверяет JWT администратора |
-| Каталог | `/api/products/*`, `/api/categories/*` | Отдаёт товары, фильтры и дерево категорий |
-| Заказы | `/api/orders/*` | Создаёт заказы и позволяет менеджеру менять их статусы |
-| Квиз и формы | `/api/quiz/*`, `/api/contact/*` | Сохраняет заявки посетителей для дальнейшей обработки |
-| Синхронизация | `/api/sync/*` | Запускает обновление каталога и показывает его результат |
-
-Полный список методов, параметров и схем данных доступен в Swagger UI: <http://localhost:8000/docs>. Защищённые запросы используют заголовок `Authorization: Bearer <token>`.
-
-## Синхронизация с Tilda
-
-Автоматическая синхронизация выполняется каждый час, с момента запуска приложения. Синхронизацию можно запустить вручную через защищённый API. Сервис получает страницы товаров из Tilda Store API, приводит поля к внутреннему формату, сопоставляет категории и обновляет PostgreSQL. Результат операции сохраняется в `sync_logs`.
-
-При повторной синхронизации существующие товары обновляются, а дубликаты не создаются. Для проверки используются тестовые данные вместо production API.
-
-## Администрирование
-
-Панель SQLAdmin находится по адресу <http://localhost:8000/admin>. Учётные данные задаются переменными `ADMIN_USERNAME` и `ADMIN_PASSWORD`, а API авторизации выдаёт JWT для защищённых операций.
-
-В текущей реализации маршруты просмотра и изменения результатов квиза и обращений не требуют JWT. Это отражено в таблице API и должно учитываться при публикации приложения.
+</details>
 
 ## Разработка с OpenAI Codex
 
-При разработке LEDEL-LIGHTS часть задач выполнялась вручную, часть с помощью OpenAI Codex. Агент помогал менять frontend, backend, базу данных и инфраструктуру. В само приложение он не входит, после внесения изменений все сервисы работают без него.
+При разработке LEDEL-LIGHTS часть функциональности создавалась вручную, часть — с использованием OpenAI Codex. Агент подключался к отдельным задачам во frontend, backend, базе данных и инфраструктурной конфигурации. До начала реализации определялись границы изменения, затрагиваемые сервисы и допустимые изменения API и структуры данных.
 
-В [`AGENTS.md`](./AGENTS.md) записаны общие правила проекта: где находится код, что можно менять и какие проверки нужно выполнить. [`SKILL.md`](./.agents/skills/tilda-catalog-sync/SKILL.md) используется только в задачах по синхронизации каталога с Tilda. В нём описан порядок работы с данными и границы таких изменений.
+Контекст проекта и ограничения передавались через Markdown-инструкции. В публичной версии репозитория этот подход оформлен в виде [`AGENTS.md`](./AGENTS.md) с общими правилами работы и отдельной инструкции [`tilda-catalog-sync`](./.agents/skills/tilda-catalog-sync/SKILL.md) для задач синхронизации каталога. Codex подготавливал изменения в пределах поставленной задачи, после чего полученный diff проходил сборку и функциональную проверку наравне с кодом, написанным вручную.
 
-Навык `tilda-catalog-sync` помогает проследить путь товара от Tilda до PostgreSQL, проверить загрузку всех страниц, привести поля к нужному формату и записать результат в `sync_logs`. Структура товара вынесена в [`product-contract.md`](./.agents/skills/tilda-catalog-sync/references/product-contract.md). Поэтому в каждой новой задаче остаётся описать только нужное изменение.
+<div align="center">
+
+[![OpenAI Codex](https://img.shields.io/badge/OpenAI-Codex-000000?style=for-the-badge&logo=openai&logoColor=white)](https://openai.com/codex/)
+[![AGENTS.md](https://img.shields.io/badge/AGENTS.md-правила_проекта-4F46E5?style=for-the-badge&logo=markdown&logoColor=white)](./AGENTS.md)
+[![SKILL.md](https://img.shields.io/badge/SKILL.md-Tilda_синхронизация-7C3AED?style=for-the-badge&logo=markdown&logoColor=white)](./.agents/skills/tilda-catalog-sync/SKILL.md)
+
+</div>
+
+### Место Codex в процессе разработки
+
+Ручная и агентная разработка не разделялись на два независимых процесса. Codex использовался внутри общего цикла: после проработки задачи и до проверки готового изменения.
 
 ```mermaid
-flowchart TB
+flowchart LR
     TASK["Требование или дефект"] --> ANALYSIS["Разбор потока данных<br/>и затрагиваемых контрактов"]
     ANALYSIS --> DESIGN["Архитектурное решение<br/>и границы изменения"]
     DESIGN --> MODE{"Способ реализации"}
@@ -207,27 +157,216 @@ flowchart TB
     class INTEGRATION result;
 ```
 
-Задача для агента описывает конкретное ожидаемое поведение, границы изменения и критерии готовности. Например:
+Для агента собирался только контекст, относящийся к текущему изменению. Общие ограничения проекта не повторялись в каждой задаче: они находились в `AGENTS.md`. Последовательность действий для повторяемого сценария задавалась в `SKILL.md`, а конкретная задача содержала ожидаемое поведение, границы изменения и критерии готовности.
+
+```text
+LEDEL-LIGHTS/
+├── AGENTS.md
+├── .agents/
+│   └── skills/
+│       └── tilda-catalog-sync/
+│           ├── SKILL.md
+│           └── references/
+│               └── product-contract.md
+├── frontend/
+├── backend/
+│   ├── routers/
+│   ├── services/
+│   ├── models/
+│   └── alembic/
+├── nginx/
+└── docker-compose.yml
+```
+
+`AGENTS.md` применяется ко всему репозиторию: описывает структуру проекта, допустимые границы изменений и обязательные проверки. Инструкция `tilda-catalog-sync` загружается для задач, связанных с Tilda Store API, нормализацией товаров, сопоставлением категорий, обновлением записей в PostgreSQL и журналированием синхронизации. Файл `references/product-contract.md` содержит схему входных данных, правила преобразования полей и условия upsert; для несвязанных задач агенту не требуется его загружать.
+
+### Пример задачи для агента
+
+Ниже приведён сокращённый пример инструкции для изменения синхронизации каталога. Общие правила репозитория и порядок работы со сценарием агент получает из `AGENTS.md` и `SKILL.md`, поэтому в самой задаче остаются только требования к конкретному изменению.
 
 ```text
 Используй $tilda-catalog-sync.
 
-Доработай синхронизацию каталога: повторный запуск должен обновлять
-существующие товары и не создавать дубликаты.
+Задача
+Доработать синхронизацию каталога из Tilda Store API: повторный запуск
+должен обновлять существующие товары и не создавать дубликаты.
 
-Сохрани публичные API-маршруты, оставь бизнес-логику в сервисном слое
-и фиксируй результат в sync_logs. Если меняется схема БД, добавь миграцию.
+Текущее поведение
+Ответ Tilda обрабатывается в backend/services/tilda_sync.py. Товары
+сохраняются в PostgreSQL через существующие модели SQLAlchemy. Результат
+операции должен фиксироваться в sync_logs.
 
-Проверь повторный запуск на локальной обезличенной фикстуре, конфигурацию
-Docker Compose, сборку backend и ответ GET /api/health.
+Перед изменением
+1. Восстанови текущий путь данных от ответа Tilda до записи в PostgreSQL.
+2. Определи действующее правило идентификации товара по uid / tilda_id.
+3. Укажи, требуется ли изменение API-контракта, моделей или схемы БД.
+4. Не изменяй код, не связанный с синхронизацией каталога.
+
+Ограничения
+- Сохрани существующие публичные API-маршруты.
+- Не переноси логику синхронизации в backend/routers/.
+- Не добавляй поля ответа Tilda, которых нет в текущем контракте или фикстуре.
+- Не записывай необработанный production-ответ и учётные данные в репозиторий.
+- Если потребуется изменение схемы БД, добавь миграцию Alembic.
+- Ошибка обработки одного товара не должна повреждать ранее сохранённые данные.
+
+Критерии готовности
+- повторная синхронизация одной фикстуры не создаёт новые строки товаров;
+- товар с тем же идентификатором и изменёнными данными обновляется;
+- результат операции и ошибки сохраняются в sync_logs;
+- docker compose config и сборка backend завершаются успешно;
+- после запуска backend endpoint /api/health отвечает успешно.
+
+В результате укажи изменённые файлы, изменения контрактов и схемы БД,
+выполненные команды, результаты проверок и оставшиеся ограничения.
 ```
 
-Подготовленный агентом diff проходит те же проверки, что и изменение, написанное вручную. В репозиторий включается проверенный результат, а не исходный ответ агента.
+### Проверка изменений
+
+Изменения, подготовленные Codex, проходили тот же путь, что и ручная разработка. Для frontend выполнялись lint и production-сборка. Для backend и инфраструктуры проверялись конфигурация Docker Compose, сборка и запуск затронутых сервисов, health-check и журналы выполнения. Изменения структуры данных проверялись через миграции Alembic и повторный запуск синхронизации на тестовой фикстуре.
+
+Если результат не соответствовал контракту или затрагивал лишние файлы, задача уточнялась либо код дорабатывался вручную. В репозиторий включался проверенный результат, а не исходный ответ агента.
+
+## Быстрый запуск
+
+### Требования
+
+- Git
+- Docker Engine или Docker Desktop
+- Docker Compose
+
+### Установка
+
+1. Клонируйте репозиторий:
+
+   ```bash
+   git clone https://github.com/cislota/LEDEL-LIGHTS.git
+   cd LEDEL-LIGHTS
+   ```
+
+2. Создайте локальный файл настроек:
+
+   ```powershell
+   Copy-Item .env.example .env
+   ```
+
+3. Замените в `.env` демонстрационные значения `JWT_SECRET_KEY`, `ADMIN_USERNAME` и `ADMIN_PASSWORD`.
+
+4. Соберите и запустите приложение:
+
+   ```bash
+   docker compose up -d --build
+   ```
+
+5. Проверьте состояние сервисов:
+
+   ```bash
+   docker compose ps
+   ```
+
+## Адреса сервисов
+
+| Сервис | Адрес |
+|---|---|
+| Приложение через Nginx | <http://localhost> |
+| Frontend | <http://localhost:3000> |
+| Backend API | <http://localhost:8000> |
+| Swagger UI | <http://localhost:8000/docs> |
+| Панель администратора | <http://localhost:8000/admin> |
+
+Остановка приложения:
+
+```bash
+docker compose down
+```
+
+Просмотр журналов:
+
+```bash
+docker compose logs -f
+```
+
+## API
+
+| Возможность | Маршруты | Назначение |
+|---|---|---|
+| Состояние | `GET /api/health` | Проверка API и PostgreSQL |
+| Авторизация | `/api/auth/*` | Получение и проверка JWT |
+| Каталог | `/api/products/*`, `/api/categories/*` | Товары, фильтры и категории |
+| Заказы | `/api/orders/*` | Создание заказов и изменение статусов |
+| Формы | `/api/quiz/*`, `/api/contact/*` | Сохранение обращений посетителей |
+| Синхронизация | `/api/sync/*` | Обновление каталога и просмотр результата |
+
+Полная интерактивная документация доступна в [Swagger UI](http://localhost:8000/docs). Защищённые запросы используют заголовок `Authorization: Bearer <token>`.
+
+## Синхронизация каталога
+
+```mermaid
+flowchart LR
+    TILDA[Tilda Store API] --> LOAD[Постраничная загрузка]
+    LOAD --> NORMALIZE[Нормализация]
+    NORMALIZE --> CATEGORIES[Категоризация]
+    CATEGORIES --> UPSERT[Upsert товаров]
+    UPSERT --> DB[(PostgreSQL)]
+    UPSERT --> LOGS[sync_logs]
+```
+
+Синхронизация автоматически выполняется каждый час после запуска приложения. Её также можно запустить вручную через защищённый API.
+
+- загружаются все страницы товаров;
+- данные приводятся к внутреннему формату;
+- существующие записи обновляются;
+- дубликаты не создаются;
+- результат сохраняется в `sync_logs`.
+
+## Основные настройки
+
+Все параметры перечислены в `.env.example`.
+
+| Переменная | Назначение |
+|---|---|
+| `DATABASE_URL` | Подключение backend к PostgreSQL |
+| `JWT_SECRET_KEY` | Ключ подписи JWT |
+| `ADMIN_USERNAME` | Имя администратора |
+| `ADMIN_PASSWORD` | Пароль администратора |
+| `TILDA_API_URL` | Адрес Tilda Store API |
+| `TILDA_STORE_PART_UID` | Идентификатор части магазина |
+| `TILDA_RECID` | Идентификатор блока Tilda |
+| `NEXT_PUBLIC_API_BASE_URL` | Базовый адрес API для frontend |
+
+> [!WARNING]
+> В `.env` указаны демонстрационные параметры (пароли, токены и т.д.).
 
 ## Проверка изменений
 
-Frontend проверяется командами `npm run lint` и `npm run build` в каталоге `frontend/`. Для backend проверяются конфигурация Docker Compose, запуск сервисов, `GET /api/health` и журналы.
+### Frontend
 
-При изменении структуры данных добавляется миграция Alembic и проверяется на локальной базе. Синхронизация тестируется повторным запуском обезличенной фикстуры.
+```bash
+cd frontend
+npm run lint
+npm run build
+```
 
-Резервное копирование описано в [`scripts/README.md`](./scripts/README.md), настройка сертификатов — в [`nginx/ssl/README.md`](./nginx/ssl/README.md).
+### Backend и инфраструктура
+
+```bash
+docker compose config
+docker compose up -d --build
+docker compose ps
+docker compose logs backend
+```
+
+После запуска проверьте `GET /api/health`. При изменении структуры данных необходимо добавить и применить миграцию Alembic.
+
+## Дополнительная документация
+
+- [Правила работы с проектом](./AGENTS.md)
+- [Резервное копирование](./scripts/README.md)
+- [Настройка SSL](./nginx/ssl/README.md)
+- [Навык синхронизации каталога](./.agents/skills/tilda-catalog-sync/SKILL.md)
+
+---
+
+<div align="center">
+
+</div>

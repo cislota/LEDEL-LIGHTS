@@ -24,7 +24,7 @@ LEDEL-LIGHTS - приложение, разработанное в ходе пе
 flowchart TB
     USER["Пользователь"]
 
-    subgraph APP["LEDEL-LIGHTS · Docker Compose"]
+    subgraph APP["LEDEL-LIGHTS"]
         NGINX["Nginx<br/>reverse proxy"]
         NGINX -->|"/"| FRONT["Next.js / React<br/>пользовательский интерфейс"]
         NGINX -->|"/api/*"| ROUTERS["FastAPI routers<br/>auth · products · orders · quiz"]

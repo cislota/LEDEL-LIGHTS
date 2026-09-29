@@ -61,7 +61,7 @@ flowchart LR
     end
 
     USER --> NGINX
-    SERVICES -->|"Tilda Store API"| TILDA["Tilda"]
+    SERVICES --> TILDA["Tilda Store API"]
 
     classDef edge fill:#eef2ff,stroke:#4f46e5,color:#1e1b4b;
     classDef app fill:#ecfeff,stroke:#0891b2,color:#164e63;

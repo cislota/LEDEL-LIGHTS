@@ -295,6 +295,4 @@ docker compose logs backend
 
 <div align="center">
 
-**LEDEL-LIGHTS** · Next.js · FastAPI · PostgreSQL · Docker
-
 </div>

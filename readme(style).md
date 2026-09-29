@@ -198,6 +198,71 @@ flowchart LR
 > [!WARNING]
 > Не добавляйте `.env`, пароли, токены и необработанные production-ответы в репозиторий.
 
+## 🤖 Разработка с OpenAI Codex
+
+Часть задач в **LEDEL-LIGHTS** выполнялась вручную, а часть — с помощью **OpenAI Codex**. AI-агент использовался как помощник при работе с frontend, backend, базой данных и инфраструктурой.
+
+Codex не является частью работающего приложения и не требуется для его запуска. В репозиторий попадает проверенный код, а не исходный ответ AI.
+
+<div align="center">
+
+[![OpenAI Codex](https://img.shields.io/badge/OpenAI-Codex-000000?style=for-the-badge&logo=openai&logoColor=white)](https://openai.com/codex/)
+[![AGENTS.md](https://img.shields.io/badge/AGENTS.md-правила_проекта-4F46E5?style=for-the-badge&logo=markdown&logoColor=white)](./AGENTS.md)
+[![SKILL.md](https://img.shields.io/badge/SKILL.md-Tilda_синхронизация-7C3AED?style=for-the-badge&logo=markdown&logoColor=white)](./.agents/skills/tilda-catalog-sync/SKILL.md)
+
+</div>
+
+### Контекст для AI-агента
+
+| Файл | Назначение |
+|---|---|
+| [`AGENTS.md`](./AGENTS.md) | Общие правила репозитория, архитектурные границы и обязательные проверки |
+| [`SKILL.md`](./.agents/skills/tilda-catalog-sync/SKILL.md) | Сценарий работы с синхронизацией каталога Tilda |
+| [`product-contract.md`](./.agents/skills/tilda-catalog-sync/references/product-contract.md) | Контракт товара и правила преобразования данных |
+
+Специализированный навык `tilda-catalog-sync` помогает проследить путь товара от Tilda до PostgreSQL, проверить загрузку всех страниц, нормализовать поля, сопоставить категории, выполнить идемпотентное обновление и записать результат в `sync_logs`.
+
+```mermaid
+flowchart LR
+    TASK[Задача] --> CONTEXT[Контекст проекта]
+    AGENTS[AGENTS.md] --> CONTEXT
+    SKILL[SKILL.md] --> CONTEXT
+    CONTRACT[Контракты данных] --> CONTEXT
+    CONTEXT --> CODEX[OpenAI Codex]
+    CODEX --> DIFF[Изменения кода]
+    DIFF --> REVIEW[Проверка diff]
+    REVIEW --> TESTS[Сборка и тесты]
+    TESTS --> RESULT[Проверенный результат]
+
+    classDef input fill:#eef2ff,stroke:#4f46e5,color:#1e1b4b
+    classDef agent fill:#f5f3ff,stroke:#7c3aed,color:#4c1d95
+    classDef check fill:#ecfeff,stroke:#0891b2,color:#164e63
+    classDef result fill:#f0fdf4,stroke:#16a34a,color:#14532d
+
+    class TASK,CONTEXT,AGENTS,SKILL,CONTRACT input
+    class CODEX,DIFF agent
+    class REVIEW,TESTS check
+    class RESULT result
+```
+
+Пример задачи для Codex:
+
+```text
+Используй $tilda-catalog-sync.
+
+Доработай синхронизацию каталога: повторный запуск должен обновлять
+существующие товары и не создавать дубликаты.
+
+Сохрани публичные API-маршруты, оставь бизнес-логику в сервисном слое
+и фиксируй результат в sync_logs. Если меняется схема БД, добавь миграцию.
+
+Проверь повторный запуск на локальной обезличенной фикстуре, конфигурацию
+Docker Compose, сборку backend и ответ GET /api/health.
+```
+
+> [!IMPORTANT]
+> Изменения, подготовленные Codex, проходят те же проверки, что и код, написанный вручную: ревью области изменений, проверку контрактов, сборку и тестирование затронутых компонентов.
+
 ## ✅ Проверка изменений
 
 ### Frontend

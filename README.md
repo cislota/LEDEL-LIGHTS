@@ -96,7 +96,11 @@ LEDEL-LIGHTS/
    docker compose ps
    ```
 
-После запуска адреса сервисов будут такими: frontend <http://localhost:3000>, API <http://localhost:8000>, Swagger UI <http://localhost:8000/docs>, административная панель <http://localhost:8000/admin>. Через Nginx приложение открывается на <http://localhost>.
+Адреса сервисов после запуска: 
+frontend <http://localhost:3000>, 
+API <http://localhost:8000>, 
+Swagger UI <http://localhost:8000/docs>, 
+административная панель <http://localhost:8000/admin>. 
 
 Для остановки выполните `docker compose down`. Журналы всех сервисов можно посмотреть командой `docker compose logs -f`. Для просмотра только backend используйте `docker compose logs -f backend`.
 

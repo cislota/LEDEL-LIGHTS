@@ -1,297 +1,182 @@
 # LEDS-LIGHTS
 
-Веб-приложение интернет-магазина светильников с админ-панелью, API на FastAPI и фронтендом на Next.js.
+Full-stack веб-приложение для каталога светотехнической продукции: публичный сайт, каталог товаров, формы заявок, квиз, административная панель, REST API и синхронизация товарных данных с Tilda.
 
-## О проекте
+Проект сделан как практический кейс по разработке интернет-магазина с backend-логикой, базой данных, Docker-инфраструктурой и AI-assisted engineering workflow.
 
-Проект состоит из нескольких частей:
+## Что реализовано
 
-- Backend: FastAPI + SQLAlchemy + PostgreSQL
-- Frontend: Next.js + React + TypeScript
-- Nginx: проксирование и статический входной узел
-- База данных: PostgreSQL 15
-- Админ-панель: SQLAdmin
-- Синхронизация каталога: интеграция с Tilda API
+- Публичный сайт на Next.js с каталогом, карточками товаров, формами заявок и квизом.
+- Backend API на FastAPI для товаров, категорий, заказов, контактных форм, квиза, авторизации и синхронизации.
+- Административная зона для управления заказами, товарами, заявками и результатами квиза.
+- PostgreSQL-база данных с моделями, связями, индексами и миграциями Alembic.
+- Интеграция с Tilda Store API: загрузка, парсинг, нормализация и upsert товаров.
+- Nginx reverse proxy для frontend, backend, Swagger UI и SQLAdmin.
+- Docker Compose-окружение для локального и серверного запуска.
+- Скрипты резервного копирования и восстановления PostgreSQL.
 
-## Стек технологий
+## Стек
 
-### Backend
-- Python 3.11
-- FastAPI
-- SQLAlchemy 2
-- PostgreSQL
-- Alembic
-- JWT-аутентификация
-- SQLAdmin
+**Frontend:** Next.js, React, TypeScript, Tailwind CSS, Axios  
+**Backend:** Python, FastAPI, SQLAlchemy, Pydantic, Uvicorn  
+**Database:** PostgreSQL, Alembic  
+**Infrastructure:** Docker, Docker Compose, Nginx  
+**Auth/Admin:** JWT, HTTP Bearer, SQLAdmin  
+**Integration:** Tilda Store API  
+**Documentation:** FastAPI Swagger/OpenAPI через `/docs` и `/openapi.json`
 
-### Frontend
-- Next.js 16
-- React 19
-- TypeScript
-- Tailwind CSS
-
-### Infra
-- Docker
-- Docker Compose
-- Nginx
-
----
-
-## Структура проекта
+## Архитектура
 
 ```text
-LEDEL-LIGHTS/
-├── backend/
-│   ├── alembic/
-│   ├── crud/
-│   ├── models/
-│   ├── routers/
-│   ├── services/
-│   ├── utils/
-│   ├── admin.py
-│   ├── config.py
-│   ├── database.py
-│   ├── main.py
-│   ├── requirements.txt
-│   └── ...
-├── frontend/
-│   ├── src/
-│   ├── public/
-│   ├── package.json
-│   └── ...
-├── nginx/
-│   ├── nginx.conf
-│   ├── nginx-dev.conf
-│   └── ssl/
-├── docker-compose.yml
-├── .env.example
-├── README.md
-└── scripts/
+Пользователь / администратор
+        |
+      Nginx
+   /        \
+Next.js   FastAPI
+Frontend  Backend API
+   |        |
+   |     PostgreSQL
+   |
+Tilda assets / media
+
+FastAPI <-> Tilda Store API
 ```
 
----
+Основные сервисы:
 
-## Требования
+- `frontend` - Next.js-приложение, публичные страницы и админские интерфейсы.
+- `backend` - FastAPI API, бизнес-логика, CRUD, авторизация, синхронизация Tilda.
+- `db` - PostgreSQL.
+- `nginx` - единая точка входа, проксирование frontend/backend.
 
-Перед запуском установите:
+## AI-assisted engineering
 
-- Docker Desktop или Docker Engine
-- Docker Compose
-- Git
+Проект разрабатывался в workflow совместной работы с ИИ-агентом Codex. Цель была не просто получить сгенерированный код, а выстроить управляемый процесс разработки: ставить задачи агенту, задавать контекст, проверять результат, уточнять архитектуру и доводить изменения до рабочего состояния.
 
-Для локальной разработки без Docker может потребоваться:
+В рамках проекта выполнялась работа с AI-агентом как с инженерным исполнителем:
 
-- Python 3.11
-- Node.js 20+
-- PostgreSQL 15
+- формулирование задач для агента на уровне фич, модулей и технических ограничений;
+- декомпозиция задач: frontend, backend, база данных, интеграция, Docker-инфраструктура;
+- постановка архитектурного направления: Next.js + FastAPI + PostgreSQL + Nginx + Docker Compose;
+- управление контекстом через Markdown-описания, правила проекта и уточняющие инструкции;
+- написание и уточнение промптов для генерации, исправления и рефакторинга кода;
+- ревью изменений агента: проверка структуры, зависимостей, маршрутов, моделей, миграций и конфигов;
+- итерационная доработка результата: запуск, диагностика ошибок, корректировка требований;
+- контроль соответствия кода стеку проекта и уже выбранным паттернам;
+- настройка окружения и оркестрация сервисов через Docker Compose;
+- работа с документацией и проверка того, как агент использует проектный контекст;
+- изучение подхода к skills/rules для AI-агента и настройке устойчивого рабочего процесса.
 
----
+Фактически проект демонстрирует навык **AI-augmented development**: умение не только писать код, но и управлять ИИ-агентом как частью инженерного пайплайна.
 
-## Быстрый запуск
+## Что это демонстрирует
 
-1. Скопируйте пример переменных окружения:
+- Умение проектировать full-stack приложение и разделять ответственность между frontend, backend и infrastructure.
+- Умение работать с REST API, Swagger/OpenAPI, ORM-моделями и миграциями.
+- Умение проектировать таблицы, связи one-to-many и связующие сущности для заказов и товаров.
+- Умение разворачивать приложение в Docker-окружении и настраивать reverse proxy.
+- Умение интегрировать внешний источник данных, нормализовать данные и сохранять их в БД.
+- Умение применять AI-агентов в разработке: ставить задачи, задавать правила, управлять контекстом, проверять и курировать результат.
+
+## База данных
+
+Основные таблицы:
+
+- `products` - товары, загруженные и нормализованные из Tilda.
+- `categories` - категории товаров.
+- `orders` - заказы и заявки.
+- `order_items` - позиции заказа, связь заказа с товарами.
+- `quiz_results` - результаты квиза.
+- `contact_form_submissions` - заявки из форм обратной связи.
+- `sync_logs` - логи синхронизации с Tilda.
+
+Используются:
+
+- SQLAlchemy ORM-модели;
+- Alembic-миграции;
+- индексы для поиска и фильтрации;
+- внешние ключи;
+- enum-статусы заказов;
+- связи one-to-many: `orders -> order_items`, `products -> order_items`, `categories -> categories`.
+
+## API
+
+FastAPI автоматически предоставляет:
+
+- Swagger UI: `/docs`
+- OpenAPI schema: `/openapi.json`
+- Health check: `/api/health`
+
+Основные группы API:
+
+- `/api/products` - товары, фильтрация, категории, бренды, синхронизация Tilda.
+- `/api/orders` - создание и обработка заказов.
+- `/api/categories` - категории.
+- `/api/contact` - заявки из форм.
+- `/api/quiz` - результаты квиза.
+- `/api/auth` - авторизация администратора.
+- `/api/sync` - синхронизация и статус.
+- `/api/scheduler` - статус планировщика синхронизации.
+
+## Интеграция с Tilda
+
+Синхронизация товаров реализована через Tilda Store API:
+
+- запрос товаров по `storepartuid`, `recid` и `slice`;
+- обработка пагинации Tilda;
+- нормализация структуры товара;
+- генерация slug;
+- извлечение изображений и характеристик;
+- категоризация товаров;
+- upsert в PostgreSQL по `uid` / `tilda_id`;
+- логирование результата синхронизации.
+
+## Локальный запуск
+
+Создать `.env` на основе `.env.example`, затем запустить сервисы:
 
 ```bash
-copy .env.example .env
+docker compose up --build
 ```
 
-2. Проверьте и при необходимости измените значения в `.env`.
+После запуска:
 
-3. Запустите проект:
+- сайт: `http://localhost`
+- backend docs: `http://localhost/docs`
+- health check: `http://localhost/health`
+- SQLAdmin: `http://localhost/admin/sql`
 
-```bash
-docker compose up -d --build
-```
+## Полезные команды
 
-4. Проверьте статус контейнеров:
-
-```bash
-docker compose ps
-```
-
-5. Откройте приложение:
-
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:8000
-- Swagger UI: http://localhost:8000/docs
-- Admin panel: http://localhost:8000/admin
-
----
-
-## Переменные окружения
-
-В корне проекта есть файл `.env.example` с базовыми настройками. Основные параметры:
-
-```env
-POSTGRES_USER=ledl_user
-POSTGRES_PASSWORD=ledl_pass
-POSTGRES_DB=ledl_db
-
-DEBUG=True
-DATABASE_URL=postgresql://ledl_user:ledl_pass@db:5432/ledl_db
-
-ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
-JWT_SECRET_KEY=...
-JWT_ACCESS_TOKEN_EXPIRE_MINUTES=480
-
-ADMIN_USERNAME=admin
-ADMIN_PASSWORD=...
-
-TILDA_API_URL=https://store.tildacdn.com/api/getproductslist/
-TILDA_STORE_PART_UID=508199045462
-TILDA_RECID=766672722
-
-NEXT_PUBLIC_APP_NAME=LEDS-LIGHTS
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8000/api
-```
-
-> Важно: `JWT_SECRET_KEY`, `ADMIN_USERNAME` и `ADMIN_PASSWORD` должны быть заданы в реальном `.env` файле.
-
----
-
-## Команды Docker
-
-### Запуск
-
-```bash
-docker compose up -d
-```
-
-### Перезапуск после изменений
-
-```bash
-docker compose up -d --build
-```
-
-### Остановка
-
-```bash
-docker compose down
-```
-
-### Просмотр логов
-
-```bash
-docker compose logs -f
-```
-
-### Пересборка конкретного сервиса
-
-```bash
-docker compose build backend
-docker compose up -d backend
-```
-
----
-
-## Запуск без Docker
-
-### Backend
-
-```bash
-cd backend
-pip install -r requirements.txt
-python -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload
-```
-
-### Frontend
+Frontend:
 
 ```bash
 cd frontend
 npm install
 npm run dev
+npm run build
 ```
 
-### База данных
-
-Нужно иметь локально работающий PostgreSQL, либо использовать контейнер `db` из `docker-compose.yml`.
-
----
-
-## API
-
-Основные точки доступа:
-
-- `/api/` — корневой эндпоинт API
-- `/api/health` — проверка состояния сервиса
-- `/api/init-db` — инициализация структуры базы данных
-- `/api/sync/products` — синхронизация товаров с Tilda
-- `/api/sync/status` — статус последней синхронизации
-- `/api/scheduler/status` — статус планировщика
-
-Swagger доступен по адресу:
-
-```text
-http://localhost:8000/docs
-```
-
----
-
-## Администрирование
-
-В проекте предусмотрена админ-панель и JWT-аутентификация для административных операций.
-
-Учетные данные задаются через переменные:
-
-```env
-ADMIN_USERNAME=...
-ADMIN_PASSWORD=...
-```
-
-После запуска можно использовать административные эндпоинты через авторизацию и панель `/admin`.
-
----
-
-## Синхронизация с Tilda
-
-Проект поддерживает синхронизацию товаров с Tilda API через настройки:
-
-```env
-TILDA_API_URL=https://store.tildacdn.com/api/getproductslist/
-TILDA_STORE_PART_UID=508199045462
-TILDA_RECID=766672722
-```
-
-Синхронизация запускается автоматически по расписанию и также доступна через API.
-
----
-
-## Полезные команды для разработки
-
-### Проверить состояние контейнеров
+Backend:
 
 ```bash
-docker compose ps
+cd backend
+pip install -r requirements.txt
+alembic upgrade head
+uvicorn main:app --reload
 ```
 
-### Посмотреть логи backend
+Docker:
 
 ```bash
-docker compose logs -f backend
+docker compose up --build
+docker compose logs backend
+docker compose logs frontend
+docker compose logs nginx
 ```
 
-### Посмотреть логи frontend
+## Резюме по проекту
 
-```bash
-docker compose logs -f frontend
-```
+Этот проект можно описывать как full-stack кейс разработки интернет-магазина/каталога с использованием AI-агента:
 
-### Остановить все контейнеры
-
-```bash
-docker compose down
-```
-
----
-
-## Примечания
-
-- Для production рекомендуется заменить `nginx-dev.conf` на `nginx.conf` и настроить SSL-сертификаты.
-- Не храните секретные значения в репозитории; используйте `.env` и убедитесь, что он добавлен в `.gitignore`.
-- Для разработки данные и база хранятся в Docker volume `postgres_data`.
-
----
-
-## Лицензия
-
-Проект предназначен для внутреннего использования и разработки. При необходимости уточните условия использования у владельца проекта.
+> Разработал full-stack веб-приложение на Next.js, FastAPI и PostgreSQL с Docker Compose-инфраструктурой, Nginx reverse proxy, REST API, Swagger/OpenAPI, Alembic-миграциями и интеграцией с Tilda Store API. Работал в AI-assisted workflow с Codex: формулировал задачи и промпты, задавал правила и контекст, управлял декомпозицией, проверял изменения, проводил ревью кода и курировал доработки до рабочего результата.
